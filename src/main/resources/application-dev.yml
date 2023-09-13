@@ -34,8 +34,6 @@ management:
       probability: 0
 
 spring:
-  flyway:
-    locations: classpath:/db/migration/replication,classpath:/db/migration/postgresql
   datasource:
     url: jdbc:postgresql://localhost:5432/api?stringtype=unspecified&reWriteBatchedInserts=true
     username: user
