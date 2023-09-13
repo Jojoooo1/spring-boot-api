@@ -74,6 +74,9 @@ spring:
       pageable:
         max-page-size: 20 # default 2000
 
+  flyway:
+    locations: classpath:/db/migration/postgresql
+
   datasource:
     hikari.maximum-pool-size: ${DB_MAX_POOL_SIZE:20}
     url: jdbc:postgresql://${DB_HOST}/${DB_NAME}?stringtype=unspecified&reWriteBatchedInserts=true
@@ -122,3 +125,11 @@ logging:
   level:
     org:
       hibernate: ERROR
+
+---
+spring:
+  config:
+    activate:
+      on-profile: replication
+  flyway:
+    locations: classpath:/db/migration/replication,classpath:/db/migration/postgresql
