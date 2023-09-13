@@ -1,0 +1,69 @@
+http:
+  clients:
+    my-external-api:
+      base-url: https://webhook.site/8258fbb5-0137-4e8c-9a5f-080629933063
+
+slack:
+  username: api-alert-dev
+  channels:
+    api-alert:
+      url: http://your-slack-bot-url.com/example
+      name: api-alert
+
+rabbitmq:
+  host: localhost
+  port: 5672
+  username: user
+  password: password
+  listeners:
+    event:
+      queue: webhook
+  publishers:
+    webhook:
+      exchange: outbound
+      routingkey: to_outbound_webhook
+
+management:
+  server:
+    port: 8080
+  endpoint:
+    health:
+      show-details: always
+  tracing:
+    sampling:
+      probability: 0
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/api?stringtype=unspecified&reWriteBatchedInserts=true
+    username: user
+    password: password
+
+  jpa:
+    properties:
+      hibernate:
+        show_sql: false # does not show correctly batch insert (use datasource-proxy)
+        format_sql: false
+        # generate_statistics: true
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8000/realms/api
+          jwk-set-uri: http://localhost:8000/realms/api/protocol/openid-connect/certs
+
+  devtools:
+    restart:
+      enabled: false
+
+logging:
+  pattern:
+    level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
+  level:
+    web: info
+    # org.springframework.cache: TRACE
+    # hibernate.SQL: DEBUG
+    # hibernate.engine.jdbc.batch.internal.BatchingBatch: DEBUG
+    # reactor.netty.http.client.HttpClient: DEBUG
+

@@ -1,0 +1,102 @@
+{
+  "rabbit_version": "3.12.4",
+  "rabbitmq_version": "3.12.4",
+  "product_name": "RabbitMQ",
+  "product_version": "3.12.4",
+  "users": [
+    {
+      "name": "user",
+      "password_hash": "uRpW/Oo8IwVY9z/V2i48TfsRXlrkrDM8yi+gdte4m49Snm+A",
+      "hashing_algorithm": "rabbit_password_hashing_sha256",
+      "tags": [
+        "administrator"
+      ],
+      "limits": {}
+    }
+  ],
+  "vhosts": [
+    {
+      "name": "/"
+    }
+  ],
+  "permissions": [
+    {
+      "user": "user",
+      "vhost": "/",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    }
+  ],
+  "topic_permissions": [],
+  "parameters": [],
+  "global_parameters": [
+    {
+      "name": "internal_cluster_id",
+      "value": "rabbitmq-cluster-id-7RK4AQm26a2tDE2NFh2zdw"
+    }
+  ],
+  "policies": [],
+  "queues": [
+    {
+      "name": "event",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-max-length": 100000,
+        "x-overflow": "reject-publish"
+      }
+    },
+    {
+      "name": "webhook",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-max-length": 100000,
+        "x-overflow": "reject-publish"
+      }
+    }
+  ],
+  "exchanges": [
+    {
+      "name": "outbound",
+      "vhost": "/",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {
+        "x-delayed-type": "direct"
+      }
+    },
+    {
+      "name": "inbound",
+      "vhost": "/",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    }
+  ],
+  "bindings": [
+    {
+      "source": "inbound",
+      "vhost": "/",
+      "destination": "event",
+      "destination_type": "queue",
+      "routing_key": "to_inbound_event",
+      "arguments": {}
+    },
+    {
+      "source": "outbound",
+      "vhost": "/",
+      "destination": "webhook",
+      "destination_type": "queue",
+      "routing_key": "to_outbound_webhook",
+      "arguments": {}
+    }
+  ]
+}

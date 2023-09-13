@@ -1,0 +1,29 @@
+name: "Dev - Test"
+
+on:
+  pull_request:
+    types: [ opened, synchronize, reopened ]
+    branches: [ develop ]
+
+concurrency:
+  group: ci-dev-test-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  dev-test:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Setup
+      - uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v3.12.0
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'maven'
+
+      # 2. Run tests
+      - name: Run Unit & Integration Tests
+        run: mvn clean verify --no-transfer-progress
+
+      # 3. Notify if fails

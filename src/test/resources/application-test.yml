@@ -1,0 +1,32 @@
+http:
+  clients:
+    my-external-api:
+      base-url: http://test.com
+
+slack:
+  username: api-alert-test
+  channels:
+    api-alert:
+      url: http://test.com
+      name: api-alert
+
+rabbitmq:
+  listeners:
+    event:
+      queue: webhook
+  publishers:
+    webhook:
+      exchange: outbound
+      routingkey: to_outbound_webhook
+
+
+spring:
+  flyway:
+    locations: classpath:/db/migration/postgresql
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://test:8000/realms/api
+          jwk-set-uri: http://test:8000/realms/api/protocol/openid-connect/certs
+

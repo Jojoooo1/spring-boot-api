@@ -1,0 +1,9 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+  cloud:
+    kubernetes:
+      enabled: false
+  flyway:
+    locations: classpath:/db/migration/replication,classpath:/db/migration/postgresql
