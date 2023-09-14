@@ -9,12 +9,12 @@ import io.micrometer.tracing.Tracer;
 import java.nio.charset.StandardCharsets;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageBuilder;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.core.MessagePropertiesBuilder;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -26,9 +26,9 @@ public class EventPublisher {
   private final Tracer tracer;
 
   public void publish(
-      @NotNull final String exchange,
-      @NotNull final String routingKey,
-      @NotNull final Object payload) {
+      @NonNull final String exchange,
+      @NonNull final String routingKey,
+      @NonNull final Object payload) {
 
     try {
 
