@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ApiKeyDetails {
+public class ApiKeyAuthenticationDetails {
   private Long id;
   private String email;
   private String companySlug;

@@ -5,7 +5,7 @@ import static com.mycompany.microservice.api.constants.JWTClaims.CLAIM_EMAIL;
 
 import com.mycompany.microservice.api.exceptions.InternalServerErrorException;
 import com.mycompany.microservice.api.infra.auth.provider.apikey.ApiKeyAuthentication;
-import com.mycompany.microservice.api.infra.auth.provider.apikey.ApiKeyDetails;
+import com.mycompany.microservice.api.infra.auth.provider.apikey.ApiKeyAuthenticationDetails;
 import java.util.Optional;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -58,7 +58,8 @@ public class AuthFacade {
 
       } else if (isApiKey(authentication)) {
         final ApiKeyAuthentication apiKeyAuthentication = (ApiKeyAuthentication) authentication;
-        return Optional.ofNullable(apiKeyAuthentication.getApiKeyDetails().getEmail());
+        return Optional.ofNullable(
+            apiKeyAuthentication.getApiKeyAuthenticationDetails().getEmail());
       }
 
       return Optional.empty();
@@ -91,13 +92,14 @@ public class AuthFacade {
   private Optional<String> getCompanySlugFromApikey(final Authentication authentication) {
 
     final ApiKeyAuthentication apiKeyAuthentication = (ApiKeyAuthentication) authentication;
-    final ApiKeyDetails apiKeyDetails = apiKeyAuthentication.getApiKeyDetails();
+    final ApiKeyAuthenticationDetails apiKeyAuthenticationDetails =
+        apiKeyAuthentication.getApiKeyAuthenticationDetails();
 
-    if (StringUtils.isBlank(apiKeyDetails.getCompanySlug())) {
-      log.info("api-key '{}' does not have a company_slug", apiKeyDetails.getId());
+    if (StringUtils.isBlank(apiKeyAuthenticationDetails.getCompanySlug())) {
+      log.info("api-key '{}' does not have a company_slug", apiKeyAuthenticationDetails.getId());
       return Optional.empty();
     }
 
-    return Optional.ofNullable(apiKeyDetails.getCompanySlug());
+    return Optional.ofNullable(apiKeyAuthenticationDetails.getCompanySlug());
   }
 }

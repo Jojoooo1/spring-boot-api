@@ -26,5 +26,4 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: http://test:8000/realms/api
-          jwk-set-uri: http://test:8000/realms/api/protocol/openid-connect/certs
 

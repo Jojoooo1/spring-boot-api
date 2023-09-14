@@ -3,7 +3,7 @@ package com.mycompany.microservice.api.facades;
 import static com.mycompany.microservice.api.constants.JWTClaims.CLAIM_EMAIL;
 
 import com.mycompany.microservice.api.infra.auth.provider.apikey.ApiKeyAuthentication;
-import com.mycompany.microservice.api.infra.auth.provider.apikey.ApiKeyDetails;
+import com.mycompany.microservice.api.infra.auth.provider.apikey.ApiKeyAuthenticationDetails;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -83,7 +83,7 @@ public class AuthFacadeTest {
 
     final var authentication =
         new ApiKeyAuthentication(
-            API_KEY, true, new ApiKeyDetails(1L, StringUtils.EMPTY, COMPANY_SLUG));
+            API_KEY, true, new ApiKeyAuthenticationDetails(1L, StringUtils.EMPTY, COMPANY_SLUG));
 
     final var securityContext = Mockito.mock(SecurityContext.class);
     Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
@@ -96,7 +96,8 @@ public class AuthFacadeTest {
   void verifyGetUserEmailOnApiAuth() {
 
     final var authentication =
-        new ApiKeyAuthentication(API_KEY, true, new ApiKeyDetails(1L, EMAIL, StringUtils.EMPTY));
+        new ApiKeyAuthentication(
+            API_KEY, true, new ApiKeyAuthenticationDetails(1L, EMAIL, StringUtils.EMPTY));
 
     final var securityContext = Mockito.mock(SecurityContext.class);
     Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);

@@ -68,7 +68,6 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: ${SECURITY_OAUTH_ISSUER_URI}
-          jwk-set-uri: ${SECURITY_OAUTH_JWK_SET_URI}
   data:
     web:
       pageable:

@@ -96,6 +96,8 @@ public class SecurityConfiguration {
                     // Else return 401
                     .anyRequest()
                     .denyAll())
+
+        // To prevent any misconfiguration we disable explicitly all authentication scheme
         .sessionManagement(
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .csrf(AbstractHttpConfigurer::disable)

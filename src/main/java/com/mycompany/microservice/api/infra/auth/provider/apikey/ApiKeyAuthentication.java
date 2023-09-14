@@ -13,13 +13,15 @@ public class ApiKeyAuthentication extends AbstractAuthenticationToken {
   @Serial private static final long serialVersionUID = -1137277407288808164L;
 
   private String apiKey;
-  private ApiKeyDetails apiKeyDetails;
+  private ApiKeyAuthenticationDetails apiKeyAuthenticationDetails;
 
   public ApiKeyAuthentication(
-      final String apiKey, final boolean authenticated, final ApiKeyDetails apiKeyDetails) {
+      final String apiKey,
+      final boolean authenticated,
+      final ApiKeyAuthenticationDetails apiKeyAuthenticationDetails) {
     super(AuthorityUtils.NO_AUTHORITIES);
     this.apiKey = apiKey;
-    this.apiKeyDetails = apiKeyDetails;
+    this.apiKeyAuthenticationDetails = apiKeyAuthenticationDetails;
     this.setAuthenticated(authenticated);
   }
 

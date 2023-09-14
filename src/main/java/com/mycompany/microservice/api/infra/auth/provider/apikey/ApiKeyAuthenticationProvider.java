@@ -34,14 +34,14 @@ public class ApiKeyAuthenticationProvider implements AuthenticationProvider {
 
       if (apiKeyOptional.isPresent()) {
         final ApiKey apiKey = apiKeyOptional.get();
-        final ApiKeyDetails apiKeyDetails =
-            ApiKeyDetails.builder()
+        final ApiKeyAuthenticationDetails apiKeyAuthenticationDetails =
+            ApiKeyAuthenticationDetails.builder()
                 .id(apiKey.getId())
                 .companySlug(apiKey.getCompany().getSlug())
                 .email(apiKey.getCompany().getEmail())
                 .build();
 
-        return new ApiKeyAuthentication(apiKey.getKey(), true, apiKeyDetails);
+        return new ApiKeyAuthentication(apiKey.getKey(), true, apiKeyAuthenticationDetails);
       }
 
       log.info("[{}] api-key '{}' not found, returning 401", LOG_NAME, apiKeyInRequest);
