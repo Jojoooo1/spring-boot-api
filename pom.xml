@@ -45,7 +45,6 @@
     <slack-api-client.version>1.32.0</slack-api-client.version>
     <apache-commons-text.version>1.10.0</apache-commons-text.version>
     <apache-commons-collection.version>4.4</apache-commons-collection.version>
-    <gson.version>2.10.1</gson.version>
     
     <!-- Development-->
     <git-code-format-maven-plugin.version>4.2</git-code-format-maven-plugin.version>
