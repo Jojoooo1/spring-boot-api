@@ -1,6 +1,7 @@
 version: '3.9'
 
 services:
+  # After using this maven container you need to re-install maven using "mvn install -DskipTests"
   api:
     container_name: api
     image: maven:3.9.4-eclipse-temurin-17
@@ -25,7 +26,7 @@ services:
       SPRING_CLOUD_KUBERNETES_ENABLED: "false"
       SPRING_DATASOURCE_URL: "jdbc:postgresql://localhost:5432/api?stringtype=unspecified&reWriteBatchedInserts=true"
     volumes:
-      - .:/usr/src/workdir:rw
+      - "$PWD:/usr/src/workdir"
       - ~/.m2:/var/maven/.m2
     working_dir: /usr/src/workdir
     healthcheck:
