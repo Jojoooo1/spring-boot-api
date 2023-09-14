@@ -23,12 +23,12 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.lang.NonNull;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
@@ -122,7 +122,14 @@ public abstract class BaseService<E extends BaseEntity> {
     if (!skipActivities) {
       this.activitiesBeforeDeleteEntities(entities);
     }
-    this.getRepository().deleteAll(entities);
+
+    // Used to improve cache management since deleteAll will reset the entire cache.
+    if (entities.size() == 1) {
+      this.getRepository().delete(entities.get(0));
+    } else {
+      this.getRepository().deleteAll(entities);
+    }
+
     if (!skipActivities) {
       this.activitiesAfterDeleteEntities(ids);
     }
@@ -134,7 +141,7 @@ public abstract class BaseService<E extends BaseEntity> {
 
   @Transactional
   private List<E> saveAll(
-      @NotNull final List<E> entities,
+      @NonNull final List<E> entities,
       final boolean skipActivities,
       final ServiceOperation operation) {
 
@@ -174,7 +181,12 @@ public abstract class BaseService<E extends BaseEntity> {
       }
     }
 
-    this.getRepository().saveAll(entities);
+    // Used to improve cache management since saveAll will reset the entire cache.
+    if (entities.size() == 1) {
+      this.getRepository().save(entities.get(0));
+    } else {
+      this.getRepository().saveAll(entities);
+    }
 
     if (!skipActivities) {
       switch (operation) {
