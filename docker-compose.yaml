@@ -21,8 +21,9 @@ services:
         condition: service_healthy
     environment:
       MAVEN_CONFIG: /var/maven/.m2
-      SPRING_CLOUD_KUBERNETES_ENABLED: 'false'
-      SPRING_DATASOURCE_URL: 'jdbc:postgresql://api-database/api?stringtype=unspecified&reWriteBatchedInserts=true'
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_CLOUD_KUBERNETES_ENABLED: "false"
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://localhost:5432/api?stringtype=unspecified&reWriteBatchedInserts=true"
     volumes:
       - .:/usr/src/workdir:rw
       - ~/.m2:/var/maven/.m2
