@@ -35,12 +35,9 @@
           <stackTrace>
             <fieldName>stackTrace</fieldName>
             <throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
-              <!--  By default set to Integer.MAX_VALUE, full is not working anymore -->
-              <!-- <maxDepthPerThrowable>full</maxDepthPerThrowable>-->
-              <!--  By default set to Integer.MAX_VALUE, full is not working anymore -->
-              <!-- <maxLength>full</maxLength>-->
-              <!--  By default set to -1, full is not working anymore -->
-              <!-- <shortenedClassNameLength>20</shortenedClassNameLength>-->
+              <maxDepthPerThrowable>4</maxDepthPerThrowable>
+              <!-- <maxLength>256</maxLength>-->
+              <shortenedClassNameLength>30</shortenedClassNameLength>
               <rootCauseFirst>true</rootCauseFirst>
             </throwableConverter>
           </stackTrace>
