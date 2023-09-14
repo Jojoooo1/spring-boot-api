@@ -32,10 +32,12 @@ restart-infra: ## Reset and start required infrastructure with docker compose
 	$(MAKE) start-database start-keycloak start-rabbitmq
 
 start-all: ## Run all containers with docker compose
-	$(MAKE) kill start-infra start-api
-
-restart-all: ## Reset and start all containers with docker compose
 	$(MAKE) start-infra start-api
+
+restart-all: ## Restart containers with docker compose
+	@docker compose stop api # used to rebuild API after modification
+	@docker compose up -d
+	@docker compose logs -f api
 
 start-database: ## Run api database
 	@docker compose up -d ${DB_CONTAINER} --wait
@@ -62,13 +64,9 @@ kill-rabbitmq : ## Kill rabbitmq
 	@docker compose rm -sf rabbitmq
 	@docker volume rm -f api_rabbitmq
 
-restart: ## restart project
-	@docker compose stop api # used to rebuild API after modification
-	@docker compose up -d
-	@docker compose logs -f api
-
 kill: ## Kill and reset project
 	@docker compose down
+	@mvn install -DskipTests
 	$(MAKE) kill-database kill-keycloak kill-rabbitmq
 
 release: ## Create release
