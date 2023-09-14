@@ -4,12 +4,10 @@ import static java.lang.String.format;
 
 import io.micrometer.tracing.Span;
 import io.micrometer.tracing.Tracer;
-import lombok.RequiredArgsConstructor;
+import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Component;
 
-@Component
-@RequiredArgsConstructor
+@UtilityClass
 public class TraceUtils {
 
   public static String getTrace(final Tracer tracer) {

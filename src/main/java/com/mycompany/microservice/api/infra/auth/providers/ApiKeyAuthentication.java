@@ -16,7 +16,7 @@ public class ApiKeyAuthentication extends AbstractAuthenticationToken {
   @Serial private static final long serialVersionUID = -1137277407288808164L;
 
   private String apiKey;
-  private ApiKeyDetails apiKeyDetails;
+  private transient ApiKeyDetails apiKeyDetails;
 
   public ApiKeyAuthentication(
       final String apiKey, final boolean authenticated, final ApiKeyDetails apiKeyDetails) {
@@ -51,7 +51,6 @@ public class ApiKeyAuthentication extends AbstractAuthenticationToken {
   @NoArgsConstructor
   @AllArgsConstructor
   @Builder
-  @Transient
   public static class ApiKeyDetails {
     private Long id;
     private String email;

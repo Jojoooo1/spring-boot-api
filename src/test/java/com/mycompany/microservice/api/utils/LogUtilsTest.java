@@ -11,8 +11,8 @@ class LogUtilsTest {
 
   @Test
   void verifyLogIdNullSafe() {
-    Assertions.assertEquals(LogUtils.logId(null), NULL);
-    Assertions.assertEquals(LogUtils.logId(new Company()), NULL);
+    Assertions.assertEquals(NULL, LogUtils.logId(null));
+    Assertions.assertEquals(NULL, LogUtils.logId(new Company()));
   }
 
   @Test

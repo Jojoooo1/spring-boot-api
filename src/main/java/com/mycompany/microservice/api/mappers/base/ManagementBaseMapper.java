@@ -10,21 +10,21 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
  * The interface Base mapper management.
  *
  * @param <E> the type parameter Entity
- * @param <Cr> the type parameter CreateRequest
- * @param <UR> the type parameter UpdateRequest
+ * @param <C> the type parameter CreateRequest
+ * @param <U> the type parameter UpdateRequest
  * @param <R> the type parameter Response
  */
-public interface ManagementBaseMapper<E, Cr, Ur, R> {
+public interface ManagementBaseMapper<E, C, U, R> {
 
   @ToEntity
-  E toEntity(Cr request);
+  E toEntity(C request);
 
   @ToEntity
-  E update(Ur request, @MappingTarget E entity);
+  E update(U request, @MappingTarget E entity);
 
   @ToEntity
   @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-  E patch(Ur request, @MappingTarget E entity);
+  E patch(U request, @MappingTarget E entity);
 
   R toManagementResponse(E entity);
 
