@@ -7,6 +7,11 @@ http:
     my-external-api:
       base-url: ${HTTP_CLIENTS_MY_EXTERNAL_API_BASE_URL}
 
+rate-limit:
+  default:
+    name: ${DEFAULT_RATE_LIMIT_NAME:DEFAULT}
+    max-requests: ${DEFAULT_MAX_REQUESTS:50}
+    refill-in-seconds: ${DEFAULT_REFILL_IN_SECONDS:1}
 
 slack:
   username: ${SLACK_USERNAME}

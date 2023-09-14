@@ -1,7 +1,7 @@
 package com.mycompany.microservice.api.infra.auth.filters;
 
 import com.mycompany.microservice.api.constants.AppHeaders;
-import com.mycompany.microservice.api.infra.auth.provider.apikey.ApiKeyAuthentication;
+import com.mycompany.microservice.api.infra.auth.providers.ApiKeyAuthentication;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

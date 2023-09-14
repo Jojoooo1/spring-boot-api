@@ -1,4 +1,4 @@
-package com.mycompany.microservice.api.infra.auth.provider.apikey;
+package com.mycompany.microservice.api.infra.auth.providers;
 
 import java.io.Serial;
 import lombok.AllArgsConstructor;
