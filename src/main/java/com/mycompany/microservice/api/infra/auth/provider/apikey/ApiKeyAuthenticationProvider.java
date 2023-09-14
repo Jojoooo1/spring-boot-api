@@ -1,6 +1,7 @@
 package com.mycompany.microservice.api.infra.auth.provider.apikey;
 
 import com.mycompany.microservice.api.entities.ApiKey;
+import com.mycompany.microservice.api.infra.auth.provider.apikey.ApiKeyAuthentication.ApiKeyDetails;
 import com.mycompany.microservice.api.services.ApiKeyService;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
