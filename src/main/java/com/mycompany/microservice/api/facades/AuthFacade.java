@@ -5,7 +5,7 @@ import static com.mycompany.microservice.api.constants.JWTClaims.CLAIM_EMAIL;
 
 import com.mycompany.microservice.api.exceptions.InternalServerErrorException;
 import com.mycompany.microservice.api.infra.auth.provider.apikey.ApiKeyAuthentication;
-import com.mycompany.microservice.api.infra.auth.provider.apikey.ApiKeyDetails;
+import com.mycompany.microservice.api.infra.auth.provider.apikey.ApiKeyAuthentication.ApiKeyDetails;
 import java.util.Optional;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
