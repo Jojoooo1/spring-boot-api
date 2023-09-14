@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.Transient;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -17,7 +16,7 @@ public class ApiKeyAuthentication extends AbstractAuthenticationToken {
   @Serial private static final long serialVersionUID = -1137277407288808164L;
 
   private String apiKey;
-  private ApiKeyDetails apiKeyDetails;
+  private transient ApiKeyDetails apiKeyDetails;
 
   public ApiKeyAuthentication(
       final String apiKey, final boolean authenticated, final ApiKeyDetails apiKeyDetails) {
@@ -49,7 +48,6 @@ public class ApiKeyAuthentication extends AbstractAuthenticationToken {
   }
 
   @Getter
-  @Setter
   @NoArgsConstructor
   @AllArgsConstructor
   @Builder

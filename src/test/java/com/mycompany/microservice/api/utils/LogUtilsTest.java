@@ -7,12 +7,12 @@ import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class LogUtilsTest {
+class LogUtilsTest {
 
   @Test
   void verifyLogIdNullSafe() {
-    Assertions.assertEquals(LogUtils.logId(null), NULL);
-    Assertions.assertEquals(LogUtils.logId(new Company()), NULL);
+    Assertions.assertEquals(NULL, LogUtils.logId(null));
+    Assertions.assertEquals(NULL, LogUtils.logId(new Company()));
   }
 
   @Test

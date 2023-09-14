@@ -2,7 +2,6 @@ package com.mycompany.microservice.api.services.base;
 
 import static com.mycompany.microservice.api.listeners.EntityTransactionLogListener.EntityTransactionLogEvent.EntityTransactionLogEnum.CREATE;
 import static com.mycompany.microservice.api.listeners.EntityTransactionLogListener.EntityTransactionLogEvent.EntityTransactionLogEnum.DELETE;
-import static com.mycompany.microservice.api.listeners.EntityTransactionLogListener.EntityTransactionLogEvent.EntityTransactionLogEnum.UNKNOWN;
 import static com.mycompany.microservice.api.listeners.EntityTransactionLogListener.EntityTransactionLogEvent.EntityTransactionLogEnum.UPDATE;
 import static com.mycompany.microservice.api.services.base.BaseService.ServiceOperation.CREATING;
 import static com.mycompany.microservice.api.services.base.BaseService.ServiceOperation.DELETING;
@@ -35,7 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public abstract class BaseService<E extends BaseEntity> {
 
-  private final int ENTITY_MAX_SIZE_TO_LOG = 100;
+  private static final int ENTITY_MAX_SIZE_TO_LOG = 100;
 
   @Autowired private ApplicationEventPublisher applicationEventPublisher;
 
@@ -92,6 +91,78 @@ public abstract class BaseService<E extends BaseEntity> {
   }
 
   @Transactional
+  public List<E> saveAll(
+      @NonNull final List<E> entities,
+      final boolean skipActivities,
+      final ServiceOperation operation) {
+
+    if (isEmpty(entities)) {
+      log.info("[{}] empty entities, returning.", operation.getName());
+      return Collections.emptyList();
+    }
+
+    switch (operation) {
+      case CREATING -> {
+        if (entities.stream()
+            .map(entity -> entity.getId() != null)
+            .toList()
+            .contains(Boolean.TRUE)) {
+          throw new IllegalStateException(
+              "Some entities already have an id. Are you trying to create an existing entity?");
+        }
+      }
+      case UPDATING -> {
+        if (entities.stream()
+            .map(entity -> entity.getId() == null)
+            .toList()
+            .contains(Boolean.TRUE)) {
+          throw new IllegalStateException(
+              "Some entities does not have id. Are you trying to update a new entity?");
+        }
+      }
+      default -> throw new IllegalStateException("ServiceOperation not found");
+    }
+
+    log.info(
+        "[{}] {} {}", operation.getName(), this.getEntityName(), this.getEntitiesToLog(entities));
+
+    if (!skipActivities) {
+      switch (operation) {
+        case CREATING -> this.activitiesBeforeCreateEntities(entities);
+        case UPDATING -> this.activitiesBeforeUpdateEntities(entities);
+        default -> throw new IllegalStateException("ServiceOperation not found");
+      }
+    }
+
+    // Used to improve cache management since saveAll will reset the entire cache.
+    if (entities.size() == 1) {
+      this.getRepository().save(entities.get(0));
+    } else {
+      this.getRepository().saveAll(entities);
+    }
+
+    if (!skipActivities) {
+      switch (operation) {
+        case CREATING -> this.activitiesAfterCreateEntities(entities);
+        case UPDATING -> this.activitiesAfterUpdateEntities(entities);
+        default -> throw new IllegalStateException("ServiceOperation not found");
+      }
+    }
+
+    this.applicationEventPublisher.publishEvent(
+        new EntityTransactionLogEvent(
+            switch (operation) {
+              case CREATING -> CREATE;
+              case UPDATING -> UPDATE;
+              default -> throw new IllegalStateException("ServiceOperation not found");
+            },
+            this.getEntityName(),
+            this.getEventEntitiesToLog(entities)));
+
+    return entities;
+  }
+
+  @Transactional
   public void delete(final Long id) {
     this.delete(this.findById(id));
   }
@@ -137,75 +208,6 @@ public abstract class BaseService<E extends BaseEntity> {
     this.applicationEventPublisher.publishEvent(
         new EntityTransactionLogEvent(
             DELETE, this.getEntityName(), this.getEventEntitiesToLog(entities)));
-  }
-
-  @Transactional
-  private List<E> saveAll(
-      @NonNull final List<E> entities,
-      final boolean skipActivities,
-      final ServiceOperation operation) {
-
-    if (isEmpty(entities)) {
-      log.info("[{}] empty entities, returning.", operation.getName());
-      return Collections.emptyList();
-    }
-
-    switch (operation) {
-      case CREATING -> {
-        if (entities.stream()
-            .map(entity -> entity.getId() != null)
-            .toList()
-            .contains(Boolean.TRUE)) {
-          throw new IllegalStateException(
-              "Some entities already have an id. Are you trying to create an existing entity?");
-        }
-      }
-      case UPDATING -> {
-        if (entities.stream()
-            .map(entity -> entity.getId() == null)
-            .toList()
-            .contains(Boolean.TRUE)) {
-          throw new IllegalStateException(
-              "Some entities does not have id. Are you trying to update a new entity?");
-        }
-      }
-    }
-
-    log.info(
-        "[{}] {} {}", operation.getName(), this.getEntityName(), this.getEntitiesToLog(entities));
-
-    if (!skipActivities) {
-      switch (operation) {
-        case CREATING -> this.activitiesBeforeCreateEntities(entities);
-        case UPDATING -> this.activitiesBeforeUpdateEntities(entities);
-      }
-    }
-
-    // Used to improve cache management since saveAll will reset the entire cache.
-    if (entities.size() == 1) {
-      this.getRepository().save(entities.get(0));
-    } else {
-      this.getRepository().saveAll(entities);
-    }
-
-    if (!skipActivities) {
-      switch (operation) {
-        case CREATING -> this.activitiesAfterCreateEntities(entities);
-        case UPDATING -> this.activitiesAfterUpdateEntities(entities);
-      }
-    }
-
-    this.applicationEventPublisher.publishEvent(
-        new EntityTransactionLogEvent(
-            switch (operation) {
-              case CREATING -> CREATE;
-              case UPDATING -> UPDATE;
-              default -> UNKNOWN;
-            },
-            this.getEntityName(),
-            this.getEventEntitiesToLog(entities)));
-
-    return entities;
   }
 
   /*
@@ -263,13 +265,13 @@ public abstract class BaseService<E extends BaseEntity> {
   }
 
   private String getEntitiesToLog(final List<E> entities) {
-    return entities.size() < this.ENTITY_MAX_SIZE_TO_LOG
+    return entities.size() < ENTITY_MAX_SIZE_TO_LOG
         ? entities.toString()
         : format("with '%s' entities", entities.size());
   }
 
   private String getEventEntitiesToLog(final List<E> entities) {
-    return entities.size() < this.ENTITY_MAX_SIZE_TO_LOG
+    return entities.size() < ENTITY_MAX_SIZE_TO_LOG
         ? entities.stream().map(e -> e.getId().toString()).toList().toString()
         : format("with '%s' entities", entities.size());
   }

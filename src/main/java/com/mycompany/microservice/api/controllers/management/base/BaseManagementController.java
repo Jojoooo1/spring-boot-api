@@ -17,14 +17,14 @@ import org.springframework.web.bind.annotation.*;
  * The type Base management controller.
  *
  * @param <E> the type parameter Entity
- * @param <CR> the type parameter CreateRequest
- * @param <UR> the type parameter UpdateRequest
+ * @param <C> the type parameter CreateRequest
+ * @param <U> the type parameter UpdateRequest
  * @param <R> the type parameter Response
  */
 @Slf4j
-public abstract class BaseManagementController<E extends BaseEntity, CR, UR, R> {
+public abstract class BaseManagementController<E extends BaseEntity, C, U, R> {
 
-  public abstract ManagementBaseMapper<E, CR, UR, R> getMapper();
+  public abstract ManagementBaseMapper<E, C, U, R> getMapper();
 
   public abstract BaseService<E> getService();
 
@@ -33,8 +33,7 @@ public abstract class BaseManagementController<E extends BaseEntity, CR, UR, R> 
   public R findById(@PathVariable("id") final Long id) {
     log.debug("[request] retrieve {} with id {}", this.getName(), id);
     final E entity = this.getService().findById(id);
-    final R response = this.getMapper().toManagementResponse(entity);
-    return response;
+    return this.getMapper().toManagementResponse(entity);
   }
 
   @ResponseStatus(HttpStatus.OK)
@@ -48,39 +47,34 @@ public abstract class BaseManagementController<E extends BaseEntity, CR, UR, R> 
 
   @ResponseStatus(HttpStatus.CREATED)
   @PostMapping
-  public R create(@Valid @RequestBody final CR request) {
+  public R create(@Valid @RequestBody final C request) {
     log.info("[request] create {}", request);
-
     final E entity = this.getService().create(this.getMapper().toEntity(request));
-    final R response = this.getMapper().toManagementResponse(entity);
-
-    return response;
+    return this.getMapper().toManagementResponse(entity);
   }
 
   @ResponseStatus(HttpStatus.OK)
   @PutMapping("/{id}")
-  public R update(@PathVariable("id") final Long id, @Valid @RequestBody final UR request) {
+  public R update(@PathVariable("id") final Long id, @Valid @RequestBody final U request) {
     log.info("[request] update '{}' {}", id, request);
 
     final E original = this.getService().findById(id);
     final E merged = this.getMapper().update(request, original);
     final E entity = this.getService().update(merged);
-    final R response = this.getMapper().toManagementResponse(entity);
 
-    return response;
+    return this.getMapper().toManagementResponse(entity);
   }
 
   @ResponseStatus(HttpStatus.OK)
   @PatchMapping("/{id}")
-  public R patch(@PathVariable("id") final Long id, @RequestBody final UR request) {
+  public R patch(@PathVariable("id") final Long id, @RequestBody final U request) {
     log.info("[request] patch  '{}' {}", id, request);
 
     final E original = this.getService().findById(id);
     final E merged = this.getMapper().patch(request, original);
     final E entity = this.getService().update(merged);
-    final R response = this.getMapper().toManagementResponse(entity);
 
-    return response;
+    return this.getMapper().toManagementResponse(entity);
   }
 
   @ResponseStatus(HttpStatus.NO_CONTENT)

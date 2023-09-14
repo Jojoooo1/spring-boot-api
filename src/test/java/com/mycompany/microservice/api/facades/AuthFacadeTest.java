@@ -26,7 +26,7 @@ public class AuthFacadeTest {
     final var securityContext = Mockito.mock(SecurityContext.class);
     SecurityContextHolder.setContext(securityContext);
 
-    Assertions.assertEquals(AuthFacade.getCompanySlug(), StringUtils.EMPTY);
+    Assertions.assertEquals(StringUtils.EMPTY, AuthFacade.getCompanySlug());
   }
 
   @Test

@@ -11,6 +11,6 @@ public class StringUtils {
       return value;
     }
 
-    return value.replaceAll("[^0-9]", "");
+    return value.replaceAll("\\D", "");
   }
 }
