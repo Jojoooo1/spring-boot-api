@@ -91,55 +91,7 @@ public abstract class BaseService<E extends BaseEntity> {
   }
 
   @Transactional
-  public void delete(final Long id) {
-    this.delete(this.findById(id));
-  }
-
-  @Transactional
-  public void delete(final E entity) {
-    this.deleteAll(List.of(entity), false);
-  }
-
-  @Transactional
-  public void deleteAll(final List<E> entities, final boolean skipActivities) {
-
-    if (isEmpty(entities)) {
-      log.info("[{}] empty entities, returning.", DELETING.getName());
-      return;
-    }
-
-    final List<Long> ids =
-        entities.stream().map(BaseEntity::getId).filter(Objects::nonNull).toList();
-    if (entities.size() != ids.size()) {
-      throw new IllegalStateException(
-          "Some entities does not have id. Are you trying to delete a new entity?");
-    }
-
-    log.info(
-        "[{}] {} {}", DELETING.getName(), this.getEntityName(), this.getEntitiesToLog(entities));
-
-    if (!skipActivities) {
-      this.activitiesBeforeDeleteEntities(entities);
-    }
-
-    // Used to improve cache management since deleteAll will reset the entire cache.
-    if (entities.size() == 1) {
-      this.getRepository().delete(entities.get(0));
-    } else {
-      this.getRepository().deleteAll(entities);
-    }
-
-    if (!skipActivities) {
-      this.activitiesAfterDeleteEntities(ids);
-    }
-
-    this.applicationEventPublisher.publishEvent(
-        new EntityTransactionLogEvent(
-            DELETE, this.getEntityName(), this.getEventEntitiesToLog(entities)));
-  }
-
-  @Transactional
-  private List<E> saveAll(
+  public List<E> saveAll(
       @NonNull final List<E> entities,
       final boolean skipActivities,
       final ServiceOperation operation) {
@@ -210,6 +162,54 @@ public abstract class BaseService<E extends BaseEntity> {
     return entities;
   }
 
+  @Transactional
+  public void delete(final Long id) {
+    this.delete(this.findById(id));
+  }
+
+  @Transactional
+  public void delete(final E entity) {
+    this.deleteAll(List.of(entity), false);
+  }
+
+  @Transactional
+  public void deleteAll(final List<E> entities, final boolean skipActivities) {
+
+    if (isEmpty(entities)) {
+      log.info("[{}] empty entities, returning.", DELETING.getName());
+      return;
+    }
+
+    final List<Long> ids =
+        entities.stream().map(BaseEntity::getId).filter(Objects::nonNull).toList();
+    if (entities.size() != ids.size()) {
+      throw new IllegalStateException(
+          "Some entities does not have id. Are you trying to delete a new entity?");
+    }
+
+    log.info(
+        "[{}] {} {}", DELETING.getName(), this.getEntityName(), this.getEntitiesToLog(entities));
+
+    if (!skipActivities) {
+      this.activitiesBeforeDeleteEntities(entities);
+    }
+
+    // Used to improve cache management since deleteAll will reset the entire cache.
+    if (entities.size() == 1) {
+      this.getRepository().delete(entities.get(0));
+    } else {
+      this.getRepository().deleteAll(entities);
+    }
+
+    if (!skipActivities) {
+      this.activitiesAfterDeleteEntities(ids);
+    }
+
+    this.applicationEventPublisher.publishEvent(
+        new EntityTransactionLogEvent(
+            DELETE, this.getEntityName(), this.getEventEntitiesToLog(entities)));
+  }
+
   /*
    * Create activities
    * */
@@ -265,13 +265,13 @@ public abstract class BaseService<E extends BaseEntity> {
   }
 
   private String getEntitiesToLog(final List<E> entities) {
-    return entities.size() < this.ENTITY_MAX_SIZE_TO_LOG
+    return entities.size() < ENTITY_MAX_SIZE_TO_LOG
         ? entities.toString()
         : format("with '%s' entities", entities.size());
   }
 
   private String getEventEntitiesToLog(final List<E> entities) {
-    return entities.size() < this.ENTITY_MAX_SIZE_TO_LOG
+    return entities.size() < ENTITY_MAX_SIZE_TO_LOG
         ? entities.stream().map(e -> e.getId().toString()).toList().toString()
         : format("with '%s' entities", entities.size());
   }

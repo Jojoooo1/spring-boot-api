@@ -17,14 +17,14 @@ import org.springframework.web.bind.annotation.*;
  * The type Base management controller.
  *
  * @param <E> the type parameter Entity
- * @param <CR> the type parameter CreateRequest
- * @param <UR> the type parameter UpdateRequest
+ * @param <Cr> the type parameter CreateRequest
+ * @param <Ur> the type parameter UpdateRequest
  * @param <R> the type parameter Response
  */
 @Slf4j
-public abstract class BaseManagementController<E extends BaseEntity, CR, UR, R> {
+public abstract class BaseManagementController<E extends BaseEntity, Cr, Ur, R> {
 
-  public abstract ManagementBaseMapper<E, CR, UR, R> getMapper();
+  public abstract ManagementBaseMapper<E, Cr, Ur, R> getMapper();
 
   public abstract BaseService<E> getService();
 
@@ -47,7 +47,7 @@ public abstract class BaseManagementController<E extends BaseEntity, CR, UR, R> 
 
   @ResponseStatus(HttpStatus.CREATED)
   @PostMapping
-  public R create(@Valid @RequestBody final CR request) {
+  public R create(@Valid @RequestBody final Cr request) {
     log.info("[request] create {}", request);
     final E entity = this.getService().create(this.getMapper().toEntity(request));
     return this.getMapper().toManagementResponse(entity);
@@ -55,7 +55,7 @@ public abstract class BaseManagementController<E extends BaseEntity, CR, UR, R> 
 
   @ResponseStatus(HttpStatus.OK)
   @PutMapping("/{id}")
-  public R update(@PathVariable("id") final Long id, @Valid @RequestBody final UR request) {
+  public R update(@PathVariable("id") final Long id, @Valid @RequestBody final Ur request) {
     log.info("[request] update '{}' {}", id, request);
 
     final E original = this.getService().findById(id);
@@ -67,7 +67,7 @@ public abstract class BaseManagementController<E extends BaseEntity, CR, UR, R> 
 
   @ResponseStatus(HttpStatus.OK)
   @PatchMapping("/{id}")
-  public R patch(@PathVariable("id") final Long id, @RequestBody final UR request) {
+  public R patch(@PathVariable("id") final Long id, @RequestBody final Ur request) {
     log.info("[request] patch  '{}' {}", id, request);
 
     final E original = this.getService().findById(id);

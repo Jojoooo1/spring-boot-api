@@ -8,7 +8,7 @@ import org.springframework.lang.NonNull;
 @UtilityClass
 public class LogUtils {
 
-  public static String NULL = "null";
+  public static final String NULL = "null";
 
   public static String logId(final BaseEntity entity) {
     return entity != null && entity.getId() != null ? entity.getId().toString() : NULL;
