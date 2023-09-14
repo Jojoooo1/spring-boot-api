@@ -2,10 +2,8 @@ package com.mycompany.microservice.api.infra.auth.providers;
 
 import java.io.Serial;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.Transient;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -49,10 +47,9 @@ public class ApiKeyAuthentication extends AbstractAuthenticationToken {
   }
 
   @Getter
-  @Setter
   @NoArgsConstructor
   @AllArgsConstructor
-  @Builder
+  @Transient
   public static class ApiKeyDetails {
     private Long id;
     private String email;

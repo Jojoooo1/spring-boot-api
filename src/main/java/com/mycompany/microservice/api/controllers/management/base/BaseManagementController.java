@@ -33,8 +33,7 @@ public abstract class BaseManagementController<E extends BaseEntity, CR, UR, R> 
   public R findById(@PathVariable("id") final Long id) {
     log.debug("[request] retrieve {} with id {}", this.getName(), id);
     final E entity = this.getService().findById(id);
-    final R response = this.getMapper().toManagementResponse(entity);
-    return response;
+    return this.getMapper().toManagementResponse(entity);
   }
 
   @ResponseStatus(HttpStatus.OK)
@@ -50,11 +49,8 @@ public abstract class BaseManagementController<E extends BaseEntity, CR, UR, R> 
   @PostMapping
   public R create(@Valid @RequestBody final CR request) {
     log.info("[request] create {}", request);
-
     final E entity = this.getService().create(this.getMapper().toEntity(request));
-    final R response = this.getMapper().toManagementResponse(entity);
-
-    return response;
+    return this.getMapper().toManagementResponse(entity);
   }
 
   @ResponseStatus(HttpStatus.OK)
@@ -65,9 +61,8 @@ public abstract class BaseManagementController<E extends BaseEntity, CR, UR, R> 
     final E original = this.getService().findById(id);
     final E merged = this.getMapper().update(request, original);
     final E entity = this.getService().update(merged);
-    final R response = this.getMapper().toManagementResponse(entity);
 
-    return response;
+    return this.getMapper().toManagementResponse(entity);
   }
 
   @ResponseStatus(HttpStatus.OK)
@@ -78,9 +73,8 @@ public abstract class BaseManagementController<E extends BaseEntity, CR, UR, R> 
     final E original = this.getService().findById(id);
     final E merged = this.getMapper().patch(request, original);
     final E entity = this.getService().update(merged);
-    final R response = this.getMapper().toManagementResponse(entity);
 
-    return response;
+    return this.getMapper().toManagementResponse(entity);
   }
 
   @ResponseStatus(HttpStatus.NO_CONTENT)

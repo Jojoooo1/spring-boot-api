@@ -26,7 +26,7 @@ public class InternalRequestFilter extends HttpFilter {
   @Serial private static final long serialVersionUID = 587106095561283733L;
   private static final String LOG_NAME = "InternalRequestFilter";
 
-  final CompanyService companyService;
+  final transient CompanyService companyService;
 
   @Override
   public void doFilter(

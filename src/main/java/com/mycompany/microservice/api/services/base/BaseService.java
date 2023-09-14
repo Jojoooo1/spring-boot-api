@@ -2,7 +2,6 @@ package com.mycompany.microservice.api.services.base;
 
 import static com.mycompany.microservice.api.listeners.EntityTransactionLogListener.EntityTransactionLogEvent.EntityTransactionLogEnum.CREATE;
 import static com.mycompany.microservice.api.listeners.EntityTransactionLogListener.EntityTransactionLogEvent.EntityTransactionLogEnum.DELETE;
-import static com.mycompany.microservice.api.listeners.EntityTransactionLogListener.EntityTransactionLogEvent.EntityTransactionLogEnum.UNKNOWN;
 import static com.mycompany.microservice.api.listeners.EntityTransactionLogListener.EntityTransactionLogEvent.EntityTransactionLogEnum.UPDATE;
 import static com.mycompany.microservice.api.services.base.BaseService.ServiceOperation.CREATING;
 import static com.mycompany.microservice.api.services.base.BaseService.ServiceOperation.DELETING;
@@ -35,7 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public abstract class BaseService<E extends BaseEntity> {
 
-  private final int ENTITY_MAX_SIZE_TO_LOG = 100;
+  private static final int ENTITY_MAX_SIZE_TO_LOG = 100;
 
   @Autowired private ApplicationEventPublisher applicationEventPublisher;
 
@@ -169,6 +168,7 @@ public abstract class BaseService<E extends BaseEntity> {
               "Some entities does not have id. Are you trying to update a new entity?");
         }
       }
+      default -> throw new IllegalStateException("ServiceOperation not found");
     }
 
     log.info(
@@ -178,6 +178,7 @@ public abstract class BaseService<E extends BaseEntity> {
       switch (operation) {
         case CREATING -> this.activitiesBeforeCreateEntities(entities);
         case UPDATING -> this.activitiesBeforeUpdateEntities(entities);
+        default -> throw new IllegalStateException("ServiceOperation not found");
       }
     }
 
@@ -192,6 +193,7 @@ public abstract class BaseService<E extends BaseEntity> {
       switch (operation) {
         case CREATING -> this.activitiesAfterCreateEntities(entities);
         case UPDATING -> this.activitiesAfterUpdateEntities(entities);
+        default -> throw new IllegalStateException("ServiceOperation not found");
       }
     }
 
@@ -200,7 +202,7 @@ public abstract class BaseService<E extends BaseEntity> {
             switch (operation) {
               case CREATING -> CREATE;
               case UPDATING -> UPDATE;
-              default -> UNKNOWN;
+              default -> throw new IllegalStateException("ServiceOperation not found");
             },
             this.getEntityName(),
             this.getEventEntitiesToLog(entities)));

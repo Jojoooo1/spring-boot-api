@@ -178,25 +178,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     return buildProblemDetail(HttpStatus.INTERNAL_SERVER_ERROR, ex, errors);
   }
 
-  // @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-  // @ExceptionHandler(HttpMessageNotWritableException.class)
-  // public ProblemDetail handleHttpMessageNotWritableException(
-  //     final HttpMessageNotWritableException ex, final WebRequest request) {
-  //
-  //   log.warn(ex.getMessage(), ex);
-  //
-  //   // this.slack.notify(format("LazyInitializationException: %s", ex.getMessage()));
-  //
-  //   final List<ApiErrorDetails> errors =
-  //       List.of(
-  //           ApiErrorDetails.builder()
-  //               .name(InternalServerErrorException.class.getSimpleName())
-  //               .reason(API_DEFAULT_ERROR_MESSAGE)
-  //               .build());
-  //
-  //   return buildProblemDetail(HttpStatus.INTERNAL_SERVER_ERROR, ex, errors);
-  // }
-
   @ExceptionHandler(RootException.class)
   public ResponseEntity<ProblemDetail> rootException(final RootException ex) {
     log.info(ex.getMessage(), ex);
