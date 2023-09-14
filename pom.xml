@@ -32,7 +32,7 @@
     <!-- Metrics -->
     <hibernate-micrometer.version>6.3.0.Final</hibernate-micrometer.version>
     <datasource-micrometer.version>1.0.2</datasource-micrometer.version>
-    <opentelemetry-exporter-otlp.version>1.26.0</opentelemetry-exporter-otlp.version>
+    <opentelemetry-exporter-otlp.version>1.28.0</opentelemetry-exporter-otlp.version>
     
     <!-- Lombok & Mapstruct -->
     <projectlombok.version>1.18.28</projectlombok.version>
@@ -45,7 +45,6 @@
     <slack-api-client.version>1.32.0</slack-api-client.version>
     <apache-commons-text.version>1.10.0</apache-commons-text.version>
     <apache-commons-collection.version>4.4</apache-commons-collection.version>
-    <gson.version>2.10.1</gson.version>
     
     <!-- Development-->
     <git-code-format-maven-plugin.version>4.2</git-code-format-maven-plugin.version>
