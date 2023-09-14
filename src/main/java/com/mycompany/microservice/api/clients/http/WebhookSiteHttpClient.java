@@ -25,7 +25,7 @@ import reactor.util.retry.Retry;
 @Component
 public class WebhookSiteHttpClient {
 
-  private static final String logName = "webhookSite";
+  private static final String LOG_NAME = "webhookSite";
 
   private final WebClient webClient;
 
@@ -38,7 +38,7 @@ public class WebhookSiteHttpClient {
   }
 
   public Mono<String> post(final Object request) {
-    log.debug(format("[%s][POST] url '%s'' request '%s'", logName, POST, request));
+    log.debug(format("[%s][POST] url '%s'' request '%s'", LOG_NAME, POST, request));
     return this.getWebClient()
         .post()
         .uri(POST.getUrl())
@@ -73,13 +73,6 @@ public class WebhookSiteHttpClient {
 
   private Mono<String> defaultErrorHandler(final Throwable ex) {
     log.warn("HTTP[ERROR_INTERNAL] '{}'", getErrorMessage(ex), ex);
-
-    //    Handle my error
-    //    if (ex instanceof RuntimeException) {
-    //      log.info("my error log");
-    //      return Mono.of("Something went wrong");
-    //    }
-
     return Mono.empty();
   }
 

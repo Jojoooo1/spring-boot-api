@@ -3,7 +3,7 @@ package com.mycompany.microservice.api.utils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class CryptoUtilsTest {
+class CryptoUtilsTest {
 
   @Test
   void verifyRandomKey() {

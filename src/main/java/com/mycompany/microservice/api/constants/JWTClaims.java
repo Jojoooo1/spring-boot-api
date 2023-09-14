@@ -1,5 +1,8 @@
 package com.mycompany.microservice.api.constants;
 
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
 public class JWTClaims {
   public static final String CLAIM_COMPANY_SLUG = "company_slug";
   public static final String CLAIM_EMAIL = "email";
