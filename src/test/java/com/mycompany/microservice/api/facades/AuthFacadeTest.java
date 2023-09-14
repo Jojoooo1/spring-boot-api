@@ -2,8 +2,8 @@ package com.mycompany.microservice.api.facades;
 
 import static com.mycompany.microservice.api.constants.JWTClaims.CLAIM_EMAIL;
 
-import com.mycompany.microservice.api.infra.auth.provider.apikey.ApiKeyAuthentication;
-import com.mycompany.microservice.api.infra.auth.provider.apikey.ApiKeyAuthentication.ApiKeyDetails;
+import com.mycompany.microservice.api.infra.auth.providers.ApiKeyAuthentication;
+import com.mycompany.microservice.api.infra.auth.providers.ApiKeyAuthentication.ApiKeyDetails;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

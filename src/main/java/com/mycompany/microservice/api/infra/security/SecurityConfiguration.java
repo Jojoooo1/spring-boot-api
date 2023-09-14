@@ -1,18 +1,12 @@
 package com.mycompany.microservice.api.infra.security;
 
-import static com.mycompany.microservice.api.constants.JWTClaims.CLAIM_REALM_ACCESS;
-import static com.mycompany.microservice.api.constants.JWTClaims.CLAIM_ROLES;
 import static com.mycompany.microservice.api.enums.UserRolesEnum.*;
-import static java.lang.String.format;
 
 import com.mycompany.microservice.api.constants.AppUrls;
+import com.mycompany.microservice.api.infra.auth.converters.KeycloakJwtConverter;
 import com.mycompany.microservice.api.infra.auth.filters.ApiKeyProcessingFilter;
-import com.mycompany.microservice.api.infra.auth.provider.apikey.ApiKeyAuthenticationProvider;
-import java.util.Collection;
+import com.mycompany.microservice.api.infra.auth.providers.ApiKeyAuthenticationProvider;
 import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,9 +18,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 
@@ -96,45 +87,18 @@ public class SecurityConfiguration {
                     // Else return 401
                     .anyRequest()
                     .denyAll())
+        // Necessary if we want to be able to call POST/PUT/DELETE
+        .csrf(AbstractHttpConfigurer::disable)
+        // To prevent any misconfiguration we disable explicitly all authentication scheme
         .sessionManagement(
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .csrf(AbstractHttpConfigurer::disable)
         .httpBasic(AbstractHttpConfigurer::disable)
         .formLogin(AbstractHttpConfigurer::disable)
         .logout(AbstractHttpConfigurer::disable)
         .oauth2ResourceServer(
             oauth2 ->
-                oauth2.jwt(
-                    jwtConfigurer ->
-                        jwtConfigurer.jwtAuthenticationConverter(
-                            this::getKeycloakJwtAuthenticationToken)));
+                oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(new KeycloakJwtConverter())));
 
     return http.build();
-  }
-
-  private JwtAuthenticationToken getKeycloakJwtAuthenticationToken(final Jwt jwt) {
-    final Map<String, Collection<String>> realmAccess = jwt.getClaim(CLAIM_REALM_ACCESS);
-
-    if (realmAccess == null) {
-      log.warn(
-          format("realm_access is null for jwt %s verify realm configuration.", jwt.getClaims()));
-      return new JwtAuthenticationToken(jwt, Collections.emptyList());
-    }
-
-    final Collection<String> roles = realmAccess.get(CLAIM_ROLES);
-
-    if (roles == null) {
-      log.warn(
-          format(
-              "realm_access.roles is null for jwt %s verify realm configuration.",
-              jwt.getClaims()));
-      return new JwtAuthenticationToken(jwt, Collections.emptyList());
-    }
-
-    final List<SimpleGrantedAuthority> grantedAuthorities =
-        roles.stream()
-            .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
-            .collect(Collectors.toList());
-    return new JwtAuthenticationToken(jwt, grantedAuthorities);
   }
 }
