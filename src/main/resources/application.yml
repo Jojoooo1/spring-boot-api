@@ -44,6 +44,12 @@ management:
     web:
       exposure:
         include: info, health, prometheus, metrics, preStopHook
+  tracing:
+    sampling:
+      probability: 0
+  #  otlp:
+  #    tracing:
+  #      endpoint:
   endpoint:
     health:
       probes:
