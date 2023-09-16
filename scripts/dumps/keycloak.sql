@@ -5,7 +5,7 @@
 -- Dumped from database version 15.4
 -- Dumped by pg_dump version 15.4 (Ubuntu 15.4-1.pgdg22.04+1)
 
--- Started on 2023-09-07 17:18:37 -03
+-- Started on 2023-09-16 17:07:11 -03
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -2165,10 +2165,12 @@ d34edce2-b506-464c-b7d2-e73c1d4c74d6	7fb85825-9810-42d9-8707-891c11fb3111
 
 COPY public.credential (id, salt, type, user_id, created_date, user_label, secret_data, credential_data, priority) FROM stdin;
 53401a41-68c1-4ba2-ab24-3f6a4aa2b63a	\N	password	7d08b9b5-bb0e-48c3-8158-2474ae3e38a2	1694111992015	\N	{"value":"uSKyW1qAqDGJ2yoCyCL5JKY9EwhnP9QSpfxl0eL5PDY=","salt":"wfMyYnND2AKv7kNFSiiH4g==","additionalParameters":{}}	{"hashIterations":27500,"algorithm":"pbkdf2-sha256","additionalParameters":{}}	10
-0c9020b5-5b0d-4186-a95d-d845f3e5f41c	\N	password	79ba8d1b-d263-4ffe-bc90-db1c6bf45a36	1694113198269	My password	{"value":"g6WN02+KEpFuQGQ4G/PmDT4UbiKy5EXi+Cf1B51qcWU=","salt":"qvs54wtcUNNbP3mAeFZD2A==","additionalParameters":{}}	{"hashIterations":27500,"algorithm":"pbkdf2-sha256","additionalParameters":{}}	10
 d2d79509-8195-4fd6-a8d5-279322196572	\N	password	18dd4c24-a575-4944-97b5-4d7e60e4b2ee	1694113850070	My password	{"value":"+hN1qSh+fcfYvY041XtJHkqgYWjKehonl1+lMufdzow=","salt":"ogLSMIg80GUtzBBekNsVfQ==","additionalParameters":{}}	{"hashIterations":27500,"algorithm":"pbkdf2-sha256","additionalParameters":{}}	10
 fc1ec41a-1bd3-46e2-9b04-41cfd7fd20f0	\N	password	864b40d8-4b9c-4c63-84ae-59b96397e000	1694113867859	My password	{"value":"1p74/C2H1N5R1Ln06hE4paLmPGq+5yd0jFQmPA/CkB8=","salt":"80dVR/x1XrSBsyae52Sg5A==","additionalParameters":{}}	{"hashIterations":27500,"algorithm":"pbkdf2-sha256","additionalParameters":{}}	10
-7a25c218-3e43-4030-8448-630b73375f1b	\N	password	96bde1d0-fd64-49d4-82be-704a31ead94c	1694113882102	My password	{"value":"ifd5QzOM3bgPNpNG5Eax0bQ9RJLwCbNPvdEK4g/GjLY=","salt":"7uloq8caoMKnIVwydLTRlQ==","additionalParameters":{}}	{"hashIterations":27500,"algorithm":"pbkdf2-sha256","additionalParameters":{}}	10
+e8e8f381-c2cc-4d20-904c-f02c935d6128	\N	password	4137073a-ac40-437c-8450-61732d1874cb	1694893063257	My password	{"value":"L2Pdc9IxVSppHEDfGUw+nJQtuxtsuDnZjkF+coRIPcA=","salt":"Va+NZbPOF62mWomgh0QbWg==","additionalParameters":{}}	{"hashIterations":27500,"algorithm":"pbkdf2-sha256","additionalParameters":{}}	10
+641576b6-f6b3-4467-94d1-ac526c11ce53	\N	password	181edd3e-372a-4ecb-9e6a-41a5bd02db0c	1694893092001	My password	{"value":"pdZoCrrziBJ0ev2C8KjnY1NosR9C+escB68KtieywN8=","salt":"BW7eOZ6qcW8r9YufNXthfA==","additionalParameters":{}}	{"hashIterations":27500,"algorithm":"pbkdf2-sha256","additionalParameters":{}}	10
+dbe3f683-f6d6-4e07-a37b-bb4d37b98498	\N	password	6ce64cf0-3e5c-40dc-aa62-822d55d5278d	1694893118377	My password	{"value":"mxJQpeth0If059z9Y/2o67FTVJ36b7KY+1HRmgD3vPs=","salt":"QawdlVvAKk5P1Ss8NpkDcw==","additionalParameters":{}}	{"hashIterations":27500,"algorithm":"pbkdf2-sha256","additionalParameters":{}}	10
+c5fdaa56-6e65-438c-a2bb-1ba8e19b73d7	\N	password	ce7eff56-8462-4bf9-899c-1c811cf1fd04	1694894808501	My password	{"value":"PqqcTeD6E9UJ4QJJrhuAuk7RsHW5Atfr7hbCJKqLs5s=","salt":"MQxDzKPaxX338DLOBGM5hg==","additionalParameters":{}}	{"hashIterations":27500,"algorithm":"pbkdf2-sha256","additionalParameters":{}}	10
 \.
 
 
@@ -2458,8 +2460,8 @@ COPY public.group_attribute (id, name, value, group_id) FROM stdin;
 COPY public.group_role_mapping (role_id, group_id) FROM stdin;
 c66a2e8d-7a0a-42c0-86a8-dd5398ba4d5a	2871365d-80f9-4737-b5e1-e154c32ce038
 74ece232-7cd7-4f8c-99c4-34a0ac8aa6fd	d6c1cf29-8f2b-4eb6-8424-c077d0885596
-a7359073-b0dd-4685-a1c4-6b675e27665e	d5056ac9-3374-40ef-a83f-2750e1af3ac2
-2fbbc43a-489e-44cd-b7ef-a9a0c3a5ac6f	ca61efdb-4e04-4bf2-9a23-2c77ec67a379
+d50d7e48-2d96-48c4-a527-eb06f87336a0	d5056ac9-3374-40ef-a83f-2750e1af3ac2
+44e98f75-4193-419c-be26-1f9809d1c81c	ca61efdb-4e04-4bf2-9a23-2c77ec67a379
 \.
 
 
@@ -2513,9 +2515,9 @@ COPY public.keycloak_group (id, name, parent_group, realm_id) FROM stdin;
 96479cd6-63f5-4fc6-a2e2-4e4fe3661321	back-office	 	f22bc560-708c-401c-ad05-2dbb1cda77dd
 2871365d-80f9-4737-b5e1-e154c32ce038	user	96479cd6-63f5-4fc6-a2e2-4e4fe3661321	f22bc560-708c-401c-ad05-2dbb1cda77dd
 d6c1cf29-8f2b-4eb6-8424-c077d0885596	admin	96479cd6-63f5-4fc6-a2e2-4e4fe3661321	f22bc560-708c-401c-ad05-2dbb1cda77dd
-f259c8b4-c086-4352-9769-15dad9f6b972	mobile	 	f22bc560-708c-401c-ad05-2dbb1cda77dd
 d5056ac9-3374-40ef-a83f-2750e1af3ac2	user	f259c8b4-c086-4352-9769-15dad9f6b972	f22bc560-708c-401c-ad05-2dbb1cda77dd
 ca61efdb-4e04-4bf2-9a23-2c77ec67a379	admin	f259c8b4-c086-4352-9769-15dad9f6b972	f22bc560-708c-401c-ad05-2dbb1cda77dd
+f259c8b4-c086-4352-9769-15dad9f6b972	platform	 	f22bc560-708c-401c-ad05-2dbb1cda77dd
 \.
 
 
@@ -2607,10 +2609,10 @@ a7d20f33-d7d4-4fd4-9da9-94d01b89ac80	7b1b68dc-583f-4952-bd7f-dcce425bf42e	t	${ro
 ee78484e-0acc-4e1b-b332-7b7eae732f44	1cd60c76-57d3-46c4-b80e-7c6f8b0c014e	t	${role_read-token}	read-token	f22bc560-708c-401c-ad05-2dbb1cda77dd	1cd60c76-57d3-46c4-b80e-7c6f8b0c014e	\N
 13cf3361-0704-4115-b5ea-bd3059e120d2	f22bc560-708c-401c-ad05-2dbb1cda77dd	f	${role_offline-access}	offline_access	f22bc560-708c-401c-ad05-2dbb1cda77dd	\N	\N
 58a838a3-5410-4fd8-a7f1-e7dd6eeff6de	f22bc560-708c-401c-ad05-2dbb1cda77dd	f	${role_uma_authorization}	uma_authorization	f22bc560-708c-401c-ad05-2dbb1cda77dd	\N	\N
-2fbbc43a-489e-44cd-b7ef-a9a0c3a5ac6f	f22bc560-708c-401c-ad05-2dbb1cda77dd	f		mobile_admin	f22bc560-708c-401c-ad05-2dbb1cda77dd	\N	\N
 c66a2e8d-7a0a-42c0-86a8-dd5398ba4d5a	f22bc560-708c-401c-ad05-2dbb1cda77dd	f		back_office_user	f22bc560-708c-401c-ad05-2dbb1cda77dd	\N	\N
 74ece232-7cd7-4f8c-99c4-34a0ac8aa6fd	f22bc560-708c-401c-ad05-2dbb1cda77dd	f		back_office_admin	f22bc560-708c-401c-ad05-2dbb1cda77dd	\N	\N
-a7359073-b0dd-4685-a1c4-6b675e27665e	f22bc560-708c-401c-ad05-2dbb1cda77dd	f		mobile_user	f22bc560-708c-401c-ad05-2dbb1cda77dd	\N	\N
+44e98f75-4193-419c-be26-1f9809d1c81c	f22bc560-708c-401c-ad05-2dbb1cda77dd	f		platform_admin	f22bc560-708c-401c-ad05-2dbb1cda77dd	\N	\N
+d50d7e48-2d96-48c4-a527-eb06f87336a0	f22bc560-708c-401c-ad05-2dbb1cda77dd	f		platform_user	f22bc560-708c-401c-ad05-2dbb1cda77dd	\N	\N
 \.
 
 
@@ -3495,10 +3497,12 @@ COPY public.user_consent_client_scope (user_consent_id, scope_id) FROM stdin;
 
 COPY public.user_entity (id, email, email_constraint, email_verified, enabled, federation_link, first_name, last_name, realm_id, username, created_timestamp, service_account_client_link, not_before) FROM stdin;
 7d08b9b5-bb0e-48c3-8158-2474ae3e38a2	\N	071cc69e-9790-4ed1-98aa-c798d4be66d2	f	t	\N	\N	\N	e57cceb5-7637-45fa-b2ba-ebbba563f9c9	admin	1694111991899	\N	0
-79ba8d1b-d263-4ffe-bc90-db1c6bf45a36	mobile_user@gmail.com	mobile_user@gmail.com	t	t	\N			f22bc560-708c-401c-ad05-2dbb1cda77dd	mobile_user	1694112518987	\N	0
-96bde1d0-fd64-49d4-82be-704a31ead94c	mobile_admin@gmail.com	mobile_admin@gmail.com	t	t	\N			f22bc560-708c-401c-ad05-2dbb1cda77dd	mobile_admin	1694112546407	\N	0
 864b40d8-4b9c-4c63-84ae-59b96397e000	back_office_user@gmail.com	back_office_user@gmail.com	t	t	\N			f22bc560-708c-401c-ad05-2dbb1cda77dd	back_office_user	1694112567788	\N	0
 18dd4c24-a575-4944-97b5-4d7e60e4b2ee	back_office_admin@gmail.com	back_office_admin@gmail.com	t	t	\N			f22bc560-708c-401c-ad05-2dbb1cda77dd	back_office_admin	1694112582470	\N	0
+4137073a-ac40-437c-8450-61732d1874cb	platform@gmail.com	platform@gmail.com	t	t	\N			f22bc560-708c-401c-ad05-2dbb1cda77dd	platform	1694893049910	\N	0
+181edd3e-372a-4ecb-9e6a-41a5bd02db0c	platform_admin@gmail.com	platform_admin@gmail.com	t	t	\N			f22bc560-708c-401c-ad05-2dbb1cda77dd	platform_admin	1694893076540	\N	0
+6ce64cf0-3e5c-40dc-aa62-822d55d5278d	platform_user@gmail.com	platform_user@gmail.com	t	t	\N			f22bc560-708c-401c-ad05-2dbb1cda77dd	platform_user	1694893109445	\N	0
+ce7eff56-8462-4bf9-899c-1c811cf1fd04	test_user@gmail.com	test_user@gmail.com	f	t	\N			f22bc560-708c-401c-ad05-2dbb1cda77dd	test_user	1694894792203	\N	0
 \.
 
 
@@ -3549,10 +3553,11 @@ COPY public.user_federation_provider (id, changed_sync_period, display_name, ful
 --
 
 COPY public.user_group_membership (group_id, user_id) FROM stdin;
-d5056ac9-3374-40ef-a83f-2750e1af3ac2	79ba8d1b-d263-4ffe-bc90-db1c6bf45a36
-ca61efdb-4e04-4bf2-9a23-2c77ec67a379	96bde1d0-fd64-49d4-82be-704a31ead94c
 2871365d-80f9-4737-b5e1-e154c32ce038	864b40d8-4b9c-4c63-84ae-59b96397e000
 d6c1cf29-8f2b-4eb6-8424-c077d0885596	18dd4c24-a575-4944-97b5-4d7e60e4b2ee
+f259c8b4-c086-4352-9769-15dad9f6b972	4137073a-ac40-437c-8450-61732d1874cb
+ca61efdb-4e04-4bf2-9a23-2c77ec67a379	181edd3e-372a-4ecb-9e6a-41a5bd02db0c
+d5056ac9-3374-40ef-a83f-2750e1af3ac2	6ce64cf0-3e5c-40dc-aa62-822d55d5278d
 \.
 
 
@@ -3592,10 +3597,12 @@ cfe75d36-0907-4d1c-928c-0362d574472d	7d08b9b5-bb0e-48c3-8158-2474ae3e38a2
 7fb85825-9810-42d9-8707-891c11fb3111	7d08b9b5-bb0e-48c3-8158-2474ae3e38a2
 1b01bd7b-43a8-43fb-b036-2a908723f61d	7d08b9b5-bb0e-48c3-8158-2474ae3e38a2
 b46e4418-17e0-42ea-8049-aafd345505fc	7d08b9b5-bb0e-48c3-8158-2474ae3e38a2
-095bc3e8-37d4-4ce4-b47c-e5fa9d000f26	79ba8d1b-d263-4ffe-bc90-db1c6bf45a36
-095bc3e8-37d4-4ce4-b47c-e5fa9d000f26	96bde1d0-fd64-49d4-82be-704a31ead94c
 095bc3e8-37d4-4ce4-b47c-e5fa9d000f26	864b40d8-4b9c-4c63-84ae-59b96397e000
 095bc3e8-37d4-4ce4-b47c-e5fa9d000f26	18dd4c24-a575-4944-97b5-4d7e60e4b2ee
+095bc3e8-37d4-4ce4-b47c-e5fa9d000f26	4137073a-ac40-437c-8450-61732d1874cb
+095bc3e8-37d4-4ce4-b47c-e5fa9d000f26	181edd3e-372a-4ecb-9e6a-41a5bd02db0c
+095bc3e8-37d4-4ce4-b47c-e5fa9d000f26	6ce64cf0-3e5c-40dc-aa62-822d55d5278d
+095bc3e8-37d4-4ce4-b47c-e5fa9d000f26	ce7eff56-8462-4bf9-899c-1c811cf1fd04
 \.
 
 
@@ -5917,7 +5924,7 @@ ALTER TABLE ONLY public.identity_provider_config
     ADD CONSTRAINT fkdc4897cf864c4e43 FOREIGN KEY (identity_provider_id) REFERENCES public.identity_provider(internal_id);
 
 
--- Completed on 2023-09-07 17:18:37 -03
+-- Completed on 2023-09-16 17:07:11 -03
 
 --
 -- PostgreSQL database dump complete

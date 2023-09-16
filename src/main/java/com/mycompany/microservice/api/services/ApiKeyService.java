@@ -29,7 +29,7 @@ public class ApiKeyService extends BaseService<ApiKey> {
 
   public Optional<ApiKey> findByKeyOptional(final String key) {
     log.debug("[retrieving] apiKey");
-    return this.repository.findWithCompanyByKeyAndIsActive(key, true);
+    return this.repository.findByKeyAndIsActive(key, true);
   }
 
   public ApiKey findFirstByCompanyIdAndIsActive(final Long companyId) {

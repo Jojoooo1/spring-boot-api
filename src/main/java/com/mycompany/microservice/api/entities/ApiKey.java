@@ -4,17 +4,14 @@ import static com.mycompany.microservice.api.entities.ApiKey.TABLE_NAME;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mycompany.microservice.api.entities.base.BaseEntity;
-import com.mycompany.microservice.api.utils.LogUtils;
 import io.hypersistence.utils.hibernate.id.BatchSequenceGenerator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.io.Serial;
 import lombok.AccessLevel;
@@ -51,9 +48,8 @@ public class ApiKey extends BaseEntity {
       })
   private Long id;
 
-  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(nullable = false)
-  private Company company;
+  private Long companyId;
 
   @Column(nullable = false)
   private String name;
@@ -75,8 +71,8 @@ public class ApiKey extends BaseEntity {
     return "Apikey{"
         + "id="
         + this.id
-        + ", company="
-        + LogUtils.logId(this.company)
+        + ", companyId="
+        + this.companyId
         + ", name='"
         + this.name
         + "', isActive="

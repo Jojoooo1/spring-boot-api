@@ -4,6 +4,7 @@ import static com.mycompany.microservice.api.constants.JWTClaims.CLAIM_EMAIL;
 
 import com.mycompany.microservice.api.infra.auth.providers.ApiKeyAuthentication;
 import com.mycompany.microservice.api.infra.auth.providers.ApiKeyAuthentication.ApiKeyDetails;
+import java.util.Collections;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -22,7 +23,7 @@ public class AuthFacadeTest {
   public static String COMPANY_SLUG = "my-company-test";
 
   @Test
-  void verifyGetCompanySlugIsEmptyOnEmptyAuth() {
+  void verifyGetCompanySlugIsEmptyOnEmptyAuthentication() {
     final var securityContext = Mockito.mock(SecurityContext.class);
     SecurityContextHolder.setContext(securityContext);
 
@@ -30,7 +31,7 @@ public class AuthFacadeTest {
   }
 
   @Test
-  void verifyGetCompanySlugIsEmptyOnInvalidAuth() {
+  void verifyGetCompanySlugIsEmptyOnInvalidAuthentication() {
     final var securityContext = Mockito.mock(SecurityContext.class);
     final var authentication = Mockito.mock(Authentication.class);
 
@@ -41,7 +42,7 @@ public class AuthFacadeTest {
   }
 
   @Test
-  void verifyGetCompanySlugOnJwtAuth() {
+  void verifyGetCompanySlugOnJwtAuthentication() {
 
     final var jwt =
         Jwt.withTokenValue("token")
@@ -60,7 +61,7 @@ public class AuthFacadeTest {
   }
 
   @Test
-  void verifyGetUserEmailOnJwtAuth() {
+  void verifyGetUserEmailOnJwtAuthentication() {
 
     final var jwt =
         Jwt.withTokenValue("token")
@@ -79,11 +80,14 @@ public class AuthFacadeTest {
   }
 
   @Test
-  void verifyGetCompanySlugOnApiAuth() {
+  void verifyGetCompanySlugOnApiAuthentication() {
 
     final var authentication =
         new ApiKeyAuthentication(
-            API_KEY, true, new ApiKeyDetails(1L, StringUtils.EMPTY, COMPANY_SLUG));
+            API_KEY,
+            true,
+            ApiKeyDetails.builder().id(1L).companySlug(COMPANY_SLUG).build(),
+            Collections.emptyList());
 
     final var securityContext = Mockito.mock(SecurityContext.class);
     Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
@@ -93,10 +97,14 @@ public class AuthFacadeTest {
   }
 
   @Test
-  void verifyGetUserEmailOnApiAuth() {
+  void verifyGetUserEmailOnApiAuthentication() {
 
     final var authentication =
-        new ApiKeyAuthentication(API_KEY, true, new ApiKeyDetails(1L, EMAIL, StringUtils.EMPTY));
+        new ApiKeyAuthentication(
+            API_KEY,
+            true,
+            ApiKeyDetails.builder().id(1L).email(EMAIL).build(),
+            Collections.emptyList());
 
     final var securityContext = Mockito.mock(SecurityContext.class);
     Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);

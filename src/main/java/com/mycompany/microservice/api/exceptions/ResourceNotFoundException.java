@@ -11,6 +11,10 @@ public class ResourceNotFoundException extends RootException {
 
   @Serial private static final long serialVersionUID = 26377136569699646L;
 
+  public ResourceNotFoundException() {
+    super(NOT_FOUND, "entity not found, please provide a valid id");
+  }
+
   public ResourceNotFoundException(final Long id) {
     super(NOT_FOUND, format("entity with id '%s' not found", id));
   }

@@ -1,4 +1,4 @@
-package com.mycompany.microservice.api.controllers.backoffice;
+package com.mycompany.microservice.api.controllers.platform.mobile;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -10,9 +10,9 @@ import com.mycompany.microservice.api.testutils.builders.JwtBuilder;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-class AuthorizationBackOfficeControllerIT extends BaseIntegrationTest {
+class AuthorizationPlatformMobileControllerIT extends BaseIntegrationTest {
 
-  private final String URL = BackOfficeController.BASE_URL + "/hello-world";
+  private final String URL = PlatformMobileController.BASE_URL + "/hello-world";
 
   @BeforeAll
   void init() {}
@@ -36,7 +36,7 @@ class AuthorizationBackOfficeControllerIT extends BaseIntegrationTest {
     this.mockMvc
         .perform(
             get(this.URL)
-                .with(authentication(JwtBuilder.jwt(random(), UserRolesEnum.PLATFORM_USER))))
+                .with(authentication(JwtBuilder.jwt(random(), UserRolesEnum.BACK_OFFICE_USER))))
         .andExpect(status().isForbidden());
   }
 
@@ -45,7 +45,7 @@ class AuthorizationBackOfficeControllerIT extends BaseIntegrationTest {
     this.mockMvc
         .perform(
             get(this.URL)
-                .with(authentication(JwtBuilder.jwt(random(), UserRolesEnum.BACK_OFFICE_USER))))
+                .with(authentication(JwtBuilder.jwt(random(), UserRolesEnum.PLATFORM_USER))))
         .andExpect(status().isOk());
   }
 }

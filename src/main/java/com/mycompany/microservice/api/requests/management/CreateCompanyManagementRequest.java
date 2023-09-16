@@ -23,4 +23,4 @@ public record CreateCompanyManagementRequest(
     BigDecimal addressLongitude,
     Boolean isManagement,
     Boolean isInternal,
-    Boolean isClient) {}
+    Boolean isPlatform) {}

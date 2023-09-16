@@ -12,8 +12,8 @@ public class CompanyBuilder {
     return Company.builder().name(random()).slug(random()).build();
   }
 
-  public static Company client() {
-    return Company.builder().name(random()).slug(random()).isClient(true).build();
+  public static Company platform() {
+    return Company.builder().name(random()).slug(random()).isPlatform(true).build();
   }
 
   public static Company management() {

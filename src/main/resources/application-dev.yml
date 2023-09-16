@@ -1,14 +1,14 @@
-http:
-  clients:
-    my-external-api:
-      base-url: https://webhook.site/8258fbb5-0137-4e8c-9a5f-080629933063
-
 slack:
   username: api-alert-dev
   channels:
     api-alert:
       url: http://your-slack-bot-url.com/example
       name: api-alert
+
+http:
+  clients:
+    my-external-api:
+      base-url: https://webhook.site/8258fbb5-0137-4e8c-9a5f-080629933063
 
 rabbitmq:
   host: localhost

@@ -6,7 +6,6 @@ import com.mycompany.microservice.api.requests.management.CreateApiKeyManagement
 import com.mycompany.microservice.api.requests.management.UpdateApiKeyManagementRequest;
 import com.mycompany.microservice.api.responses.management.ApikeyManagementResponse;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface ApiKeyMapper
@@ -16,13 +15,9 @@ public interface ApiKeyMapper
         UpdateApiKeyManagementRequest,
         ApikeyManagementResponse> {
 
-  @Mapping(
-      target = "company",
-      expression = "java(request.companyId() == null ? null : new Company(request.companyId()))")
   @Override
   ApiKey toEntity(CreateApiKeyManagementRequest request);
 
-  @Mapping(source = "company.id", target = "companyId")
   @Override
   ApikeyManagementResponse toManagementResponse(ApiKey entity);
 }
