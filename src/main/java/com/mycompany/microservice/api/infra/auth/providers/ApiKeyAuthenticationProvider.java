@@ -39,6 +39,11 @@ public class ApiKeyAuthenticationProvider implements AuthenticationProvider {
       if (apiKeyOptional.isPresent()) {
         final ApiKey apiKey = apiKeyOptional.get();
         final Company company = this.companyService.findById(apiKey.getCompanyId());
+        log.debug(
+            "[{}] api-key '{}' found with authorities '{}'",
+            LOG_NAME,
+            apiKeyInRequest,
+            company.getAuthorities());
 
         final ApiKeyDetails apiKeyDetails =
             ApiKeyDetails.builder()
