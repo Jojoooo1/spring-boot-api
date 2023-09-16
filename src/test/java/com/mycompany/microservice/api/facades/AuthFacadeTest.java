@@ -103,7 +103,7 @@ public class AuthFacadeTest {
         new ApiKeyAuthentication(
             API_KEY,
             true,
-            ApiKeyDetails.builder().id(1L).companySlug(COMPANY_SLUG).build(),
+            ApiKeyDetails.builder().id(1L).email(EMAIL).build(),
             Collections.emptyList());
 
     final var securityContext = Mockito.mock(SecurityContext.class);

@@ -189,13 +189,13 @@ public class Company extends BaseEntity {
   private List<UserRolesEnum> getUserRoles() {
     final List<UserRolesEnum> roles = new ArrayList<>();
 
-    if (this.isManagement) {
+    if (Boolean.TRUE.equals(this.isManagement)) {
       roles.add(UserRolesEnum.MANAGEMENT_USER);
     }
-    if (this.isInternal) {
+    if (Boolean.TRUE.equals(this.isInternal)) {
       roles.add(UserRolesEnum.INTERNAL_USER);
     }
-    if (this.isPlatform) {
+    if (Boolean.TRUE.equals(this.isPlatform)) {
       roles.add(UserRolesEnum.PLATFORM_USER);
     }
 

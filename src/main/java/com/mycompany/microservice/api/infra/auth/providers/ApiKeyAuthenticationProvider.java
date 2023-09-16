@@ -50,9 +50,9 @@ public class ApiKeyAuthenticationProvider implements AuthenticationProvider {
                 .id(apiKey.getId())
                 .companySlug(company.getSlug())
                 .email(company.getEmail())
-                .isManagement(company.getIsManagement())
-                .isInternal(company.getIsInternal())
-                .isPlatform(company.getIsPlatform())
+                .isManagement(Boolean.TRUE.equals(company.getIsManagement()))
+                .isInternal(Boolean.TRUE.equals(company.getIsInternal()))
+                .isPlatform(Boolean.TRUE.equals(company.getIsPlatform()))
                 .build();
 
         return new ApiKeyAuthentication(

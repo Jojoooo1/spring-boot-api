@@ -37,13 +37,13 @@ class AuthorizationPlatformApiControllerIT extends BaseIntegrationTest {
     final var apiKey = this.apiKeyService.create(ApiKeyBuilder.apiKey(company));
     this.mockMvc
         .perform(delete(URL).header(AppHeaders.API_KEY_HEADER, apiKey.getKey()))
-        .andExpect(status().isUnauthorized());
+        .andExpect(status().isForbidden());
 
     final var management = this.companyService.create(CompanyBuilder.management());
     final var apiKeyManagement = this.apiKeyService.create(ApiKeyBuilder.apiKey(management));
     this.mockMvc
         .perform(delete(URL).header(AppHeaders.API_KEY_HEADER, apiKeyManagement.getKey()))
-        .andExpect(status().isUnauthorized());
+        .andExpect(status().isForbidden());
   }
 
   @Test
