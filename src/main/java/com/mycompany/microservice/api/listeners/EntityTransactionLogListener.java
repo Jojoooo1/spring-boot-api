@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
@@ -18,13 +19,15 @@ import org.springframework.transaction.event.TransactionalEventListener;
 @Component
 public class EntityTransactionLogListener {
 
+  @Async
   @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-  private void onCommitEvent(final EntityTransactionLogEvent event) {
+  public void onCommitEvent(final EntityTransactionLogEvent event) {
     log.info("[{}] {} {}", event.operation().getName(), event.entityName(), event.entitiesToLog());
   }
 
+  @Async
   @TransactionalEventListener(phase = TransactionPhase.AFTER_ROLLBACK)
-  private void onRollbackEvent(final EntityTransactionLogEvent event) {
+  public void onRollbackEvent(final EntityTransactionLogEvent event) {
     log.info(
         "[{}] {} {} rollback.",
         event.operation().getName(),
