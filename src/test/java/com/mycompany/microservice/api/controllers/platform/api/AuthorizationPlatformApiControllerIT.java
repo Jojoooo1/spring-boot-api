@@ -48,8 +48,8 @@ class AuthorizationPlatformApiControllerIT extends BaseIntegrationTest {
 
   @Test
   void return_401_IfApikeyIsDisabled() throws Exception {
-    final var client = this.companyService.create(CompanyBuilder.platform());
-    final var apiKey = this.apiKeyService.create(ApiKeyBuilder.apiKey(client));
+    final var platform = this.companyService.create(CompanyBuilder.platform());
+    final var apiKey = this.apiKeyService.create(ApiKeyBuilder.apiKey(platform));
     this.apiKeyService.delete(apiKey.getId());
     this.mockMvc
         .perform(get(URL).header(AppHeaders.API_KEY_HEADER, apiKey.getKey()))
@@ -58,8 +58,8 @@ class AuthorizationPlatformApiControllerIT extends BaseIntegrationTest {
 
   @Test
   void return_200() throws Exception {
-    final var client = this.companyService.create(CompanyBuilder.platform());
-    final var apiKey = this.apiKeyService.create(ApiKeyBuilder.apiKey(client));
+    final var platform = this.companyService.create(CompanyBuilder.platform());
+    final var apiKey = this.apiKeyService.create(ApiKeyBuilder.apiKey(platform));
     this.mockMvc
         .perform(get(URL).header(AppHeaders.API_KEY_HEADER, apiKey.getKey()))
         .andExpect(status().isOk());
