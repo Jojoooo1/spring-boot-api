@@ -204,7 +204,7 @@ public class Company extends BaseEntity {
 
   public Collection<GrantedAuthority> getAuthorities() {
     return this.getUserRoles().stream()
-        .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getSlug()))
+        .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName()))
         .collect(Collectors.toSet());
   }
 }

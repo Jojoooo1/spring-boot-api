@@ -55,13 +55,13 @@ public class SecurityConfiguration {
             authorize ->
                 authorize
                     .requestMatchers(AppUrls.BACK_OFFICE + "/**")
-                    .hasAnyRole(BACK_OFFICE_USER.getSlug(), BACK_OFFICE_ADMIN.getSlug())
+                    .hasAnyRole(BACK_OFFICE_USER.getName(), BACK_OFFICE_ADMIN.getName())
                     .requestMatchers(AppUrls.INTERNAL + "/**")
-                    .hasAnyRole(INTERNAL_USER.getSlug())
+                    .hasAnyRole(INTERNAL_USER.getName())
                     .requestMatchers(AppUrls.MANAGEMENT + "/**")
-                    .hasAnyRole(MANAGEMENT_USER.getSlug())
+                    .hasAnyRole(MANAGEMENT_USER.getName())
                     .requestMatchers(AppUrls.PLATFORM + "/**")
-                    .hasAnyRole(PLATFORM_USER.getSlug(), PLATFORM_ADMIN.getSlug())
+                    .hasAnyRole(PLATFORM_USER.getName(), PLATFORM_ADMIN.getName())
                     .requestMatchers(AppUrls.PUBLIC + "/**")
                     .permitAll()
                     .anyRequest()

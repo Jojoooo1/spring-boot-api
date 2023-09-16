@@ -14,5 +14,5 @@ public enum UserRolesEnum {
   PLATFORM_USER("platform_user"),
   PLATFORM_ADMIN("platform_admin");
 
-  private final String slug;
+  private final String name;
 }

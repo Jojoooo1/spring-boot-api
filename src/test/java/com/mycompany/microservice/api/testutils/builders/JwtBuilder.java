@@ -16,7 +16,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 public class JwtBuilder {
 
   public static JwtAuthenticationToken jwt(final String companySlug, final UserRolesEnum role) {
-    return jwt(companySlug, role.getSlug());
+    return jwt(companySlug, role.getName());
   }
 
   public static JwtAuthenticationToken jwt(final String companySlug, final String role) {
