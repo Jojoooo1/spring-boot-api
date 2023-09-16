@@ -1,4 +1,4 @@
-package com.mycompany.microservice.api.controllers.actuator;
+package com.mycompany.microservice.api.controllers.internal.actuator;
 
 import static org.springframework.http.HttpStatus.OK;
 

@@ -1,4 +1,4 @@
-package com.mycompany.microservice.api.controllers.api.v1;
+package com.mycompany.microservice.api.controllers.platform.api;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -14,9 +14,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class AuthorizationApiControllerIT extends BaseIntegrationTest {
+class AuthorizationPlatformApiControllerIT extends BaseIntegrationTest {
 
-  private static final String URL = ApiController.BASE_URL + "/hello-world";
+  private static final String URL = PlatformApiController.BASE_URL + "/hello-world";
 
   @Autowired private ApiKeyService apiKeyService;
   @Autowired private CompanyService companyService;
@@ -48,7 +48,7 @@ class AuthorizationApiControllerIT extends BaseIntegrationTest {
 
   @Test
   void return_401_IfApikeyIsDisabled() throws Exception {
-    final var client = this.companyService.create(CompanyBuilder.client());
+    final var client = this.companyService.create(CompanyBuilder.platform());
     final var apiKey = this.apiKeyService.create(ApiKeyBuilder.apiKey(client));
     this.apiKeyService.delete(apiKey.getId());
     this.mockMvc
@@ -58,7 +58,7 @@ class AuthorizationApiControllerIT extends BaseIntegrationTest {
 
   @Test
   void return_200() throws Exception {
-    final var client = this.companyService.create(CompanyBuilder.client());
+    final var client = this.companyService.create(CompanyBuilder.platform());
     final var apiKey = this.apiKeyService.create(ApiKeyBuilder.apiKey(client));
     this.mockMvc
         .perform(get(URL).header(AppHeaders.API_KEY_HEADER, apiKey.getKey()))

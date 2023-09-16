@@ -22,4 +22,4 @@ public record UpdateCompanyManagementRequest(
     BigDecimal addressLongitude,
     Boolean isManagement,
     Boolean isInternal,
-    Boolean isClient) {}
+    Boolean isPlatform) {}

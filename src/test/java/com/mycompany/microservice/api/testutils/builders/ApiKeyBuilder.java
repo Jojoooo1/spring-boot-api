@@ -9,6 +9,6 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class ApiKeyBuilder {
   public static ApiKey apiKey(final Company company) {
-    return ApiKey.builder().name(random()).company(company).build();
+    return ApiKey.builder().name(random()).companyId(company.getId()).build();
   }
 }

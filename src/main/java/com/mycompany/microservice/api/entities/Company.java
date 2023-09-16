@@ -4,6 +4,7 @@ import static com.mycompany.microservice.api.entities.Company.TABLE_NAME;
 import static com.mycompany.microservice.api.utils.StringUtils.numericOnly;
 
 import com.mycompany.microservice.api.entities.base.BaseEntity;
+import com.mycompany.microservice.api.enums.UserRolesEnum;
 import io.hypersistence.utils.hibernate.id.BatchSequenceGenerator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,6 +17,10 @@ import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import java.io.Serial;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,6 +31,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -81,7 +88,7 @@ public class Company extends BaseEntity {
   @Column private BigDecimal addressLatitude;
   @Column private BigDecimal addressLongitude;
 
-  @Column private Boolean isClient;
+  @Column private Boolean isPlatform;
   @Column private Boolean isManagement;
   @Column private Boolean isInternal;
 
@@ -142,8 +149,8 @@ public class Company extends BaseEntity {
         + this.addressLatitude
         + ", addressLongitude="
         + this.addressLongitude
-        + ", isClient="
-        + this.isClient
+        + ", isPlatform="
+        + this.isPlatform
         + ", isManagement="
         + this.isManagement
         + ", isInternal="
@@ -177,5 +184,27 @@ public class Company extends BaseEntity {
 
   public boolean is(final String slug) {
     return StringUtils.isNotBlank(this.slug) && this.slug.equals(slug);
+  }
+
+  private List<UserRolesEnum> getUserRoles() {
+    final List<UserRolesEnum> roles = new ArrayList<>();
+
+    if (this.isManagement) {
+      roles.add(UserRolesEnum.MANAGEMENT_USER);
+    }
+    if (this.isInternal) {
+      roles.add(UserRolesEnum.INTERNAL_USER);
+    }
+    if (this.isPlatform) {
+      roles.add(UserRolesEnum.PLATFORM_USER);
+    }
+
+    return roles;
+  }
+
+  public Collection<GrantedAuthority> getAuthorities() {
+    return this.getUserRoles().stream()
+        .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getSlug()))
+        .collect(Collectors.toSet());
   }
 }

@@ -1,24 +1,25 @@
-package com.mycompany.microservice.api.infra.filters.mdc;
+package com.mycompany.microservice.api.infra.filters;
 
+import com.mycompany.microservice.api.facades.AuthFacade;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.MDC;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 /*
- * This filter is used to inject nginx trace value
+ * This filter is used to inject user and company value
  * within MDC context.
  */
 @Component
-public class AddNginxTraceToMDCFilter extends OncePerRequestFilter {
+public class AddAuthToMDCFilter extends OncePerRequestFilter {
 
-  private static final String NGINX_REQUEST_ID_HEADER = "X-Request-ID";
+  private static final String USER_MDC_KEY = "user";
+  private static final String COMPANY_MDC_KEY = "company";
 
   @Override
   protected void doFilterInternal(
@@ -27,16 +28,14 @@ public class AddNginxTraceToMDCFilter extends OncePerRequestFilter {
       final FilterChain filterChain)
       throws ServletException, IOException {
 
-    final String nginxRequestId = request.getHeader(NGINX_REQUEST_ID_HEADER);
-
-    MDC.put(
-        NGINX_REQUEST_ID_HEADER,
-        StringUtils.isNotBlank(nginxRequestId) ? nginxRequestId : StringUtils.EMPTY);
+    MDC.put(USER_MDC_KEY, AuthFacade.getUserEmail());
+    MDC.put(COMPANY_MDC_KEY, AuthFacade.getCompanySlug());
 
     try {
       filterChain.doFilter(request, response);
     } finally {
-      MDC.remove(NGINX_REQUEST_ID_HEADER);
+      MDC.remove(USER_MDC_KEY);
+      MDC.remove(COMPANY_MDC_KEY);
     }
   }
 

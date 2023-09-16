@@ -1,11 +1,13 @@
 package com.mycompany.microservice.api.infra.auth.providers;
 
 import java.io.Serial;
+import java.util.Collection;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.Transient;
 import org.springframework.security.core.authority.AuthorityUtils;
 
@@ -19,8 +21,11 @@ public class ApiKeyAuthentication extends AbstractAuthenticationToken {
   private transient ApiKeyDetails apiKeyDetails;
 
   public ApiKeyAuthentication(
-      final String apiKey, final boolean authenticated, final ApiKeyDetails apiKeyDetails) {
-    super(AuthorityUtils.NO_AUTHORITIES);
+      final String apiKey,
+      final boolean authenticated,
+      final ApiKeyDetails apiKeyDetails,
+      final Collection<? extends GrantedAuthority> authorities) {
+    super(authorities);
     this.apiKey = apiKey;
     this.apiKeyDetails = apiKeyDetails;
     this.setAuthenticated(authenticated);
@@ -55,5 +60,8 @@ public class ApiKeyAuthentication extends AbstractAuthenticationToken {
     private Long id;
     private String email;
     private String companySlug;
+    private boolean isManagement;
+    private boolean isInternal;
+    private boolean isPlatform;
   }
 }

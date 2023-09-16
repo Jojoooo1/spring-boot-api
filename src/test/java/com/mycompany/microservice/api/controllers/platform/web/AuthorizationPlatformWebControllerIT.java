@@ -1,4 +1,4 @@
-package com.mycompany.microservice.api.controllers.mobile;
+package com.mycompany.microservice.api.controllers.platform.web;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -10,9 +10,9 @@ import com.mycompany.microservice.api.testutils.builders.JwtBuilder;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-class AuthorizationMobileControllerIT extends BaseIntegrationTest {
+class AuthorizationPlatformWebControllerIT extends BaseIntegrationTest {
 
-  private final String URL = MobileController.BASE_URL + "/hello-world";
+  private final String URL = PlatformWebController.BASE_URL + "/hello-world";
 
   @BeforeAll
   void init() {}
@@ -44,7 +44,8 @@ class AuthorizationMobileControllerIT extends BaseIntegrationTest {
   void return_200() throws Exception {
     this.mockMvc
         .perform(
-            get(this.URL).with(authentication(JwtBuilder.jwt(random(), UserRolesEnum.MOBILE_USER))))
+            get(this.URL)
+                .with(authentication(JwtBuilder.jwt(random(), UserRolesEnum.PLATFORM_USER))))
         .andExpect(status().isOk());
   }
 }

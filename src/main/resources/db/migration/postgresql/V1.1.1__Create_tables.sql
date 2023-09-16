@@ -20,7 +20,7 @@ CREATE TABLE public.company (
   address_latitude numeric,
   address_longitude numeric,
 
-  is_client boolean DEFAULT false,
+  is_platform boolean DEFAULT false,
   is_management boolean DEFAULT false,
   is_internal boolean DEFAULT false,
 
@@ -58,7 +58,7 @@ VALUES ('internal', 'internal-company', 'internal-company@gmail.com', true, NOW(
 INSERT INTO public.api_key (company_id, name, key, is_active, created_at, updated_at)
 VALUES (2, 'apikey-internal', 'internal-apikey', true, NOW(), NOW());
 
-INSERT INTO public.company (slug, name, email, is_client, created_at, updated_at)
-VALUES ('client', 'client-company', 'client-company@gmail.com', true, NOW(), NOW());
+INSERT INTO public.company (slug, name, email, is_platform, created_at, updated_at)
+VALUES ('platform', 'platform-company', 'platform-company@gmail.com', true, NOW(), NOW());
 INSERT INTO public.api_key (company_id, name, key, is_active, created_at, updated_at)
-VALUES (3, 'apikey-client', 'client-apikey', true, NOW(), NOW());
+VALUES (3, 'apikey-platform', 'platform-apikey', true, NOW(), NOW());

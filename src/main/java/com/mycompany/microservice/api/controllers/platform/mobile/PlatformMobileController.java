@@ -1,4 +1,4 @@
-package com.mycompany.microservice.api.controllers.backoffice;
+package com.mycompany.microservice.api.controllers.platform.mobile;
 
 import com.mycompany.microservice.api.constants.AppUrls;
 import lombok.RequiredArgsConstructor;
@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-@RequestMapping(BackOfficeController.BASE_URL)
+@RequestMapping(PlatformMobileController.BASE_URL)
 @RequiredArgsConstructor
-public class BackOfficeController {
-  public static final String BASE_URL = AppUrls.BACK_OFFICE;
+public class PlatformMobileController {
+  public static final String BASE_URL = AppUrls.PLATFORM_MOBILE;
 
   @GetMapping("/hello-world")
   @ResponseStatus(HttpStatus.OK)

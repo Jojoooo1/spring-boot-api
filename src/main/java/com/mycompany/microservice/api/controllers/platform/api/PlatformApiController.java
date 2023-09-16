@@ -1,4 +1,4 @@
-package com.mycompany.microservice.api.controllers.api.v1;
+package com.mycompany.microservice.api.controllers.platform.api;
 
 import com.mycompany.microservice.api.constants.AppUrls;
 import lombok.RequiredArgsConstructor;
@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-@RequestMapping(ApiController.BASE_URL)
+@RequestMapping(PlatformApiController.BASE_URL)
 @RequiredArgsConstructor
-public class ApiController {
-  public static final String BASE_URL = AppUrls.API_V1;
+public class PlatformApiController {
+  public static final String BASE_URL = AppUrls.PLATFORM_API;
 
   @GetMapping("/hello-world")
   @ResponseStatus(HttpStatus.OK)
