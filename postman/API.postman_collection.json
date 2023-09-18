@@ -7,7 +7,7 @@
 	},
 	"item": [
 		{
-			"name": "actuaor",
+			"name": "actuator",
 			"item": [
 				{
 					"name": "actuator",
@@ -31,47 +31,650 @@
 			]
 		},
 		{
-			"name": "v1",
+			"name": "platform",
 			"item": [
 				{
-					"name": "hello-world",
-					"request": {
-						"auth": {
-							"type": "apikey",
-							"apikey": [
+					"name": "web",
+					"item": [
+						{
+							"name": "login",
+							"item": [
 								{
-									"key": "value",
-									"value": "{{client_apikey}}",
-									"type": "string"
+									"name": "as user",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = JSON.parse(responseBody);",
+													"",
+													"postman.setEnvironmentVariable(\"access_token_platform_user\", jsonData.access_token);"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "basic",
+											"basic": [
+												{
+													"key": "password",
+													"value": "{{keycloak_client_secret}}",
+													"type": "string"
+												},
+												{
+													"key": "username",
+													"value": "{{keycloak_client}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "urlencoded",
+											"urlencoded": [
+												{
+													"key": "grant_type",
+													"value": "password",
+													"type": "text"
+												},
+												{
+													"key": "audience",
+													"value": "{{keycloak_client}}",
+													"type": "text"
+												},
+												{
+													"key": "username",
+													"value": "{{platform_user_username}}",
+													"type": "text"
+												},
+												{
+													"key": "password",
+													"value": "{{platform_user_password}}",
+													"type": "text"
+												},
+												{
+													"key": "scope",
+													"value": "email profile",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{keycloak_host}}/realms/{{keycloak_realm_name}}/protocol/openid-connect/token",
+											"host": [
+												"{{keycloak_host}}"
+											],
+											"path": [
+												"realms",
+												"{{keycloak_realm_name}}",
+												"protocol",
+												"openid-connect",
+												"token"
+											]
+										}
+									},
+									"response": []
 								},
 								{
-									"key": "key",
-									"value": "Api-Key",
-									"type": "string"
+									"name": "as admin",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = JSON.parse(responseBody);",
+													"",
+													"postman.setEnvironmentVariable(\"access_token_platform_admin\", jsonData.access_token);"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "basic",
+											"basic": [
+												{
+													"key": "password",
+													"value": "{{keycloak_client_secret}}",
+													"type": "string"
+												},
+												{
+													"key": "username",
+													"value": "{{keycloak_client}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "urlencoded",
+											"urlencoded": [
+												{
+													"key": "grant_type",
+													"value": "password",
+													"type": "text"
+												},
+												{
+													"key": "audience",
+													"value": "{{keycloak_client}}",
+													"type": "text"
+												},
+												{
+													"key": "username",
+													"value": "{{platform_admin_username}}",
+													"type": "text"
+												},
+												{
+													"key": "password",
+													"value": "{{platform_admin_password}}",
+													"type": "text"
+												},
+												{
+													"key": "scope",
+													"value": "email profile",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{keycloak_host}}/realms/{{keycloak_realm_name}}/protocol/openid-connect/token",
+											"host": [
+												"{{keycloak_host}}"
+											],
+											"path": [
+												"realms",
+												"{{keycloak_realm_name}}",
+												"protocol",
+												"openid-connect",
+												"token"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "as user with oauth2",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = JSON.parse(responseBody);",
+													"",
+													"postman.setEnvironmentVariable(\"access_token_platform_user\", jsonData.access_token);"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "oauth2",
+											"oauth2": [
+												{
+													"key": "scope",
+													"value": "email profile openid",
+													"type": "string"
+												},
+												{
+													"key": "accessTokenUrl",
+													"value": "{{keycloak_host}}/realms/{{keycloak_realm_name}}/protocol/openid-connect/token",
+													"type": "string"
+												},
+												{
+													"key": "authUrl",
+													"value": "{{keycloak_host}}/realms/{{keycloak_realm_name}}/protocol/openid-connect/auth",
+													"type": "string"
+												},
+												{
+													"key": "clientSecret",
+													"value": "{{keycloak_client_secret}}",
+													"type": "string"
+												},
+												{
+													"key": "clientId",
+													"value": "{{keycloak_client}}",
+													"type": "string"
+												},
+												{
+													"key": "grant_type",
+													"value": "authorization_code",
+													"type": "string"
+												},
+												{
+													"key": "password",
+													"value": "password",
+													"type": "string"
+												},
+												{
+													"key": "username",
+													"value": "admin",
+													"type": "string"
+												},
+												{
+													"key": "redirect_uri",
+													"value": "https://google.com",
+													"type": "string"
+												},
+												{
+													"key": "addTokenTo",
+													"value": "header",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "urlencoded",
+											"urlencoded": [
+												{
+													"key": "grant_type",
+													"value": "password",
+													"type": "text"
+												},
+												{
+													"key": "audience",
+													"value": "{{keycloak_client}}",
+													"type": "text"
+												},
+												{
+													"key": "username",
+													"value": "{{platform_user_username}}",
+													"type": "text"
+												},
+												{
+													"key": "password",
+													"value": "{{platform_user_password}}",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": ""
+										}
+									},
+									"response": []
 								}
 							]
 						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{host}}/api/v1/hello-world",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"hello-world"
-							]
+						{
+							"name": "hello-world",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token_platform_user}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/platform/web/hello-world",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"platform",
+										"web",
+										"hello-world"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
+				},
+				{
+					"name": "mobile",
+					"item": [
+						{
+							"name": "login",
+							"item": [
+								{
+									"name": "as user",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = JSON.parse(responseBody);",
+													"",
+													"postman.setEnvironmentVariable(\"access_token_platform_user\", jsonData.access_token);"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "basic",
+											"basic": [
+												{
+													"key": "password",
+													"value": "{{keycloak_client_secret}}",
+													"type": "string"
+												},
+												{
+													"key": "username",
+													"value": "{{keycloak_client}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "urlencoded",
+											"urlencoded": [
+												{
+													"key": "grant_type",
+													"value": "password",
+													"type": "text"
+												},
+												{
+													"key": "audience",
+													"value": "{{keycloak_client}}",
+													"type": "text"
+												},
+												{
+													"key": "username",
+													"value": "{{platform_user_username}}",
+													"type": "text"
+												},
+												{
+													"key": "password",
+													"value": "{{platform_user_password}}",
+													"type": "text"
+												},
+												{
+													"key": "scope",
+													"value": "email profile",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{keycloak_host}}/realms/{{keycloak_realm_name}}/protocol/openid-connect/token",
+											"host": [
+												"{{keycloak_host}}"
+											],
+											"path": [
+												"realms",
+												"{{keycloak_realm_name}}",
+												"protocol",
+												"openid-connect",
+												"token"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "as admin",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = JSON.parse(responseBody);",
+													"",
+													"postman.setEnvironmentVariable(\"access_token_platform_admin\", jsonData.access_token);"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "basic",
+											"basic": [
+												{
+													"key": "password",
+													"value": "{{keycloak_client_secret}}",
+													"type": "string"
+												},
+												{
+													"key": "username",
+													"value": "{{keycloak_client}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "urlencoded",
+											"urlencoded": [
+												{
+													"key": "grant_type",
+													"value": "password",
+													"type": "text"
+												},
+												{
+													"key": "audience",
+													"value": "{{keycloak_client}}",
+													"type": "text"
+												},
+												{
+													"key": "username",
+													"value": "{{platform_admin_username}}",
+													"type": "text"
+												},
+												{
+													"key": "password",
+													"value": "{{platform_admin_password}}",
+													"type": "text"
+												},
+												{
+													"key": "scope",
+													"value": "email profile",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{keycloak_host}}/realms/{{keycloak_realm_name}}/protocol/openid-connect/token",
+											"host": [
+												"{{keycloak_host}}"
+											],
+											"path": [
+												"realms",
+												"{{keycloak_realm_name}}",
+												"protocol",
+												"openid-connect",
+												"token"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "as user with oauth2",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"var jsonData = JSON.parse(responseBody);",
+													"",
+													"postman.setEnvironmentVariable(\"access_token_platform_user\", jsonData.access_token);"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "oauth2",
+											"oauth2": [
+												{
+													"key": "scope",
+													"value": "email profile openid",
+													"type": "string"
+												},
+												{
+													"key": "accessTokenUrl",
+													"value": "{{keycloak_host}}/realms/{{keycloak_realm_name}}/protocol/openid-connect/token",
+													"type": "string"
+												},
+												{
+													"key": "authUrl",
+													"value": "{{keycloak_host}}/realms/{{keycloak_realm_name}}/protocol/openid-connect/auth",
+													"type": "string"
+												},
+												{
+													"key": "clientSecret",
+													"value": "{{keycloak_client_secret}}",
+													"type": "string"
+												},
+												{
+													"key": "clientId",
+													"value": "{{keycloak_client}}",
+													"type": "string"
+												},
+												{
+													"key": "grant_type",
+													"value": "authorization_code",
+													"type": "string"
+												},
+												{
+													"key": "password",
+													"value": "password",
+													"type": "string"
+												},
+												{
+													"key": "username",
+													"value": "admin",
+													"type": "string"
+												},
+												{
+													"key": "redirect_uri",
+													"value": "https://google.com",
+													"type": "string"
+												},
+												{
+													"key": "addTokenTo",
+													"value": "header",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "urlencoded",
+											"urlencoded": [
+												{
+													"key": "grant_type",
+													"value": "password",
+													"type": "text"
+												},
+												{
+													"key": "audience",
+													"value": "{{keycloak_client}}",
+													"type": "text"
+												},
+												{
+													"key": "username",
+													"value": "{{platform_user_username}}",
+													"type": "text"
+												},
+												{
+													"key": "password",
+													"value": "{{platform_user_password}}",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": ""
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "hello-world",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token_platform_user}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/platform/mobile/hello-world",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"platform",
+										"mobile",
+										"hello-world"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "api",
+					"item": [
+						{
+							"name": "hello-world",
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "{{platform_apikey}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Api-Key",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/platform/api/hello-world",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"platform",
+										"api",
+										"hello-world"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
-		},
-		{
-			"name": "api",
-			"item": []
 		},
 		{
 			"name": "back-office",
@@ -734,15 +1337,6 @@
 								},
 								"method": "DELETE",
 								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"name\": \"test\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
 								"url": {
 									"raw": "{{host}}/management/companies/{{entity_id}}",
 									"host": [
@@ -923,15 +1517,6 @@
 								},
 								"method": "DELETE",
 								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"companyId\": 1,\n    \"name\": \"apikey test\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
 								"url": {
 									"raw": "{{host}}/management/api-keys/{{entity_id}}",
 									"host": [
@@ -947,301 +1532,6 @@
 							"response": []
 						}
 					]
-				}
-			]
-		},
-		{
-			"name": "mobile",
-			"item": [
-				{
-					"name": "login",
-					"item": [
-						{
-							"name": "as user",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"var jsonData = JSON.parse(responseBody);",
-											"",
-											"postman.setEnvironmentVariable(\"access_token_mobile_user\", jsonData.access_token);"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"auth": {
-									"type": "basic",
-									"basic": [
-										{
-											"key": "password",
-											"value": "{{keycloak_client_secret}}",
-											"type": "string"
-										},
-										{
-											"key": "username",
-											"value": "{{keycloak_client}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "urlencoded",
-									"urlencoded": [
-										{
-											"key": "grant_type",
-											"value": "password",
-											"type": "text"
-										},
-										{
-											"key": "audience",
-											"value": "{{keycloak_client}}",
-											"type": "text"
-										},
-										{
-											"key": "username",
-											"value": "{{mobile_user_username}}",
-											"type": "text"
-										},
-										{
-											"key": "password",
-											"value": "{{mobile_user_password}}",
-											"type": "text"
-										},
-										{
-											"key": "scope",
-											"value": "email profile",
-											"type": "text"
-										}
-									]
-								},
-								"url": {
-									"raw": "{{keycloak_host}}/realms/{{keycloak_realm_name}}/protocol/openid-connect/token",
-									"host": [
-										"{{keycloak_host}}"
-									],
-									"path": [
-										"realms",
-										"{{keycloak_realm_name}}",
-										"protocol",
-										"openid-connect",
-										"token"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "as admin",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"var jsonData = JSON.parse(responseBody);",
-											"",
-											"postman.setEnvironmentVariable(\"access_token_mobile_admin\", jsonData.access_token);"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"auth": {
-									"type": "basic",
-									"basic": [
-										{
-											"key": "password",
-											"value": "{{keycloak_client_secret}}",
-											"type": "string"
-										},
-										{
-											"key": "username",
-											"value": "{{keycloak_client}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "urlencoded",
-									"urlencoded": [
-										{
-											"key": "grant_type",
-											"value": "password",
-											"type": "text"
-										},
-										{
-											"key": "audience",
-											"value": "{{keycloak_client}}",
-											"type": "text"
-										},
-										{
-											"key": "username",
-											"value": "{{mobile_admin_username}}",
-											"type": "text"
-										},
-										{
-											"key": "password",
-											"value": "{{mobile_admin_password}}",
-											"type": "text"
-										}
-									]
-								},
-								"url": {
-									"raw": "{{keycloak_host}}/realms/{{keycloak_realm_name}}/protocol/openid-connect/token",
-									"host": [
-										"{{keycloak_host}}"
-									],
-									"path": [
-										"realms",
-										"{{keycloak_realm_name}}",
-										"protocol",
-										"openid-connect",
-										"token"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "as user with oauth2",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"var jsonData = JSON.parse(responseBody);",
-											"",
-											"postman.setEnvironmentVariable(\"access_token_mobile_user\", jsonData.access_token);"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"auth": {
-									"type": "oauth2",
-									"oauth2": [
-										{
-											"key": "scope",
-											"value": "email profile openid",
-											"type": "string"
-										},
-										{
-											"key": "accessTokenUrl",
-											"value": "{{keycloak_host}}/realms/{{keycloak_realm_name}}/protocol/openid-connect/token",
-											"type": "string"
-										},
-										{
-											"key": "authUrl",
-											"value": "{{keycloak_host}}/realms/{{keycloak_realm_name}}/protocol/openid-connect/auth",
-											"type": "string"
-										},
-										{
-											"key": "clientSecret",
-											"value": "{{keycloak_client_secret}}",
-											"type": "string"
-										},
-										{
-											"key": "clientId",
-											"value": "{{keycloak_client}}",
-											"type": "string"
-										},
-										{
-											"key": "grant_type",
-											"value": "authorization_code",
-											"type": "string"
-										},
-										{
-											"key": "password",
-											"value": "password",
-											"type": "string"
-										},
-										{
-											"key": "username",
-											"value": "admin",
-											"type": "string"
-										},
-										{
-											"key": "redirect_uri",
-											"value": "https://google.com",
-											"type": "string"
-										},
-										{
-											"key": "addTokenTo",
-											"value": "header",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "urlencoded",
-									"urlencoded": [
-										{
-											"key": "grant_type",
-											"value": "password",
-											"type": "text"
-										},
-										{
-											"key": "audience",
-											"value": "{{keycloak_client}}",
-											"type": "text"
-										},
-										{
-											"key": "username",
-											"value": "{{mobile_user_username}}",
-											"type": "text"
-										},
-										{
-											"key": "password",
-											"value": "{{mobile_user_password}}",
-											"type": "text"
-										}
-									]
-								},
-								"url": {
-									"raw": ""
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "hello-world",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{access_token_mobile_user}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{host}}/mobile/hello-world",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"mobile",
-								"hello-world"
-							]
-						}
-					},
-					"response": []
 				}
 			]
 		},
@@ -1315,6 +1605,39 @@
 					"response": []
 				}
 			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"Object.prototype.random = () => {",
+					"    return Math.random().toString(36).substr(2, 7);",
+					"}",
+					"",
+					"Object.prototype.randomInteger = (length = 44) => {",
+					"    var result = '';",
+					"    var characters = '0123456789';",
+					"    var charactersLength = characters.length;",
+					"    for (var i = 0; i < length; i++) {",
+					"        result += characters.charAt(Math.floor(Math.random() *",
+					"            charactersLength));",
+					"    }",
+					"    return result;",
+					"}"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		}
 	]
 }
