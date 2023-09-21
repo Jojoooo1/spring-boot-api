@@ -112,24 +112,21 @@ by relying on the Role-Based Access Control (RBAC) model.
 
 ### Database
 
-We leverage PostgreSQL, a resilient open-source relational database management system, streamlining
-database migrations using Flyway. Flyway enables effortless database schema versioning and
-migration, guaranteeing seamless transitions and updates.
+It uses PostgreSQL and Flyway to manage database migrations and schema versioning.
 
 ### Caching
 
-Caching frequently accessed data is vital for optimizing application performance. This project
-leverages the default Spring cache mechanism, utilizing a concurrent hash map object. It can
-be extended to use a centralize cache like [Redis](https://redis.io/).
+The project leverages the default Spring cache mechanism, utilizing a concurrent hash map object. It 
+can be extended to use a centralize cache like [Redis](https://redis.io/).
 
 ### Message Broker
 
-Message handling is managed by RabbitMQ (using quorum queue), a crucial component for
-a scalable and robust system, ensuring reliable and efficient message delivery.
+Message handling is managed by RabbitMQ (using quorum queue), ensuring reliable and efficient
+message delivery.
 
 ### Metrics & Tracing
 
-We use Prometheus and Micrometer to collect detailed metrics and tracing data, providing essential
+It use Prometheus and Micrometer to collect detailed metrics and tracing data, providing essential
 insights into the application's behavior and performance.
 
 ### Rate Limiting
