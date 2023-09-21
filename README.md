@@ -10,7 +10,7 @@ business.
 The main objective of this project is to showcase industry-standard practices, presenting a refined
 architecture, and suggesting efficient implementation strategies commonly observed in the SaaS
 landscape. By leveraging this project as a starting point, developers can significantly improve
-their development process, enabling them to focus on creating business logic and incorporating
+their development process, enabling them to focus on creating business logic and crafting
 application-specific features.
 
 This documentation, provide a comprehensive details on the various endpoints, each
