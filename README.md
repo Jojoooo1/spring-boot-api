@@ -2,22 +2,23 @@
 
 ## Introduction
 
-Welcome to the API Documentation for the SaaS Base Project—a powerful foundation to help developers
-in building secure, resilient and robust SaaS applications. The project offers a collection of APIs,
-categorized into essential components of a Saas business.
+Welcome to the API Documentation of the SaaS Base Project—a powerful foundation to help developers
+build a secure, resilient and robust SaaS applications. It is built with a strong focus on security
+and performance, following best practices and organized into essential components of a SaaS
+business.
 
-The main objective of this project is to exemplify best practices, presenting a refined
-architecture, and recommending efficient implementation strategies commonly observed in SaaS
-landscape. By leveraging this project as a starting point, developers can significantly expedite
-their development process, enabling them to focus on tailoring business logic and features specific
-to their applications.
+The main objective of this project is to showcase industry-standard practices, presenting a refined
+architecture, and suggesting efficient implementation strategies commonly observed in the SaaS
+landscape. By leveraging this project as a starting point, developers can significantly improve
+their development process, enabling them to focus on tailoring business logic and incorporating
+application-specific features.
 
 This documentation, provide a comprehensive details on the various endpoints, each
-catering different aspects of a SaaS application:
+addressing different aspects of a SaaS application:
 
 - **Platform**: API dedicated to client-facing applications, typically accessed through frontend
   interfaces or mobile applications. Alternatively, it can be consumed through API calls, tailored
-  to the client's needs and the service provided.
+  to the client's needs and service provided.
 - **Back Office**: Streamlines operation and support applications that are vital for operational
   functionalities.
 - **Internal**: APIs for external services like schedulers, jobs, webhooks [...] enabling seamless
@@ -60,11 +61,11 @@ foundation for a robust and flexible SaaS application.
   the provided Saas service.
 - **Auth:**
     - **Authentication:** It uses a mix of api-key and JWT.
-    - **Authorization:** The API endpoint is secured by looking at the api-key and the company
-      linked to it. It verifies that the company.is_platform field is set to true.
-
-      The frontend and mobile endpoint is secured by looking at the role from the JWT. It should
-      have platform_user and or platform_admin role present.
+    - **Authorization:** The API endpoint is secured by validating the provided API key and
+      verifying the associated company's. It also verifies that the company.is_platform field is
+      set to true. In the case of frontend and mobile endpoints, security is ensured by examining
+      the role field within the JWT. Verification involves confirming the presence of either the
+      platform_user or platform_admin role.
 
 ### Back-office
 
@@ -73,7 +74,7 @@ foundation for a robust and flexible SaaS application.
   provides APIs to efficiently manage back-office operations.
 - **Auth:**
     - **Authentication:** It uses JWT.
-    - **Authorization:** It verifies that the JWT as either the back_office_user or
+    - **Authorization:** It verifies that the JWT has either the back_office_user or
       back_office_admin role present.
 
 ### Internal
@@ -83,8 +84,8 @@ foundation for a robust and flexible SaaS application.
   allowing seamless integration with the platform.
 - **Auth:**
     - **Authentication:** It uses API key.
-    - **Authorization:** It verifies that the company linked to the api-key has the
-      company.is_internal field set to true.
+    - **Authorization:** It validates the provided API key and verify the associated company's.
+      It also verifies that the company.is_internal field is set to true.
 
 ### Management
 
@@ -93,8 +94,8 @@ foundation for a robust and flexible SaaS application.
   and maintaining the entire platform.
 - **Auth:**
     - **Authentication:** It uses API key.
-    - **Authorization:** It verifies that the company linked to the api-key has the
-      company.is_management field set to true.
+    - **Authorization:** It validates the provided API key and verify the associated company's.
+      It also verifies that the company.is_management field is set to true.
 
 ### Public
 
@@ -106,20 +107,14 @@ foundation for a robust and flexible SaaS application.
 
 ### Authentication and Authorization
 
-Authentication and authorization are pivotal aspects of any application. In this project, we utilize
-Keycloak and Spring Security to handle these critical processes. The authorization mechanisms are
-primarily based on the well-established Role-Based Access Control (RBAC) model, ensuring secure
-access control.
+Keycloak and Spring Security manage authentication and authorization, ensuring secure access control
+by relying on the Role-Based Access Control (RBAC) model.
 
 ### Database
 
-Data persistence is vital for applications, and PostgreSQL, a powerful open-source relational
-database management system, is employed to handle this crucial aspect efficiently.
-
-### Database Migration
-
-Managing database migrations is simplified using Flyway. This tool allows for seamless database
-schema versioning and migration, ensuring smooth transitions and updates.
+We leverage PostgreSQL, a resilient open-source relational database management system, streamlining
+database migrations using Flyway. Flyway enables effortless database schema versioning and
+migration, guaranteeing seamless transitions and updates.
 
 ### Caching
 
@@ -129,32 +124,24 @@ obviously be improved to use a centralized cache like [Redis](https://redis.io/)
 
 ### Message Broker
 
-Message handling, an integral part of any scalable and robust system, is seamlessly managed by
-RabbitMQ (using quorum queue). This ensures reliable and efficient message delivery.
+Message handling is managed by RabbitMQ (using quorum queue), a crucial component for
+a scalable and robust system, ensuring reliable and efficient message delivery.
 
-### Metrics
+### Metrics & Tracing
 
-Monitoring system health and performance are critical. We utilize Prometheus and
-Micrometer to gather and visualize metrics effectively.
-
-### Tracing
-
-Understanding the flow and behavior of the application is essential. Micrometer, coupled with the
-OpenTelemetry Protocol (OTLP), facilitates efficient tracing, providing insights into system
-behavior and performance optimization opportunities.
+We use Prometheus and Micrometer to collect detailed metrics and tracing data, providing essential
+insights into the application's behavior and performance.
 
 ### Rate Limiting
 
 To maintain optimal performance and prevent abuse, a rate limiter is implemented. By default, it
-allows a maximum of 50 requests per second per IP, effectively managing server load and ensuring
-responsive services.
+limits each IP to 50 requests per second, helping balance server usage and maintain responsiveness.
 
 ### Error Handling
 
-Error handling is an essential aspect of any API. This project employs a comprehensive error
-handling approach to ensure informative and consistent error responses are provided. Errors are
-categorized and accompanied by relevant HTTP status codes and error messages, aiding in efficient
-debugging and issue resolution.
+We use a consistent error handling strategy that prioritizes informative and descriptive error
+responses. Errors are carefully categorized and presented with corresponding HTTP status codes
+and clear error messages.
 
 ### Postman Collection
 
