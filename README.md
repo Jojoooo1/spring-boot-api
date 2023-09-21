@@ -120,7 +120,7 @@ migration, guaranteeing seamless transitions and updates.
 
 Caching frequently accessed data is vital for optimizing application performance. This project
 leverages the default Spring cache mechanism, utilizing a concurrent hash map object. It can
-obviously be improved to use a centralized cache like [Redis](https://redis.io/).
+be extended to use a centralize cache like [Redis](https://redis.io/).
 
 ### Message Broker
 
