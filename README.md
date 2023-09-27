@@ -116,7 +116,7 @@ It uses PostgreSQL and Flyway to manage database migrations and schema versionin
 
 ### Caching
 
-The project leverages the default Spring cache mechanism, utilizing a concurrent hash map object. It 
+The project leverages the default Spring cache mechanism, utilizing a concurrent hash map object. It
 can be extended to use a centralize cache like [Redis](https://redis.io/).
 
 ### Message Broker
@@ -157,7 +157,7 @@ Environment:
 
 The dependencies of the project are:
 
-* OpenJDK Java version >= 17
+* OpenJDK Java version >= 21
 * Spring boot >= 3.2
 * [Docker](https://www.docker.com)
 * [Docker Compose](https://docs.docker.com/compose/)
