@@ -28,8 +28,8 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v3.13.0
         with:
-          distribution: 'temurin'
-          java-version: '17'
+          distribution: 'liberica'
+          java-version: '21'
           cache: 'maven'
 
       # 2. Test
@@ -50,8 +50,8 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v3.13.0
         with:
-          distribution: 'temurin'
-          java-version: '17'
+          distribution: 'liberica'
+          java-version: '21'
           cache: 'maven'
 
       # 2.1 Sets variables
@@ -144,8 +144,8 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v3.13.0
         with:
-          distribution: 'temurin'
-          java-version: '17'
+          distribution: 'liberica'
+          java-version: '21'
           cache: 'maven'
 
       # 2. Create release
@@ -181,8 +181,8 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v3.13.0
         with:
-          distribution: 'temurin'
-          java-version: '17'
+          distribution: 'liberica'
+          java-version: '21'
           cache: 'maven'
 
       # 2. Create PR
