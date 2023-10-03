@@ -42,7 +42,7 @@
     <!-- utilities -->
     <spring-cloud.version>2023.0.0-M2</spring-cloud.version>
     <bucket4j-core.version>8.4.0</bucket4j-core.version>
-    <slack-api-client.version>1.32.2</slack-api-client.version>
+    <slack-api-client.version>1.33.0</slack-api-client.version>
     <apache-commons-text.version>1.10.0</apache-commons-text.version>
     <apache-commons-collection.version>4.4</apache-commons-collection.version>
     
