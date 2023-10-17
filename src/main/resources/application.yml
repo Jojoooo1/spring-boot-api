@@ -71,6 +71,9 @@ management:
 spring:
   application:
     name: api
+  threads:
+    virtual:
+      enabled: true
   web:
     resources:
       add-mappings: false # disable serving of static content entirely.
