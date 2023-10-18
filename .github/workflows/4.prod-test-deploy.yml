@@ -132,6 +132,7 @@ jobs:
     steps:
 
       # 1. Setup
+      # TODO use https://github.com/actions/create-github-app-token
       - name: Generate github access token
         id: generate_gh_access_token
         uses: tibdex/github-app-token@v2
