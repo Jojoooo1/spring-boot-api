@@ -23,7 +23,7 @@ addressing different aspects of a SaaS business:
   integration with external services and enriching overall functionality.
 - **Management**: API used by the development team to manage the platform. It is intentionally
   separated from the internal API for improved security.
-    - **Public API**: Public facing API
+- **Public API**: Public facing API
 
 Each of these endpoints requires specific authentication mechanisms, collectively forming a robust
 and flexible foundation aimed at SaaS applications.
