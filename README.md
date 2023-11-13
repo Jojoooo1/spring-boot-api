@@ -30,7 +30,6 @@ and flexible foundation for SaaS applications.
 
 ## Table of Contents
 
-- [Overview](#introduction)
 - [API Endpoints](#api-endpoints)
     - [Platform](#platform)
     - [Back-office](#back-office)
@@ -56,24 +55,23 @@ and flexible foundation for SaaS applications.
 
 - **URL:** `{{host}}/platform/web/` `{{host}}/platform/mobile/` `{{host}}/platform/api/`
 - **Description:** Client-facing applications. Divided in 3 categories based on your product
+  supported
   platform. Separated for better isolation.
 - **Auth:**
-    - **Authentication:** It uses a mix of api-key and JWT.
-    - **Authorization:** The API endpoint is secured by validating the provided API key and
-      verifying the associated company's. It also verifies that the company.is_platform field is
-      set to true. In the case of frontend and mobile endpoints, security is ensured by examining
-      the role field within the JWT. Verification involves confirming the presence of either the
-      platform_user or platform_admin role.
+    - **Authentication:** Web/Mobile uses JWT, API uses API key.
+    - **Authorization:** Web and mobile uses JWT role based access. It verifies platform_user
+      and platform_admin role. API verifies the API key value and the associated
+      company's database role _company.is_platform_.
 
 ### Back-office
 
 - **URL:** `{{host}}/back-office/`
-- **Description:**  Those endpoints serves as the interface for the operation and support team. It
-  provides APIs to efficiently manage back-office operations.
+- **Description:** It provides APIs to efficiently manage back-office operations usually serving as
+  the interface between support and operation.
 - **Auth:**
     - **Authentication:** It uses JWT.
-    - **Authorization:** It verifies that the JWT has either the back_office_user or
-      back_office_admin role present.
+    - **Authorization:** It uses JWT role based access and verify the presence of the
+      back_office_user or back_office_admin role.
 
 ### Internal
 
@@ -82,8 +80,8 @@ and flexible foundation for SaaS applications.
   allowing seamless integration with the platform.
 - **Auth:**
     - **Authentication:** It uses API key.
-    - **Authorization:** It validates the provided API key and verify the associated company's.
-      It also verifies that the company.is_internal field is set to true.
+    - **Authorization:** It validates the provided API key and associated company's database role
+      _company.is_platform_.
 
 ### Management
 
@@ -92,14 +90,13 @@ and flexible foundation for SaaS applications.
   and maintaining the entire platform.
 - **Auth:**
     - **Authentication:** It uses API key.
-    - **Authorization:** It validates the provided API key and verify the associated company's.
-      It also verifies that the company.is_management field is set to true.
+    - **Authorization:** It validates the provided API key and associated company's database role
+      _company.is_management_.
 
 ### Public
 
 - **URL:** `{{host}}/public/`
-- **Description:** This endpoint is dedicated to providing public information about the service,
-  ensuring transparency and accessibility for all users.
+- **Description:** This endpoint provides public facing information.
 
 ## Infra
 
