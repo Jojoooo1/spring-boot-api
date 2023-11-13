@@ -47,6 +47,7 @@ and flexible foundation for SaaS applications.
 - [Postman Collection](#postman-collection)
 - [Error Handling](#error-handling)
 - [CI/CD](#ci/cd)
+- [Formatting](#formatting)
 - [Feedback and Support](#feedback-and-support)
 
 ## API Endpoints
@@ -102,16 +103,17 @@ and flexible foundation for SaaS applications.
 
 ### Authentication and Authorization
 
-Keycloak and Spring Security manage authentication and authorization, ensuring secure access control
-by relying on the Role-Based Access Control (RBAC) model.
+It uses Keycloak and Spring Security for authentication and implements a pretty simple Role-Based
+Access Control (RBAC) for authorization. If you need a more complete approach I would recommend
+Keycloak Attribute-based access control (ABAC).
 
 ### Database
 
-It uses PostgreSQL and Flyway to manage database migrations and schema versioning.
+It uses PostgreSQL for persistence and Flyway for managing migrations and schema versioning.
 
 ### Caching
 
-The project leverages the default Spring cache mechanism, utilizing a concurrent hash map object. It
+It uses the default Spring cache mechanism, utilizing a `ConcurrentHashMap` object. It
 can be extended to use a centralize cache like [Redis](https://redis.io/).
 
 ### Message Broker
@@ -121,21 +123,28 @@ message delivery.
 
 ### Metrics & Tracing
 
-It use Prometheus and Micrometer to collect detailed metrics and tracing data, providing essential
-insights into the application's behavior and performance.
+It uses Prometheus and Micrometer to collect detailed metrics and tracing data, providing essential
+insights into your application's behavior and performance.
 
 ### Rate Limiting
 
 To maintain optimal performance and prevent abuse, a rate limiter is implemented. By default, it
-limits each IP to 50 requests per second, helping balance server usage and maintain responsiveness.
+limits each IP to 50 requests per second, helping balance server usage and maintain
+responsiveness. Based on your use case, It can be more adequate to implement at the Load
+Balancer level.
 
 ### Error Handling
 
-We use a consistent error handling strategy that prioritizes informative and descriptive error
+It uses a consistent error handling strategy that prioritizes informative and descriptive error
 responses. Errors are carefully categorized and presented with corresponding HTTP status codes
-and clear error messages.
+and clear error messages. It mostly uses RFC 7807.
 
 ### CI/CD
+
+### Formatting
+
+It uses [Git Code Format Maven Plugin](https://github.com/Cosium/git-code-format-maven-plugin)
+to unify java formatting. On commit, the hook will automatically format staged files.
 
 ### Postman Collection
 

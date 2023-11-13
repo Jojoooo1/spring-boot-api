@@ -30,7 +30,7 @@
     <logstash.version>7.4</logstash.version>
     
     <!-- Metrics -->
-    <hibernate-micrometer.version>6.3.0.Final</hibernate-micrometer.version>
+    <!-- <hibernate-micrometer.version>6.3.0.Final</hibernate-micrometer.version>  -->
     <datasource-micrometer.version>1.0.2</datasource-micrometer.version>
     <opentelemetry-exporter-otlp.version>1.31.0</opentelemetry-exporter-otlp.version>
     
