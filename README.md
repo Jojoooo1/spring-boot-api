@@ -19,17 +19,16 @@ addressing different aspects of a SaaS application:
 - **Platform**: API dedicated to client-facing applications, typically accessed through frontend
   interfaces or mobile applications. Alternatively, it can be consumed through API calls, tailored
   to the client's needs and service provided.
-- **Back Office**: Streamlines operation and support applications that are vital for operational
+- **Back Office**: Operation and support applications that are vital for operational
   functionalities.
 - **Internal**: APIs for external services like schedulers, jobs, webhooks [...] enabling seamless
-  integration with the platform and enriching overall functionality.
-- **Management**: API used by the development team for managing the application and its
-  resources. It is intentionally separated from the internal API for improved security.
-- **Public API**: Simplifies access to publicly available resources, enhancing overall accessibility
-  and usability.
+  integration with external services and enriching overall functionality.
+- **Management**: API used by the development team to manage the platform. It is intentionally
+  separated from the internal API for improved security.
+    - **Public API**: Public facing API
 
-Each of these endpoints requires specific authentication mechanisms, and they collectively form the
-foundation for a robust and flexible SaaS application.
+Each of these endpoints requires specific authentication mechanisms, collectively forming a robust
+and flexible foundation aimed at SaaS applications.
 
 ## Table of Contents
 
@@ -57,7 +56,7 @@ foundation for a robust and flexible SaaS application.
 ### Platform
 
 - **URL:** `{{host}}/platform/web/` `{{host}}/platform/mobile/` `{{host}}/platform/api/`
-- **Description:** Client facing applications. Divided in 3 categories based on your product
+- **Description:** Client-facing applications. Divided in 3 categories based on your product
   platform. Separated for better isolation.
 - **Auth:**
     - **Authentication:** It uses a mix of api-key and JWT.
