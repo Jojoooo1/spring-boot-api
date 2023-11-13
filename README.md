@@ -66,7 +66,7 @@ and flexible foundation for SaaS applications.
 ### Back-office
 
 - **URL:** `{{host}}/back-office/`
-- **Description:** It provides APIs to efficiently manage back-office operations usually serving as
+- **Description:** It provides APIs to efficiently manage back-office operations, usually serving as
   the interface between support and operation.
 - **Auth:**
     - **Authentication:** It uses JWT.
@@ -81,7 +81,7 @@ and flexible foundation for SaaS applications.
 - **Auth:**
     - **Authentication:** It uses API key.
     - **Authorization:** It validates the provided API key and associated company's database role
-      _company.is_platform_.
+      _company.is_internal_.
 
 ### Management
 
