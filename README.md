@@ -47,6 +47,7 @@ and flexible foundation for SaaS applications.
 - [Caching](#caching)
 - [Postman Collection](#postman-collection)
 - [Error Handling](#error-handling)
+- [CI/CD](#ci/cd)
 - [Feedback and Support](#feedback-and-support)
 
 ## API Endpoints
@@ -136,6 +137,8 @@ limits each IP to 50 requests per second, helping balance server usage and maint
 We use a consistent error handling strategy that prioritizes informative and descriptive error
 responses. Errors are carefully categorized and presented with corresponding HTTP status codes
 and clear error messages.
+
+### CI/CD
 
 ### Postman Collection
 
