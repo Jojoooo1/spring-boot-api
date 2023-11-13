@@ -139,7 +139,30 @@ It uses a consistent error handling strategy that prioritizes informative and de
 responses. Errors are carefully categorized and presented with corresponding HTTP status codes
 and clear error messages. It mostly uses RFC 7807.
 
-### CI/CD
+### CI/CD - Gitflow
+
+<div align="center">
+<img src="https://nvie.com/img/git-model@2x.png" height="600">
+</div>
+
+###### Long-lived branches
+
+- `origin/main`
+    - Always reflects a production-ready state.
+- `origin/develop`
+    - Always reflects a state with the latest delivered development changes for the next release.
+
+###### Release
+
+```bash
+make release
+```
+
+###### Hotfix
+
+```bash
+make hotfix # from main branch
+```
 
 ### Formatting
 
