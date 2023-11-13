@@ -57,7 +57,7 @@ foundation for a robust and flexible SaaS application.
 ### Platform
 
 - **URL:** `{{host}}/platform/web/` `{{host}}/platform/mobile/` `{{host}}/platform/api/`
-- **Description:** Client facing applications. Divided in 3 categories based on your production
+- **Description:** Client facing applications. Divided in 3 categories based on your product
   platform. Separated for better isolation.
 - **Auth:**
     - **Authentication:** It uses a mix of api-key and JWT.
