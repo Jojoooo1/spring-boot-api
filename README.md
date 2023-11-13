@@ -57,8 +57,8 @@ foundation for a robust and flexible SaaS application.
 ### Platform
 
 - **URL:** `{{host}}/platform/web/` `{{host}}/platform/mobile/` `{{host}}/platform/api/`
-- **Description:** Serves as the gateway for client applications to interact with
-  the provided Saas service.
+- **Description:** Client facing applications. Divided in 3 categories based on your production
+  platform. Separated for better isolation.
 - **Auth:**
     - **Authentication:** It uses a mix of api-key and JWT.
     - **Authorization:** The API endpoint is secured by validating the provided API key and
