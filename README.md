@@ -4,17 +4,15 @@
 
 Welcome to the API Documentation of the SaaS Base Project—a powerful foundation to help developers
 build secure, resilient and robust SaaS applications. It's built with a strong focus on security
-and performance, following best practices and organized into essential components of a SaaS
-business.
+and performance, following best practices and industry-standard.
 
-The main objective of this project is to showcase industry-standard practices, presenting a refined
-architecture, and suggesting efficient implementation strategies commonly observed in the SaaS
-landscape. By leveraging this project as a starting point, developers can significantly improve
-their development process, enabling them to focus on creating business logic and crafting
-application-specific features.
+The main objective of this project is to suggest efficient implementation strategies commonly
+observed in the SaaS landscape. By leveraging this project as a starting point, developers can
+significantly improve their development process, enabling them to focus on creating business
+logic and crafting application-specific features.
 
 This documentation, provide a comprehensive details on the various endpoints, each
-addressing different aspects of a SaaS application:
+addressing different aspects of a SaaS business:
 
 - **Platform**: API dedicated to client-facing applications, typically accessed through frontend
   interfaces or mobile applications. Alternatively, it can be consumed through API calls, tailored
