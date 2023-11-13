@@ -20,7 +20,7 @@ addressing different aspects of a SaaS business:
 - **Back Office**: Operation and support applications that are vital for operational
   functionalities.
 - **Internal**: APIs for external services like schedulers, jobs, webhooks [...] enabling seamless
-  integration with external services and enriching overall functionality.
+  integration and enriching overall functionality.
 - **Management**: API used by the development team to manage the platform. It is intentionally
   separated from the internal API for improved security.
 - **Public API**: Public facing API
