@@ -26,7 +26,7 @@ addressing different aspects of a SaaS business:
 - **Public API**: Public facing API
 
 Each of these endpoints requires specific authentication mechanisms, collectively forming a robust
-and flexible foundation aimed at SaaS applications.
+and flexible foundation for SaaS applications.
 
 ## Table of Contents
 
