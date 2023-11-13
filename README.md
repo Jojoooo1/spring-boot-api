@@ -11,7 +11,7 @@ observed in the SaaS landscape. By leveraging this project as a starting point, 
 significantly improve their development process, enabling them to focus on creating business
 logic and crafting application-specific features.
 
-This documentation, provide a comprehensive details on the various endpoints, each
+This documentation, provide a comprehensive details on the various API, each
 addressing different aspects of a SaaS business:
 
 - **Platform**: API dedicated to client-facing applications, typically accessed through frontend
