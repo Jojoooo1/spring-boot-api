@@ -38,12 +38,12 @@ public class ApiKey extends BaseEntity {
   @Serial private static final long serialVersionUID = -3552577854495026179L;
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "api_key")
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = TABLE_NAME)
   @GenericGenerator(
-      name = "api_key",
+      name = TABLE_NAME,
       type = BatchSequenceGenerator.class,
       parameters = {
-        @Parameter(name = "sequence", value = "api_key_id_seq"),
+        @Parameter(name = "sequence", value = TABLE_NAME + "_id_seq"),
         @Parameter(name = "fetch_size", value = "1")
       })
   private Long id;

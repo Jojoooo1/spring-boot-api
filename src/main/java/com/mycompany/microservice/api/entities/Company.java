@@ -48,12 +48,12 @@ public class Company extends BaseEntity {
   @Serial private static final long serialVersionUID = 2137607105409362080L;
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "company")
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = TABLE_NAME)
   @GenericGenerator(
-      name = "company",
+      name = TABLE_NAME,
       type = BatchSequenceGenerator.class,
       parameters = {
-        @Parameter(name = "sequence", value = "company_id_seq"),
+        @Parameter(name = "sequence", value = TABLE_NAME + "_id_seq"),
         @Parameter(name = "fetch_size", value = "1")
       })
   private Long id;
