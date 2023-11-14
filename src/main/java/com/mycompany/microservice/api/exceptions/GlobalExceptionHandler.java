@@ -14,7 +14,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.hibernate.LazyInitializationException;
 import org.postgresql.util.PSQLException;
 import org.springframework.core.NestedExceptionUtils;
@@ -57,11 +56,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     String details = API_DEFAULT_ERROR_MESSAGE;
 
+    // Example: ERROR: duplicate key value violates unique constraint "company_slug_key"  Detail:
+    // Key (slug)=(bl8lo0d) already exists.
     if (cause.contains("Detail")) {
       final List<String> matchList = new ArrayList<>();
+      // find database values between "()"
       final Pattern pattern = Pattern.compile("\\((.*?)\\)");
       final Matcher matcher = pattern.matcher(cause);
 
+      // Creates list ["slug", "bl8lo0d"]
       while (matcher.find()) {
         matchList.add(matcher.group(1));
       }
@@ -69,8 +72,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       if (matchList.size() == 2) {
         final String key = matchList.get(0);
         final String value = matchList.get(1);
+        // Gets the message after the last ")"
         final String message = cause.substring(cause.lastIndexOf(")") + 1);
 
+        // return errorMessage: slug 'bl8lo0d'  already exists.
         details = format("%s '%s' %s", key, value, message);
       }
     }
@@ -89,11 +94,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     final List<ApiErrorDetails> errors = new ArrayList<>();
 
     for (final ObjectError err : ex.getBindingResult().getAllErrors()) {
-      errors.add(
-          ApiErrorDetails.builder()
-              .name("ValidationException")
-              .reason(format("%s: %s", ((FieldError) err).getField(), err.getDefaultMessage()))
-              .build());
+      if (err instanceof FieldError) {
+        errors.add(
+            ApiErrorDetails.builder()
+                .reason(err.getDefaultMessage())
+                .pointer(((FieldError) err).getField())
+                .build());
+      }
     }
 
     return ResponseEntity.status(BAD_REQUEST).body(buildProblemDetail(BAD_REQUEST, ex, errors));
@@ -109,8 +116,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     for (final var violation : ex.getConstraintViolations()) {
       errors.add(
           ApiErrorDetails.builder()
-              .name(jakarta.validation.ConstraintViolationException.class.getSimpleName())
-              .reason(format("%s: %s", violation.getPropertyPath(), violation.getMessage()))
+              .reason(violation.getMessage())
+              .pointer(violation.getPropertyPath().toString())
               .build());
     }
 
@@ -132,7 +139,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     final String errorDetail = this.extractPersistenceDetails(cause);
 
     final List<ApiErrorDetails> errors =
-        List.of(ApiErrorDetails.builder().name("PersistenceException").reason(errorDetail).build());
+        List.of(ApiErrorDetails.builder().reason(errorDetail).build());
     return buildProblemDetail(BAD_REQUEST, ex, errors);
   }
 
@@ -150,11 +157,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     log.info(ex.getMessage(), ex);
 
     final List<ApiErrorDetails> errors =
-        List.of(
-            ApiErrorDetails.builder()
-                .name(EmptyResultDataAccessException.class.getSimpleName())
-                .reason("no record found for this id")
-                .build());
+        List.of(ApiErrorDetails.builder().reason("no record found for this id").build());
 
     return buildProblemDetail(HttpStatus.NOT_FOUND, ex, errors);
   }
@@ -169,11 +172,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     // this.slack.notify(format("LazyInitializationException: %s", ex.getMessage()));
 
     final List<ApiErrorDetails> errors =
-        List.of(
-            ApiErrorDetails.builder()
-                .name(InternalServerErrorException.class.getSimpleName())
-                .reason(API_DEFAULT_ERROR_MESSAGE)
-                .build());
+        List.of(ApiErrorDetails.builder().reason(API_DEFAULT_ERROR_MESSAGE).build());
 
     return buildProblemDetail(HttpStatus.INTERNAL_SERVER_ERROR, ex, errors);
   }
@@ -188,12 +187,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     List<ApiErrorDetails> errors = ex.getErrors();
     if (ex.getErrors().isEmpty()) {
-      errors =
-          List.of(
-              ApiErrorDetails.builder()
-                  .name(ExceptionUtils.getRootCause(ex).getClass().getSimpleName())
-                  .reason(ex.getMessage())
-                  .build());
+      errors = List.of(ApiErrorDetails.builder().reason(ex.getMessage()).build());
     }
 
     final ProblemDetail problemDetail = buildProblemDetail(ex.getHttpStatus(), ex, errors);
@@ -209,11 +203,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     // this.slack.notify(format("[API] InternalServerError: %s", ex.getMessage()));
 
     final List<ApiErrorDetails> errors =
-        List.of(
-            ApiErrorDetails.builder()
-                .name(InternalServerErrorException.class.getSimpleName())
-                .reason(API_DEFAULT_ERROR_MESSAGE)
-                .build());
+        List.of(ApiErrorDetails.builder().reason(API_DEFAULT_ERROR_MESSAGE).build());
 
     return buildProblemDetail(HttpStatus.INTERNAL_SERVER_ERROR, ex, errors);
   }
@@ -235,11 +225,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     final HttpStatus status = HttpStatus.valueOf(stat.value());
 
     final List<ApiErrorDetails> errors =
-        List.of(
-            ApiErrorDetails.builder()
-                .name(InternalServerErrorException.class.getSimpleName())
-                .reason(API_DEFAULT_ERROR_MESSAGE)
-                .build());
+        List.of(ApiErrorDetails.builder().reason(API_DEFAULT_ERROR_MESSAGE).build());
 
     return ResponseEntity.status(status).body(buildProblemDetail(status, ex, errors));
   }
