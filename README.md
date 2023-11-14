@@ -191,9 +191,6 @@ The dependencies of the project are:
 * [Docker](https://www.docker.com)
 * [Docker Compose](https://docs.docker.com/compose/)
 * [Maven](https://maven.apache.org/)
-* [Postgres](https://www.postgresql.org)
-* [Keycloak](https://www.keycloak.org/)
-* [RabbitMQ](https://www.rabbitmq.com/)
 
 ## Run project
 
