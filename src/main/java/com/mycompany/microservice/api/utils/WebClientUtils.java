@@ -38,8 +38,8 @@ public class WebClientUtils {
                 MediaType.APPLICATION_JSON_VALUE,
                 HttpHeaders.ACCEPT,
                 MediaType.APPLICATION_JSON_VALUE)
-            .filter(retryOnNetworkInstability())
-            .filter(logResponse(name));
+            .filter(retryOnNetworkInstability());
+    // .filter(logResponse(name));
 
     return webClientBuilder.build();
   }

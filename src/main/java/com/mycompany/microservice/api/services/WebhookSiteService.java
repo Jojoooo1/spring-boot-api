@@ -17,4 +17,8 @@ public class WebhookSiteService {
     // Deserialization (if needed) is done at service level to keep code DRY.
     return this.client.post(request).map(response -> response);
   }
+
+  public Mono<String> postWithCircuitBreaker(final Object request) {
+    return this.client.postWithCircuitBreaker(request).map(response -> response);
+  }
 }

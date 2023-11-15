@@ -66,14 +66,14 @@
       <artifactId>spring-boot-starter-webflux</artifactId>
     </dependency>
     
-    <!--    <dependency>-->
-    <!--      <groupId>io.github.resilience4j</groupId>-->
-    <!--      <artifactId>resilience4j-reactor</artifactId>-->
-    <!--    </dependency>-->
-    <!--    <dependency>-->
-    <!--      <groupId>io.github.resilience4j</groupId>-->
-    <!--      <artifactId>resilience4j-circuitbreaker</artifactId>-->
-    <!--    </dependency>-->
+    <dependency>
+      <groupId>io.github.resilience4j</groupId>
+      <artifactId>resilience4j-reactor</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.github.resilience4j</groupId>
+      <artifactId>resilience4j-circuitbreaker</artifactId>
+    </dependency>
     
     <!-- Spring Security & JWT -->
     <dependency>
