@@ -1,20 +1,21 @@
 package com.mycompany.microservice.api.exceptions;
 
 import static com.mycompany.microservice.api.constants.AppConstants.API_DEFAULT_ERROR_MESSAGE;
+import static com.mycompany.microservice.api.constants.AppConstants.API_DEFAULT_REQUEST_FAILED_MESSAGE;
 import static java.lang.String.format;
+import static java.util.Collections.emptyList;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 import com.mycompany.microservice.api.responses.shared.ApiErrorDetails;
-import io.micrometer.tracing.Tracer;
 import java.sql.BatchUpdateException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.LazyInitializationException;
 import org.postgresql.util.PSQLException;
 import org.springframework.core.NestedExceptionUtils;
@@ -38,8 +39,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RequiredArgsConstructor
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-  private final Tracer tracer;
-
   @Override
   protected ResponseEntity<Object> handleMethodArgumentNotValid(
       @NonNull final MethodArgumentNotValidException ex,
@@ -61,7 +60,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     return ResponseEntity.status(BAD_REQUEST)
-        .body(this.buildProblemDetail(BAD_REQUEST, ex, errors));
+        .body(this.buildProblemDetail(BAD_REQUEST, API_DEFAULT_REQUEST_FAILED_MESSAGE, errors));
   }
 
   @ResponseStatus(BAD_REQUEST)
@@ -79,7 +78,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
               .build());
     }
 
-    return this.buildProblemDetail(BAD_REQUEST, ex, errors);
+    return this.buildProblemDetail(BAD_REQUEST, API_DEFAULT_REQUEST_FAILED_MESSAGE, errors);
   }
 
   @ResponseStatus(BAD_REQUEST)
@@ -95,17 +94,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     final String cause = NestedExceptionUtils.getMostSpecificCause(ex).getLocalizedMessage();
     final String errorDetail = this.extractPersistenceDetails(cause);
-
-    final List<ApiErrorDetails> errors =
-        List.of(ApiErrorDetails.builder().reason(errorDetail).build());
-    return this.buildProblemDetail(BAD_REQUEST, ex, errors);
+    return this.buildProblemDetail(BAD_REQUEST, errorDetail);
   }
 
   @ResponseStatus(HttpStatus.FORBIDDEN)
   @ExceptionHandler({AccessDeniedException.class})
   public ProblemDetail handleAccessDeniedException(final Exception ex, final WebRequest request) {
     log.info(ex.getMessage(), ex);
-    return this.buildProblemDetail(HttpStatus.FORBIDDEN, ex, null);
+    return this.buildProblemDetail(HttpStatus.FORBIDDEN, null);
   }
 
   @ResponseStatus(HttpStatus.NOT_FOUND)
@@ -114,10 +110,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       final EmptyResultDataAccessException ex, final WebRequest request) {
     log.info(ex.getMessage(), ex);
 
-    final List<ApiErrorDetails> errors =
-        List.of(ApiErrorDetails.builder().reason("no record found for this id").build());
-
-    return this.buildProblemDetail(HttpStatus.NOT_FOUND, ex, errors);
+    return this.buildProblemDetail(HttpStatus.NOT_FOUND, "no record found for this id");
   }
 
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -129,10 +122,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     // this.slack.notify(format("LazyInitializationException: %s", ex.getMessage()));
 
-    final List<ApiErrorDetails> errors =
-        List.of(ApiErrorDetails.builder().reason(API_DEFAULT_ERROR_MESSAGE).build());
-
-    return this.buildProblemDetail(HttpStatus.INTERNAL_SERVER_ERROR, ex, errors);
+    return this.buildProblemDetail(HttpStatus.INTERNAL_SERVER_ERROR, API_DEFAULT_ERROR_MESSAGE);
   }
 
   @ExceptionHandler(RootException.class)
@@ -148,7 +138,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       errors = List.of(ApiErrorDetails.builder().reason(ex.getMessage()).build());
     }
 
-    final ProblemDetail problemDetail = this.buildProblemDetail(ex.getHttpStatus(), ex, errors);
+    final ProblemDetail problemDetail =
+        this.buildProblemDetail(ex.getHttpStatus(), API_DEFAULT_REQUEST_FAILED_MESSAGE, errors);
     return ResponseEntity.status(ex.getHttpStatus()).body(problemDetail);
   }
 
@@ -160,10 +151,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     // this.slack.notify(format("[API] InternalServerError: %s", ex.getMessage()));
 
-    final List<ApiErrorDetails> errors =
-        List.of(ApiErrorDetails.builder().reason(API_DEFAULT_ERROR_MESSAGE).build());
-
-    return this.buildProblemDetail(HttpStatus.INTERNAL_SERVER_ERROR, ex, errors);
+    return this.buildProblemDetail(HttpStatus.INTERNAL_SERVER_ERROR, API_DEFAULT_ERROR_MESSAGE);
   }
 
   /*
@@ -181,30 +169,24 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     // this.slack.notify(format("[API] InternalServerError: %s", ex.getMessage()));
 
     final HttpStatus status = HttpStatus.valueOf(stat.value());
+    return ResponseEntity.status(status)
+        .body(this.buildProblemDetail(status, API_DEFAULT_ERROR_MESSAGE));
+  }
 
-    final List<ApiErrorDetails> errors =
-        List.of(ApiErrorDetails.builder().reason(API_DEFAULT_ERROR_MESSAGE).build());
-
-    return ResponseEntity.status(status).body(this.buildProblemDetail(status, ex, errors));
+  private ProblemDetail buildProblemDetail(final HttpStatus status, final String detail) {
+    return this.buildProblemDetail(status, detail, emptyList());
   }
 
   private ProblemDetail buildProblemDetail(
-      final HttpStatus status, final Throwable ex, final List<ApiErrorDetails> errors) {
+      final HttpStatus status, final String detail, final List<ApiErrorDetails> errors) {
 
     final ProblemDetail problemDetail =
-        ProblemDetail.forStatusAndDetail(status, ex.getLocalizedMessage());
-
-    problemDetail.setTitle(status.name());
-    problemDetail.setDetail(status.getReasonPhrase());
-
-    problemDetail.setProperty("errors", errors);
-    final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-    problemDetail.setProperty("timestamp", dateFormat.format(LocalDateTime.now()));
-
-    if (this.tracer.currentTraceContext() != null
-        && this.tracer.currentTraceContext().context() != null) {
-      problemDetail.setProperty("id", this.tracer.currentTraceContext().context().traceId());
+        ProblemDetail.forStatusAndDetail(status, StringUtils.normalizeSpace(detail));
+    if (CollectionUtils.isNotEmpty(errors)) {
+      problemDetail.setProperty("errors", errors);
     }
+    // problemDetail.setProperty("timestamp",
+    // DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss").format(LocalDateTime.now()));
 
     return problemDetail;
   }
