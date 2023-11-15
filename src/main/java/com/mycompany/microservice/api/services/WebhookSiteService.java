@@ -14,10 +14,7 @@ public class WebhookSiteService {
   private final WebhookSiteHttpClient client;
 
   public Mono<String> post(final Object request) {
-    log.info("HTTP[REQUEST] {}", request);
-    return this.client
-        .post(request)
-        // Deserialization is done at service level to keep code DRY.
-        .map(response -> response);
+    // Deserialization (if needed) is done at service level to keep code DRY.
+    return this.client.post(request).map(response -> response);
   }
 }

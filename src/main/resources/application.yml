@@ -4,7 +4,7 @@ miscellaneous:
 http:
   clients:
     default-timeout: ${HTTP_CLIENTS_DEFAULT_TIMEOUT:5000}
-    my-external-api:
+    webhook-site:
       base-url: ${HTTP_CLIENTS_MY_EXTERNAL_API_BASE_URL}
 
 rate-limit:

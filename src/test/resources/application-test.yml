@@ -1,6 +1,6 @@
 http:
   clients:
-    my-external-api:
+    webhook-site:
       base-url: http://test.com
 
 slack:
