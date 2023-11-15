@@ -63,8 +63,7 @@ public class WebhookSiteHttpClient {
                 log.info("HTTP[RESPONSE] '{}'", body);
               } else {
                 log.warn(format("HTTP[ERROR] status '%s' response '%s'", status, body));
-                // Based on your necessity you can throw an error and handle it with
-                // defaultErrorHandler
+                // Based on your needs you can throw an error and handle it with defaultErrorHandler
               }
 
               return body;

@@ -98,14 +98,14 @@ spring:
     password: ${DB_PASSWORD}
 
   jpa:
-    open-in-view: false # disable lazy loading in web views
+    open-in-view: false # disable lazy loading in web views, important for performance.
     hibernate:
       ddl-auto: validate
     properties:
       hibernate:
-        generate_statistics: true
+        generate_statistics: false
         jdbc:
-          # Note: GenerationType.IDENTITY, Hibernate will disable batch inserts/updates. (workaround vladmihalcea.hibernate.id.BatchSequenceGenerator)
+          # Important: When using GenerationType.IDENTITY Hibernate disable batching, you need to use BatchSequenceGenerator
           batch_size: ${JDBC_BATCH_SIZE:10}
           time_zone: ${JDBC_TIMEZONE:America/Sao_Paulo}
 
@@ -134,11 +134,6 @@ server:
     # enable tomcat metrics
     mbeanregistry:
       enabled: true
-
-logging:
-  level:
-    org:
-      hibernate: ERROR
 
 ---
 spring:

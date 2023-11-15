@@ -8,7 +8,7 @@ slack:
 http:
   clients:
     my-external-api:
-      base-url: https://webhook.site/8258fbb5-0137-4e8c-9a5f-080629933063
+      base-url: https://webhook.site/9a0ea08a-241f-49a4-8ded-adf827021f65
 
 rabbitmq:
   host: localhost
@@ -38,9 +38,8 @@ spring:
   jpa:
     properties:
       hibernate:
-        show_sql: false # does not show correctly batch insert (use datasource-proxy)
+        show_sql: false
         format_sql: false
-        # generate_statistics: true
 
   security:
     oauth2:
@@ -54,8 +53,6 @@ spring:
       enabled: false
 
 logging:
-  pattern:
-    level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
   level:
     web: info
     # org.springframework.cache: TRACE
