@@ -133,13 +133,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     //   this.slack.notify(format("[API] InternalServerError: %s", ex.getMessage()));
     // }
 
-    List<ApiErrorDetails> errors = ex.getErrors();
-    if (ex.getErrors().isEmpty()) {
-      errors = List.of(ApiErrorDetails.builder().reason(ex.getMessage()).build());
-    }
-
     final ProblemDetail problemDetail =
-        this.buildProblemDetail(ex.getHttpStatus(), API_DEFAULT_REQUEST_FAILED_MESSAGE, errors);
+        this.buildProblemDetail(
+            ex.getHttpStatus(), API_DEFAULT_REQUEST_FAILED_MESSAGE, ex.getErrors());
     return ResponseEntity.status(ex.getHttpStatus()).body(problemDetail);
   }
 
