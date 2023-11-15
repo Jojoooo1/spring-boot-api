@@ -16,7 +16,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
  * within MDC context.
  */
 @Component
-public class AddNginxTraceToMDCFilter extends OncePerRequestFilter {
+public class AddNginxReqIdToMDCFilter extends OncePerRequestFilter {
 
   private static final String NGINX_REQUEST_ID_HEADER = "X-Request-ID";
 

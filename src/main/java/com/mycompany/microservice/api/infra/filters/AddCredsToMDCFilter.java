@@ -16,7 +16,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
  * within MDC context.
  */
 @Component
-public class AddAuthToMDCFilter extends OncePerRequestFilter {
+public class AddCredsToMDCFilter extends OncePerRequestFilter {
 
   private static final String USER_MDC_KEY = "user";
   private static final String COMPANY_MDC_KEY = "company";
