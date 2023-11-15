@@ -1097,14 +1097,14 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{host}}/management/companies/{{entity_id}}",
+									"raw": "{{host}}/management/companies/{{ez",
 									"host": [
 										"{{host}}"
 									],
 									"path": [
 										"management",
 										"companies",
-										"{{entity_id}}"
+										"{{ez"
 									]
 								}
 							},
@@ -1261,14 +1261,14 @@
 									}
 								},
 								"url": {
-									"raw": "{{host}}/management/companies/{{entity_id}}",
+									"raw": "{{host}}/management/companies/{{entity_id}}z",
 									"host": [
 										"{{host}}"
 									],
 									"path": [
 										"management",
 										"companies",
-										"{{entity_id}}"
+										"{{entity_id}}z"
 									]
 								}
 							},
@@ -1599,6 +1599,33 @@
 							"path": [
 								"public",
 								"call-external-api"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "call-external-api with cb",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "traceparent",
+								"value": "00-043102927c43d27ade5f99c0b2090bed-a40bd989b9158c64-00",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/public/call-external-api-with-cb",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"public",
+								"call-external-api-with-cb"
 							]
 						}
 					},
