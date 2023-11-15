@@ -17,6 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.LazyInitializationException;
+import org.hibernate.validator.internal.engine.path.PathImpl;
+import org.jetbrains.annotations.NotNull;
 import org.postgresql.util.PSQLException;
 import org.springframework.core.NestedExceptionUtils;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -32,6 +34,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @Slf4j
@@ -39,6 +42,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RequiredArgsConstructor
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
+  // Process @Valid
   @Override
   protected ResponseEntity<Object> handleMethodArgumentNotValid(
       @NonNull final MethodArgumentNotValidException ex,
@@ -53,8 +57,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       if (err instanceof FieldError) {
         errors.add(
             ApiErrorDetails.builder()
-                .reason(err.getDefaultMessage())
                 .pointer(((FieldError) err).getField())
+                .reason(err.getDefaultMessage())
                 .build());
       }
     }
@@ -63,8 +67,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         .body(this.buildProblemDetail(BAD_REQUEST, "Validation failed.", errors));
   }
 
+  // Process @Validated
   @ResponseStatus(BAD_REQUEST)
-  @ExceptionHandler({jakarta.validation.ConstraintViolationException.class})
+  @ExceptionHandler(jakarta.validation.ConstraintViolationException.class)
   public ProblemDetail handleJakartaConstraintViolationException(
       final jakarta.validation.ConstraintViolationException ex, final WebRequest request) {
     log.info(ex.getMessage(), ex);
@@ -74,11 +79,40 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       errors.add(
           ApiErrorDetails.builder()
               .reason(violation.getMessage())
-              .pointer(violation.getPropertyPath().toString())
+              .pointer(((PathImpl) violation.getPropertyPath()).getLeafNode().getName())
+              // .pointer(
+              //     violation.getInvalidValue() != null
+              //         ? violation.getInvalidValue().toString()
+              //         : StringUtils.EMPTY)
               .build());
     }
 
     return this.buildProblemDetail(BAD_REQUEST, "Validation failed.", errors);
+  }
+
+  // Process method parameter validation
+  @Override
+  protected ResponseEntity<Object> handleHandlerMethodValidationException(
+      final @NotNull HandlerMethodValidationException ex,
+      final @NotNull HttpHeaders headers,
+      final @NotNull HttpStatusCode status,
+      final @NotNull WebRequest request) {
+    log.info(ex.getMessage(), ex);
+
+    final List<ApiErrorDetails> errors = new ArrayList<>();
+    for (final var validation : ex.getAllValidationResults()) {
+      for (final var error : validation.getResolvableErrors()) {
+        errors.add(
+            ApiErrorDetails.builder()
+                .pointer(
+                    validation.getArgument() != null ? validation.getArgument().toString() : null)
+                .reason(error.getDefaultMessage())
+                .build());
+      }
+    }
+
+    return ResponseEntity.status(BAD_REQUEST)
+        .body(this.buildProblemDetail(BAD_REQUEST, "Validation failed.", errors));
   }
 
   @ResponseStatus(BAD_REQUEST)
