@@ -60,7 +60,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     return ResponseEntity.status(BAD_REQUEST)
-        .body(this.buildProblemDetail(BAD_REQUEST, API_DEFAULT_REQUEST_FAILED_MESSAGE, errors));
+        .body(this.buildProblemDetail(BAD_REQUEST, "Validation failed.", errors));
   }
 
   @ResponseStatus(BAD_REQUEST)
@@ -78,7 +78,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
               .build());
     }
 
-    return this.buildProblemDetail(BAD_REQUEST, API_DEFAULT_REQUEST_FAILED_MESSAGE, errors);
+    return this.buildProblemDetail(BAD_REQUEST, "Validation failed.", errors);
   }
 
   @ResponseStatus(BAD_REQUEST)
@@ -139,7 +139,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     return ResponseEntity.status(ex.getHttpStatus()).body(problemDetail);
   }
 
-  // All unknown exception will fall in this function.
+  // All unknown exception will fallback in this function.
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   @ExceptionHandler(Throwable.class)
   public ProblemDetail handleAllExceptions(final Throwable ex, final WebRequest request) {
