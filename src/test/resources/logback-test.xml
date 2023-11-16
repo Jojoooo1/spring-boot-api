@@ -6,7 +6,7 @@
   <logger level="INFO" name="org.springframework"/>
   <logger level="INFO" name="org.testcontainers"/>
   
-  <root level="INFO">
+  <root level="DEBUG">
     <appender-ref ref="CONSOLE"/>
   </root>
 

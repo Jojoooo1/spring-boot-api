@@ -89,8 +89,9 @@ public class Company extends BaseEntity {
   @Column private BigDecimal addressLongitude;
 
   @Column private Boolean isPlatform;
-  @Column private Boolean isManagement;
+  @Column private Boolean isBackOffice;
   @Column private Boolean isInternal;
+  @Column private Boolean isManagement;
 
   public Company(final Long id) {
     this.id = id;
@@ -151,10 +152,12 @@ public class Company extends BaseEntity {
         + this.addressLongitude
         + ", isPlatform="
         + this.isPlatform
-        + ", isManagement="
-        + this.isManagement
+        + ", isBackOffice="
+        + this.isBackOffice
         + ", isInternal="
         + this.isInternal
+        + ", isManagement="
+        + this.isManagement
         + "', createdBy="
         + this.getCreatedBy()
         + ", updatedBy="
@@ -186,12 +189,9 @@ public class Company extends BaseEntity {
     return StringUtils.isNotBlank(this.slug) && this.slug.equals(slug);
   }
 
-  private List<UserRolesEnum> getUserRoles() {
+  private List<UserRolesEnum> getUserRolesFromCompanyType() {
     final List<UserRolesEnum> roles = new ArrayList<>();
 
-    if (Boolean.TRUE.equals(this.isManagement)) {
-      roles.add(UserRolesEnum.MANAGEMENT_USER);
-    }
     if (Boolean.TRUE.equals(this.isInternal)) {
       roles.add(UserRolesEnum.INTERNAL_USER);
     }
@@ -202,8 +202,8 @@ public class Company extends BaseEntity {
     return roles;
   }
 
-  public Collection<GrantedAuthority> getAuthorities() {
-    return this.getUserRoles().stream()
+  public Collection<GrantedAuthority> getGrantedAuthoritiesFromCompanyType() {
+    return this.getUserRolesFromCompanyType().stream()
         .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName()))
         .collect(Collectors.toSet());
   }

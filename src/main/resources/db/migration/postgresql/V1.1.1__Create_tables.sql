@@ -21,8 +21,9 @@ CREATE TABLE public.company (
   address_longitude numeric,
 
   is_platform boolean DEFAULT false,
-  is_management boolean DEFAULT false,
+  is_back_office boolean DEFAULT false,
   is_internal boolean DEFAULT false,
+  is_management boolean DEFAULT false,
 
   created_by varchar(255),
   updated_by varchar(255),
@@ -48,10 +49,11 @@ CREATE TABLE public.api_key
 );
 CREATE INDEX api_key_key_is_active_idx ON api_key (key, is_active);
 
-INSERT INTO public.company (slug, name, email, is_management, created_at, updated_at)
-VALUES ('mgmt', 'mgmt-company', 'mgmt-company@gmail.com', true, NOW(), NOW());
-INSERT INTO public.api_key (company_id, name, key, is_active, created_at, updated_at)
-VALUES (1, 'apikey-mgmt', 'mgmt-apikey', true, NOW(), NOW());
+INSERT INTO public.company (slug, name, email, created_at, updated_at)
+VALUES ('management', 'management-company', 'management-company@gmail.com', NOW(), NOW());
+
+INSERT INTO public.company (slug, name, email, created_at, updated_at)
+VALUES ('back-office', 'back-office-company', 'back-office-company@gmail.com', NOW(), NOW());
 
 INSERT INTO public.company (slug, name, email, is_internal, created_at, updated_at)
 VALUES ('internal', 'internal-company', 'internal-company@gmail.com', true, NOW(), NOW());

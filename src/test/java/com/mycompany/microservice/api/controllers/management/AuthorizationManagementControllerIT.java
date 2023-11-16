@@ -1,21 +1,21 @@
 package com.mycompany.microservice.api.controllers.management;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.mycompany.microservice.api.BaseIntegrationTest;
-import com.mycompany.microservice.api.constants.AppHeaders;
+import com.mycompany.microservice.api.enums.UserRolesEnum;
 import com.mycompany.microservice.api.services.ApiKeyService;
 import com.mycompany.microservice.api.services.CompanyService;
-import com.mycompany.microservice.api.testutils.builders.ApiKeyBuilder;
-import com.mycompany.microservice.api.testutils.builders.CompanyBuilder;
+import com.mycompany.microservice.api.testutils.builders.JwtBuilder;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 class AuthorizationManagementControllerIT extends BaseIntegrationTest {
 
-  private static final String URL = CompanyManagementController.BASE_URL;
+  private final String URL = CompanyManagementController.BASE_URL;
 
   @Autowired private ApiKeyService apiKeyService;
   @Autowired private CompanyService companyService;
@@ -24,43 +24,34 @@ class AuthorizationManagementControllerIT extends BaseIntegrationTest {
   void init() {}
 
   @Test
-  void return_401_IfApikeyIsNotFound() throws Exception {
+  void return_401_IfNoJwtPassed() throws Exception {
     this.mockMvc
-        .perform(get(URL).header(AppHeaders.API_KEY_HEADER, random()))
+        .perform(get(this.URL).with(authentication(null)))
         .andExpect(status().isUnauthorized());
   }
 
   @Test
-  void return_401_IfApikeyCompanyHasWrongRole() throws Exception {
-    final var company = this.companyService.create(CompanyBuilder.company());
-    final var apiKey = this.apiKeyService.create(ApiKeyBuilder.apiKey(company));
+  void return_401_IfInvalidRole() throws Exception {
     this.mockMvc
-        .perform(get(URL).header(AppHeaders.API_KEY_HEADER, apiKey.getKey()))
-        .andExpect(status().isForbidden());
-
-    final var internal = this.companyService.create(CompanyBuilder.internal());
-    final var apiKeyInternal = this.apiKeyService.create(ApiKeyBuilder.apiKey(internal));
-    this.mockMvc
-        .perform(get(URL).header(AppHeaders.API_KEY_HEADER, apiKeyInternal.getKey()))
+        .perform(get(this.URL).with(authentication(JwtBuilder.jwt(random(), random()))))
         .andExpect(status().isForbidden());
   }
 
   @Test
-  void return_401_IfApikeyIsDisabled() throws Exception {
-    final var management = this.companyService.create(CompanyBuilder.management());
-    final var apiKey = this.apiKeyService.create(ApiKeyBuilder.apiKey(management));
-    this.apiKeyService.delete(apiKey.getId());
+  void return_401_IfNotAValidRole() throws Exception {
     this.mockMvc
-        .perform(get(URL).header(AppHeaders.API_KEY_HEADER, apiKey.getKey()))
-        .andExpect(status().isUnauthorized());
+        .perform(
+            get(this.URL)
+                .with(authentication(JwtBuilder.jwt(random(), UserRolesEnum.PLATFORM_USER))))
+        .andExpect(status().isForbidden());
   }
 
   @Test
   void return_200() throws Exception {
-    final var management = this.companyService.create(CompanyBuilder.management());
-    final var apiKey = this.apiKeyService.create(ApiKeyBuilder.apiKey(management));
     this.mockMvc
-        .perform(get(URL).header(AppHeaders.API_KEY_HEADER, apiKey.getKey()))
+        .perform(
+            get(this.URL)
+                .with(authentication(JwtBuilder.jwt(random(), UserRolesEnum.MANAGEMENT_USER))))
         .andExpect(status().isOk());
   }
 }

@@ -41,10 +41,6 @@ public class SecurityConfiguration {
   @Bean
   public SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
     http.addFilterBefore(
-            new ApiKeyAuthenticationFilter(
-                AppUrls.MANAGEMENT + "/**", this.authenticationManager()),
-            AnonymousAuthenticationFilter.class)
-        .addFilterBefore(
             new ApiKeyAuthenticationFilter(AppUrls.INTERNAL + "/**", this.authenticationManager()),
             AnonymousAuthenticationFilter.class)
         .addFilterBefore(
@@ -54,16 +50,22 @@ public class SecurityConfiguration {
         .authorizeHttpRequests(
             authorize ->
                 authorize
+                    //
+                    .requestMatchers(AppUrls.PLATFORM)
+                    .hasAnyRole(PLATFORM_USER.getName(), PLATFORM_ADMIN.getName())
+                    //
                     .requestMatchers(AppUrls.BACK_OFFICE + "/**")
                     .hasAnyRole(BACK_OFFICE_USER.getName(), BACK_OFFICE_ADMIN.getName())
+                    //
                     .requestMatchers(AppUrls.INTERNAL + "/**")
                     .hasAnyRole(INTERNAL_USER.getName())
+                    //
                     .requestMatchers(AppUrls.MANAGEMENT + "/**")
-                    .hasAnyRole(MANAGEMENT_USER.getName())
-                    .requestMatchers(AppUrls.PLATFORM + "/**")
-                    .hasAnyRole(PLATFORM_USER.getName(), PLATFORM_ADMIN.getName())
+                    .hasAnyRole(MANAGEMENT_USER.getName(), MANAGEMENT_ADMIN.getName())
+                    //
                     .requestMatchers(AppUrls.PUBLIC + "/**")
                     .permitAll()
+                    //
                     .anyRequest()
                     .denyAll())
         // Necessary if we want to be able to call POST/PUT/DELETE
