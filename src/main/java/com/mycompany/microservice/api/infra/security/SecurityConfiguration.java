@@ -51,7 +51,7 @@ public class SecurityConfiguration {
             authorize ->
                 authorize
                     //
-                    .requestMatchers(AppUrls.PLATFORM)
+                    .requestMatchers(AppUrls.PLATFORM + "/**")
                     .hasAnyRole(PLATFORM_USER.getName(), PLATFORM_ADMIN.getName())
                     //
                     .requestMatchers(AppUrls.BACK_OFFICE + "/**")
