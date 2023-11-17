@@ -18,6 +18,9 @@ public class ClaimValidator {
 
   private final CompanyService companyService;
 
+  /*
+   * Prevent user without company to access the API
+   * */
   @Bean
   OAuth2TokenValidator<Jwt> companySlugValidator() {
     return new JwtClaimValidator<String>(

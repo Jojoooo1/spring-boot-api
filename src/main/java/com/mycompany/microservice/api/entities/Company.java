@@ -90,8 +90,8 @@ public class Company extends BaseEntity {
 
   @Column private Boolean isPlatform;
   @Column private Boolean isBackOffice;
-  @Column private Boolean isInternal;
   @Column private Boolean isManagement;
+  @Column private Boolean isInternal;
 
   public Company(final Long id) {
     this.id = id;
@@ -154,10 +154,10 @@ public class Company extends BaseEntity {
         + this.isPlatform
         + ", isBackOffice="
         + this.isBackOffice
-        + ", isInternal="
-        + this.isInternal
         + ", isManagement="
         + this.isManagement
+        + ", isInternal="
+        + this.isInternal
         + "', createdBy="
         + this.getCreatedBy()
         + ", updatedBy="
