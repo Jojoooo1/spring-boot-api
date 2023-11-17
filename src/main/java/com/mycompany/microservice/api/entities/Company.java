@@ -190,12 +190,12 @@ public class Company extends BaseEntity {
   }
 
   public Collection<GrantedAuthority> getGrantedAuthoritiesFromCompanyType() {
-    return this.getUserRolesFromCompanyType().stream()
+    return this.getApiRolesFromCompanyType().stream()
         .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName()))
         .collect(Collectors.toSet());
   }
 
-  private List<UserRolesEnum> getUserRolesFromCompanyType() {
+  private List<UserRolesEnum> getApiRolesFromCompanyType() {
     final List<UserRolesEnum> roles = new ArrayList<>();
 
     if (Boolean.TRUE.equals(this.isInternal)) {
