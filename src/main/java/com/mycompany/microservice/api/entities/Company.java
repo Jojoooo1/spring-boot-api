@@ -193,10 +193,10 @@ public class Company extends BaseEntity {
     final List<UserRolesEnum> roles = new ArrayList<>();
 
     if (Boolean.TRUE.equals(this.isInternal)) {
-      roles.add(UserRolesEnum.INTERNAL_USER);
+      roles.add(UserRolesEnum.INTERNAL_API_USER);
     }
     if (Boolean.TRUE.equals(this.isPlatform)) {
-      roles.add(UserRolesEnum.PLATFORM_USER);
+      roles.add(UserRolesEnum.PLATFORM_API_USER);
     }
 
     return roles;

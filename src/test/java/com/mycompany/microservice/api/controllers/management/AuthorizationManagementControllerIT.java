@@ -11,6 +11,8 @@ import com.mycompany.microservice.api.services.CompanyService;
 import com.mycompany.microservice.api.testutils.builders.JwtBuilder;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 class AuthorizationManagementControllerIT extends BaseIntegrationTest {
@@ -37,12 +39,14 @@ class AuthorizationManagementControllerIT extends BaseIntegrationTest {
         .andExpect(status().isForbidden());
   }
 
-  @Test
-  void return_401_IfNotAValidRole() throws Exception {
+  @ParameterizedTest
+  @EnumSource(
+      value = UserRolesEnum.class,
+      names = {"MANAGEMENT_USER", "MANAGEMENT_ADMIN"},
+      mode = EnumSource.Mode.EXCLUDE)
+  void return_401_IfNotAValidRole(final UserRolesEnum role) throws Exception {
     this.mockMvc
-        .perform(
-            get(this.URL)
-                .with(authentication(JwtBuilder.jwt(random(), UserRolesEnum.PLATFORM_USER))))
+        .perform(get(this.URL).with(authentication(JwtBuilder.jwt(random(), role))))
         .andExpect(status().isForbidden());
   }
 

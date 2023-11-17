@@ -58,9 +58,9 @@ VALUES ('back-office', 'back-office-company', 'back-office-company@gmail.com', N
 INSERT INTO public.company (slug, name, email, is_internal, created_at, updated_at)
 VALUES ('internal', 'internal-company', 'internal-company@gmail.com', true, NOW(), NOW());
 INSERT INTO public.api_key (company_id, name, key, is_active, created_at, updated_at)
-VALUES (2, 'apikey-internal', 'internal-apikey', true, NOW(), NOW());
+VALUES (3, 'apikey-internal', 'internal-apikey', true, NOW(), NOW());
 
 INSERT INTO public.company (slug, name, email, is_platform, created_at, updated_at)
 VALUES ('platform', 'platform-company', 'platform-company@gmail.com', true, NOW(), NOW());
 INSERT INTO public.api_key (company_id, name, key, is_active, created_at, updated_at)
-VALUES (3, 'apikey-platform', 'platform-apikey', true, NOW(), NOW());
+VALUES (4, 'apikey-platform', 'platform-apikey', true, NOW(), NOW());

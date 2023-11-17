@@ -51,14 +51,16 @@ public class SecurityConfiguration {
             authorize ->
                 authorize
                     //
-                    .requestMatchers(AppUrls.PLATFORM + "/**")
+                    .requestMatchers(AppUrls.PLATFORM_API + "/**")
+                    .hasAnyRole(PLATFORM_API_USER.getName())
+                    .requestMatchers(AppUrls.PLATFORM_WEB + "/**", AppUrls.PLATFORM_MOBILE + "/**")
                     .hasAnyRole(PLATFORM_USER.getName(), PLATFORM_ADMIN.getName())
                     //
                     .requestMatchers(AppUrls.BACK_OFFICE + "/**")
                     .hasAnyRole(BACK_OFFICE_USER.getName(), BACK_OFFICE_ADMIN.getName())
                     //
                     .requestMatchers(AppUrls.INTERNAL + "/**")
-                    .hasAnyRole(INTERNAL_USER.getName())
+                    .hasAnyRole(INTERNAL_API_USER.getName())
                     //
                     .requestMatchers(AppUrls.MANAGEMENT + "/**")
                     .hasAnyRole(MANAGEMENT_USER.getName(), MANAGEMENT_ADMIN.getName())

@@ -9,11 +9,12 @@ import lombok.Getter;
 public enum UserRolesEnum {
   PLATFORM_USER("platform_user"),
   PLATFORM_ADMIN("platform_admin"),
+  PLATFORM_API_USER("platform_api_user"),
 
   BACK_OFFICE_USER("back_office_user"),
   BACK_OFFICE_ADMIN("back_office_admin"),
 
-  INTERNAL_USER("internal_user"),
+  INTERNAL_API_USER("internal_api_user"),
 
   MANAGEMENT_USER("management_user"),
   MANAGEMENT_ADMIN("management_admin");
