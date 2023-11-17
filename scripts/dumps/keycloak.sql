@@ -5,7 +5,7 @@
 -- Dumped from database version 15.5
 -- Dumped by pg_dump version 16.0 (Ubuntu 16.0-1.pgdg22.04+1)
 
--- Started on 2023-11-17 10:44:34 -03
+-- Started on 2023-11-17 15:49:28 -03
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -1689,6 +1689,7 @@ d9e489ee-6687-468b-bd43-82c773795734	role_list	f22bc560-708c-401c-ad05-2dbb1cda7
 50baaf2f-a7f0-4c34-9705-6b60d974d9bc	web-origins	f22bc560-708c-401c-ad05-2dbb1cda77dd	OpenID Connect scope for add allowed web origins to the access token	openid-connect
 3caf37ff-603b-45aa-8f68-7a6d1b8ce255	microprofile-jwt	f22bc560-708c-401c-ad05-2dbb1cda77dd	Microprofile - JWT built-in scope	openid-connect
 3b522a3b-ed69-4e6f-b3e5-78067a0fd314	acr	f22bc560-708c-401c-ad05-2dbb1cda77dd	OpenID Connect scope for add acr (authentication context class reference) to the token	openid-connect
+d1d0d4f1-a76f-4a5f-a7f2-1544cf1313e1	company	f22bc560-708c-401c-ad05-2dbb1cda77dd	Company of the user	openid-connect
 \.
 
 
@@ -1751,6 +1752,10 @@ d9e489ee-6687-468b-bd43-82c773795734	${samlRoleListScopeConsentText}	consent.scr
 3caf37ff-603b-45aa-8f68-7a6d1b8ce255	true	include.in.token.scope
 3b522a3b-ed69-4e6f-b3e5-78067a0fd314	false	display.on.consent.screen
 3b522a3b-ed69-4e6f-b3e5-78067a0fd314	false	include.in.token.scope
+d1d0d4f1-a76f-4a5f-a7f2-1544cf1313e1		consent.screen.text
+d1d0d4f1-a76f-4a5f-a7f2-1544cf1313e1	false	display.on.consent.screen
+d1d0d4f1-a76f-4a5f-a7f2-1544cf1313e1	false	include.in.token.scope
+d1d0d4f1-a76f-4a5f-a7f2-1544cf1313e1		gui.order
 \.
 
 
@@ -1878,6 +1883,7 @@ daa819c5-ca52-4936-8800-7116fdfe0d54	3caf37ff-603b-45aa-8f68-7a6d1b8ce255	f
 daa819c5-ca52-4936-8800-7116fdfe0d54	46f28b59-b9cc-4472-9211-92ea9121335c	f
 daa819c5-ca52-4936-8800-7116fdfe0d54	8a1bc266-1016-45ac-baf1-aaf2a72b33a4	f
 daa819c5-ca52-4936-8800-7116fdfe0d54	2c73bcba-f990-4d3e-9800-10255453a27b	f
+daa819c5-ca52-4936-8800-7116fdfe0d54	d1d0d4f1-a76f-4a5f-a7f2-1544cf1313e1	t
 \.
 
 
@@ -2340,6 +2346,7 @@ f22bc560-708c-401c-ad05-2dbb1cda77dd	8c7d9b8f-ef5b-4ace-a8a1-8ef4d09d4a0d	t
 f22bc560-708c-401c-ad05-2dbb1cda77dd	50baaf2f-a7f0-4c34-9705-6b60d974d9bc	t
 f22bc560-708c-401c-ad05-2dbb1cda77dd	3caf37ff-603b-45aa-8f68-7a6d1b8ce255	f
 f22bc560-708c-401c-ad05-2dbb1cda77dd	3b522a3b-ed69-4e6f-b3e5-78067a0fd314	t
+f22bc560-708c-401c-ad05-2dbb1cda77dd	d1d0d4f1-a76f-4a5f-a7f2-1544cf1313e1	t
 \.
 
 
@@ -2732,6 +2739,7 @@ b953eac5-cbce-43df-9555-f7190b677d20	upn	openid-connect	oidc-usermodel-attribute
 627976e7-07b3-4b7a-a7cb-99da88b861dc	groups	openid-connect	oidc-usermodel-realm-role-mapper	\N	3caf37ff-603b-45aa-8f68-7a6d1b8ce255
 5477a353-7133-4922-84bf-1d7c2c2a37ee	acr loa level	openid-connect	oidc-acr-mapper	\N	3b522a3b-ed69-4e6f-b3e5-78067a0fd314
 45aa7d6b-ea5c-4c1a-b2c9-25c9e32b03ff	locale	openid-connect	oidc-usermodel-attribute-mapper	8d71fd9c-c39f-44d3-bda2-39e55b8cc9a3	\N
+c1356b52-f5ca-4332-a39e-ebd659bb328f	company_slug	openid-connect	oidc-usermodel-attribute-mapper	\N	d1d0d4f1-a76f-4a5f-a7f2-1544cf1313e1
 \.
 
 
@@ -3036,6 +3044,12 @@ b953eac5-cbce-43df-9555-f7190b677d20	String	jsonType.label
 45aa7d6b-ea5c-4c1a-b2c9-25c9e32b03ff	true	access.token.claim
 45aa7d6b-ea5c-4c1a-b2c9-25c9e32b03ff	locale	claim.name
 45aa7d6b-ea5c-4c1a-b2c9-25c9e32b03ff	String	jsonType.label
+c1356b52-f5ca-4332-a39e-ebd659bb328f	true	userinfo.token.claim
+c1356b52-f5ca-4332-a39e-ebd659bb328f	company_slug	user.attribute
+c1356b52-f5ca-4332-a39e-ebd659bb328f	true	id.token.claim
+c1356b52-f5ca-4332-a39e-ebd659bb328f	true	access.token.claim
+c1356b52-f5ca-4332-a39e-ebd659bb328f	company_slug	claim.name
+c1356b52-f5ca-4332-a39e-ebd659bb328f	String	jsonType.label
 \.
 
 
@@ -3476,6 +3490,12 @@ COPY public.scope_policy (scope_id, policy_id) FROM stdin;
 --
 
 COPY public.user_attribute (name, value, user_id, id) FROM stdin;
+company_slug	back-office	18dd4c24-a575-4944-97b5-4d7e60e4b2ee	81481643-3e37-43c1-908d-f5e128d2028b
+company_slug	back-office	864b40d8-4b9c-4c63-84ae-59b96397e000	4d6c5a7c-bafd-41fe-8911-8f18f0e351d4
+company_slug	management	634d8884-417a-4592-bc9c-fc4738dc4547	5ac7fd99-25c3-4aca-8600-b94a3645d33f
+company_slug	management	d2fbe307-308c-4afa-9db6-21db9233aba0	62478294-9bea-48f2-83b7-0112d36f1495
+company_slug	platform	181edd3e-372a-4ecb-9e6a-41a5bd02db0c	597d7d1b-80e9-4191-86c4-9b2099034164
+company_slug	platform	6ce64cf0-3e5c-40dc-aa62-822d55d5278d	e74036ee-765b-43e4-b08d-2a1cb840dbfe
 \.
 
 
@@ -5935,7 +5955,7 @@ ALTER TABLE ONLY public.identity_provider_config
     ADD CONSTRAINT fkdc4897cf864c4e43 FOREIGN KEY (identity_provider_id) REFERENCES public.identity_provider(internal_id);
 
 
--- Completed on 2023-11-17 10:44:34 -03
+-- Completed on 2023-11-17 15:49:28 -03
 
 --
 -- PostgreSQL database dump complete
