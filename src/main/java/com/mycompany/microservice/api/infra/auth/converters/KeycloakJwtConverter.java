@@ -54,6 +54,6 @@ public class KeycloakJwtConverter implements Converter<Jwt, AbstractAuthenticati
   }
 
   private String extractEmail(final Jwt jwt) {
-    return jwt.getClaim(CLAIM_EMAIL);
+    return jwt.getClaimAsString(CLAIM_EMAIL);
   }
 }

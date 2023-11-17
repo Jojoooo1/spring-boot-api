@@ -53,8 +53,7 @@ public class AuthFacade {
 
       if (isJWT(authentication)) {
         final Jwt jwt = (Jwt) authentication.getPrincipal();
-        final Object email = jwt.getClaims().get(CLAIM_EMAIL);
-        return email == null ? Optional.empty() : Optional.ofNullable(email.toString());
+        return Optional.ofNullable(jwt.getClaimAsString(CLAIM_EMAIL));
 
       } else if (isApiKey(authentication)) {
         final ApiKeyAuthentication apiKeyAuthentication = (ApiKeyAuthentication) authentication;
@@ -78,14 +77,14 @@ public class AuthFacade {
   }
 
   private Optional<String> getCompanySlugFromJwt(final Jwt jwt) {
-    final Object companySlug = jwt.getClaims().get(CLAIM_COMPANY_SLUG);
+    final String companySlug = jwt.getClaimAsString(CLAIM_COMPANY_SLUG);
 
     if (companySlug == null) {
-      log.info("user '{}' does not have a company_slug", jwt.getClaims().get(CLAIM_EMAIL));
+      log.info("user '{}' does not have a company_slug", jwt.getClaimAsString(CLAIM_EMAIL));
       return Optional.empty();
     }
 
-    return Optional.ofNullable(companySlug.toString());
+    return Optional.of(companySlug);
   }
 
   private Optional<String> getCompanySlugFromApikey(final Authentication authentication) {
