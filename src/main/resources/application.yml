@@ -77,6 +77,8 @@ spring:
   web:
     resources:
       add-mappings: false # disable serving of static content entirely.
+  #  mvc:
+  #    log-resolved-exception: false # disable warn log on exception resolved, to prevent log pollution.
   security:
     oauth2:
       resourceserver:

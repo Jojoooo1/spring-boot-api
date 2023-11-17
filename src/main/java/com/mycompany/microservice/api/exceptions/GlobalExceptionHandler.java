@@ -54,13 +54,41 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     final List<ApiErrorDetails> errors = new ArrayList<>();
 
     for (final ObjectError err : ex.getBindingResult().getAllErrors()) {
-      if (err instanceof FieldError) {
-        errors.add(
-            ApiErrorDetails.builder()
-                .pointer(((FieldError) err).getField())
-                .reason(err.getDefaultMessage())
-                .build());
-      }
+      errors.add(
+          ApiErrorDetails.builder()
+              .pointer(((FieldError) err).getField())
+              .reason(err.getDefaultMessage())
+              .build());
+    }
+
+    return ResponseEntity.status(BAD_REQUEST)
+        .body(this.buildProblemDetail(BAD_REQUEST, "Validation failed.", errors));
+  }
+
+  // Process validation errors by controller method parameter type, e.g. @RequestParameter,
+  // @PathVariable, etc.
+  @Override
+  protected ResponseEntity<Object> handleHandlerMethodValidationException(
+      final @NotNull HandlerMethodValidationException ex,
+      final @NotNull HttpHeaders headers,
+      final @NotNull HttpStatusCode status,
+      final @NotNull WebRequest request) {
+    log.info(ex.getMessage(), ex);
+
+    final List<ApiErrorDetails> errors = new ArrayList<>();
+    for (final var validation : ex.getAllValidationResults()) {
+      final String arg =
+          validation.getArgument() != null ? validation.getArgument().toString() : null;
+      validation
+          .getResolvableErrors()
+          .forEach(
+              error -> {
+                errors.add(
+                    ApiErrorDetails.builder()
+                        .pointer(arg)
+                        .reason(error.getDefaultMessage())
+                        .build());
+              });
     }
 
     return ResponseEntity.status(BAD_REQUEST)
@@ -88,31 +116,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     return this.buildProblemDetail(BAD_REQUEST, "Validation failed.", errors);
-  }
-
-  // Process method parameter validation
-  @Override
-  protected ResponseEntity<Object> handleHandlerMethodValidationException(
-      final @NotNull HandlerMethodValidationException ex,
-      final @NotNull HttpHeaders headers,
-      final @NotNull HttpStatusCode status,
-      final @NotNull WebRequest request) {
-    log.info(ex.getMessage(), ex);
-
-    final List<ApiErrorDetails> errors = new ArrayList<>();
-    for (final var validation : ex.getAllValidationResults()) {
-      for (final var error : validation.getResolvableErrors()) {
-        errors.add(
-            ApiErrorDetails.builder()
-                .pointer(
-                    validation.getArgument() != null ? validation.getArgument().toString() : null)
-                .reason(error.getDefaultMessage())
-                .build());
-      }
-    }
-
-    return ResponseEntity.status(BAD_REQUEST)
-        .body(this.buildProblemDetail(BAD_REQUEST, "Validation failed.", errors));
   }
 
   @ResponseStatus(BAD_REQUEST)
