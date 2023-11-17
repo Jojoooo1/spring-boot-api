@@ -71,6 +71,8 @@ management:
 spring:
   application:
     name: api
+  main:
+    keep-alive: true # Ensures JVM is kept alive, even if all threads are virtual threads. # https://docs.spring.io/spring-boot/docs/3.2.0-RC2/reference/htmlsingle/#features.spring-application.virtual-threads
   threads:
     virtual:
       enabled: true
