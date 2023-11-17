@@ -77,14 +77,14 @@ public class AuthFacade {
   }
 
   private Optional<String> getCompanySlugFromJwt(final Jwt jwt) {
-    final String companySlug = jwt.getClaimAsString(CLAIM_COMPANY_SLUG);
+    final Optional<String> companySlugOptional =
+        Optional.ofNullable(jwt.getClaimAsString(CLAIM_COMPANY_SLUG));
 
-    if (companySlug == null) {
-      log.info("user '{}' does not have a company_slug", jwt.getClaimAsString(CLAIM_EMAIL));
-      return Optional.empty();
+    if (companySlugOptional.isEmpty()) {
+      log.warn("user '{}' does not have a company_slug", jwt.getClaimAsString(CLAIM_EMAIL));
     }
 
-    return Optional.of(companySlug);
+    return companySlugOptional;
   }
 
   private Optional<String> getCompanySlugFromApikey(final Authentication authentication) {
@@ -93,8 +93,7 @@ public class AuthFacade {
     final ApiKeyDetails apiKeyDetails = apiKeyAuthentication.getApiKeyDetails();
 
     if (StringUtils.isBlank(apiKeyDetails.getCompanySlug())) {
-      log.info("api-key '{}' does not have a company_slug", apiKeyDetails.getId());
-      return Optional.empty();
+      log.warn("api-key '{}' does not have a company_slug", apiKeyDetails.getId());
     }
 
     return Optional.ofNullable(apiKeyDetails.getCompanySlug());

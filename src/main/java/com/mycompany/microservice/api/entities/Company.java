@@ -189,6 +189,12 @@ public class Company extends BaseEntity {
     return StringUtils.isNotBlank(this.slug) && this.slug.equals(slug);
   }
 
+  public Collection<GrantedAuthority> getGrantedAuthoritiesFromCompanyType() {
+    return this.getUserRolesFromCompanyType().stream()
+        .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName()))
+        .collect(Collectors.toSet());
+  }
+
   private List<UserRolesEnum> getUserRolesFromCompanyType() {
     final List<UserRolesEnum> roles = new ArrayList<>();
 
@@ -200,11 +206,5 @@ public class Company extends BaseEntity {
     }
 
     return roles;
-  }
-
-  public Collection<GrantedAuthority> getGrantedAuthoritiesFromCompanyType() {
-    return this.getUserRolesFromCompanyType().stream()
-        .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName()))
-        .collect(Collectors.toSet());
   }
 }
