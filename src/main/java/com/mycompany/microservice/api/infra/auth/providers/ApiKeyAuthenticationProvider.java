@@ -43,20 +43,19 @@ public class ApiKeyAuthenticationProvider implements AuthenticationProvider {
             "[{}] api-key '{}' found with authorities '{}'",
             LOG_NAME,
             apiKeyInRequest,
-            company.getAuthorities());
+            company.getGrantedAuthoritiesFromCompanyType());
 
         final ApiKeyDetails apiKeyDetails =
             ApiKeyDetails.builder()
                 .id(apiKey.getId())
                 .companySlug(company.getSlug())
                 .email(company.getEmail())
-                .isManagement(Boolean.TRUE.equals(company.getIsManagement()))
                 .isInternal(Boolean.TRUE.equals(company.getIsInternal()))
                 .isPlatform(Boolean.TRUE.equals(company.getIsPlatform()))
                 .build();
 
         return new ApiKeyAuthentication(
-            apiKey.getKey(), true, apiKeyDetails, company.getAuthorities());
+            apiKey.getKey(), true, apiKeyDetails, company.getGrantedAuthoritiesFromCompanyType());
       }
 
       log.info("[{}] api-key '{}' not found, returning 401", LOG_NAME, apiKeyInRequest);

@@ -9,6 +9,8 @@ import com.mycompany.microservice.api.enums.UserRolesEnum;
 import com.mycompany.microservice.api.testutils.builders.JwtBuilder;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 class AuthorizationPlatformWebControllerIT extends BaseIntegrationTest {
 
@@ -31,12 +33,14 @@ class AuthorizationPlatformWebControllerIT extends BaseIntegrationTest {
         .andExpect(status().isForbidden());
   }
 
-  @Test
-  void return_401_IfNotAValidRole() throws Exception {
+  @ParameterizedTest
+  @EnumSource(
+      value = UserRolesEnum.class,
+      names = {"PLATFORM_USER", "PLATFORM_ADMIN"},
+      mode = EnumSource.Mode.EXCLUDE)
+  void return_401_IfNotAValidRole(final UserRolesEnum role) throws Exception {
     this.mockMvc
-        .perform(
-            get(this.URL)
-                .with(authentication(JwtBuilder.jwt(random(), UserRolesEnum.BACK_OFFICE_USER))))
+        .perform(get(this.URL).with(authentication(JwtBuilder.jwt(random(), role))))
         .andExpect(status().isForbidden());
   }
 

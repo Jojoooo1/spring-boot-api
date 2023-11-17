@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
@@ -54,6 +55,7 @@ public class KeycloakJwtConverter implements Converter<Jwt, AbstractAuthenticati
   }
 
   private String extractEmail(final Jwt jwt) {
-    return jwt.getClaim(CLAIM_EMAIL);
+    final String email = jwt.getClaimAsString(CLAIM_EMAIL);
+    return StringUtils.isNotBlank(email) ? email : StringUtils.EMPTY;
   }
 }

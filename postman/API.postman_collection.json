@@ -1074,37 +1074,289 @@
 			"name": "management",
 			"item": [
 				{
+					"name": "login",
+					"item": [
+						{
+							"name": "as user",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"",
+											"postman.setEnvironmentVariable(\"access_token_management_user\", jsonData.access_token);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{keycloak_client_secret}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{keycloak_client}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "grant_type",
+											"value": "password",
+											"type": "text"
+										},
+										{
+											"key": "audience",
+											"value": "{{keycloak_client}}",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "{{management_user_username}}",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "{{management_user_password}}",
+											"type": "text"
+										},
+										{
+											"key": "scope",
+											"value": "email profile",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{keycloak_host}}/realms/{{keycloak_realm_name}}/protocol/openid-connect/token",
+									"host": [
+										"{{keycloak_host}}"
+									],
+									"path": [
+										"realms",
+										"{{keycloak_realm_name}}",
+										"protocol",
+										"openid-connect",
+										"token"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "as admin",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"",
+											"postman.setEnvironmentVariable(\"access_token_management_admin\", jsonData.access_token);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{keycloak_client_secret}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{keycloak_client}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "grant_type",
+											"value": "password",
+											"type": "text"
+										},
+										{
+											"key": "audience",
+											"value": "{{keycloak_client}}",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "{{management_admin_username}}",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "{{management_admin_password}}",
+											"type": "text"
+										},
+										{
+											"key": "scope",
+											"value": "email profile",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{keycloak_host}}/realms/{{keycloak_realm_name}}/protocol/openid-connect/token",
+									"host": [
+										"{{keycloak_host}}"
+									],
+									"path": [
+										"realms",
+										"{{keycloak_realm_name}}",
+										"protocol",
+										"openid-connect",
+										"token"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "as user with oauth2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"",
+											"postman.setEnvironmentVariable(\"access_token_platform_user\", jsonData.access_token);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "oauth2",
+									"oauth2": [
+										{
+											"key": "scope",
+											"value": "email profile openid",
+											"type": "string"
+										},
+										{
+											"key": "accessTokenUrl",
+											"value": "{{keycloak_host}}/realms/{{keycloak_realm_name}}/protocol/openid-connect/token",
+											"type": "string"
+										},
+										{
+											"key": "authUrl",
+											"value": "{{keycloak_host}}/realms/{{keycloak_realm_name}}/protocol/openid-connect/auth",
+											"type": "string"
+										},
+										{
+											"key": "clientSecret",
+											"value": "{{keycloak_client_secret}}",
+											"type": "string"
+										},
+										{
+											"key": "clientId",
+											"value": "{{keycloak_client}}",
+											"type": "string"
+										},
+										{
+											"key": "grant_type",
+											"value": "authorization_code",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "password",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										},
+										{
+											"key": "redirect_uri",
+											"value": "https://google.com",
+											"type": "string"
+										},
+										{
+											"key": "addTokenTo",
+											"value": "header",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "grant_type",
+											"value": "password",
+											"type": "text"
+										},
+										{
+											"key": "audience",
+											"value": "{{keycloak_client}}",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "{{platform_user_username}}",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "{{platform_user_password}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": ""
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
 					"name": "companies",
 					"item": [
 						{
 							"name": "get by id",
 							"request": {
-								"auth": {
-									"type": "apikey",
-									"apikey": [
-										{
-											"key": "value",
-											"value": "{{management_apikey}}",
-											"type": "string"
-										},
-										{
-											"key": "key",
-											"value": "Api-Key",
-											"type": "string"
-										}
-									]
-								},
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{host}}/management/companies/{{ez",
+									"raw": "{{host}}/management/companies/15",
 									"host": [
 										"{{host}}"
 									],
 									"path": [
 										"management",
 										"companies",
-										"{{ez"
+										"15"
 									]
 								}
 							},
@@ -1113,21 +1365,6 @@
 						{
 							"name": "get all",
 							"request": {
-								"auth": {
-									"type": "apikey",
-									"apikey": [
-										{
-											"key": "value",
-											"value": "{{management_apikey}}",
-											"type": "string"
-										},
-										{
-											"key": "key",
-											"value": "Api-Key",
-											"type": "string"
-										}
-									]
-								},
 								"method": "GET",
 								"header": [],
 								"url": {
@@ -1192,21 +1429,6 @@
 								}
 							],
 							"request": {
-								"auth": {
-									"type": "apikey",
-									"apikey": [
-										{
-											"key": "value",
-											"value": "{{management_apikey}}",
-											"type": "string"
-										},
-										{
-											"key": "key",
-											"value": "Api-Key",
-											"type": "string"
-										}
-									]
-								},
 								"method": "POST",
 								"header": [],
 								"body": {
@@ -1234,21 +1456,6 @@
 						{
 							"name": "update",
 							"request": {
-								"auth": {
-									"type": "apikey",
-									"apikey": [
-										{
-											"key": "value",
-											"value": "{{management_apikey}}",
-											"type": "string"
-										},
-										{
-											"key": "key",
-											"value": "Api-Key",
-											"type": "string"
-										}
-									]
-								},
 								"method": "PUT",
 								"header": [],
 								"body": {
@@ -1277,21 +1484,6 @@
 						{
 							"name": "patch",
 							"request": {
-								"auth": {
-									"type": "apikey",
-									"apikey": [
-										{
-											"key": "value",
-											"value": "{{management_apikey}}",
-											"type": "string"
-										},
-										{
-											"key": "key",
-											"value": "Api-Key",
-											"type": "string"
-										}
-									]
-								},
 								"method": "PATCH",
 								"header": [],
 								"body": {
@@ -1320,21 +1512,6 @@
 						{
 							"name": "delete",
 							"request": {
-								"auth": {
-									"type": "apikey",
-									"apikey": [
-										{
-											"key": "value",
-											"value": "{{management_apikey}}",
-											"type": "string"
-										},
-										{
-											"key": "key",
-											"value": "Api-Key",
-											"type": "string"
-										}
-									]
-								},
 								"method": "DELETE",
 								"header": [],
 								"url": {
@@ -1351,6 +1528,36 @@
 							},
 							"response": []
 						}
+					],
+					"auth": {
+						"type": "bearer",
+						"bearer": [
+							{
+								"key": "token",
+								"value": "{{access_token_management_user}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
 					]
 				},
 				{
@@ -1359,21 +1566,6 @@
 						{
 							"name": "get by id",
 							"request": {
-								"auth": {
-									"type": "apikey",
-									"apikey": [
-										{
-											"key": "value",
-											"value": "{{management_apikey}}",
-											"type": "string"
-										},
-										{
-											"key": "key",
-											"value": "Api-Key",
-											"type": "string"
-										}
-									]
-								},
 								"method": "GET",
 								"header": [],
 								"url": {
@@ -1393,21 +1585,6 @@
 						{
 							"name": "get all",
 							"request": {
-								"auth": {
-									"type": "apikey",
-									"apikey": [
-										{
-											"key": "value",
-											"value": "{{management_apikey}}",
-											"type": "string"
-										},
-										{
-											"key": "key",
-											"value": "Api-Key",
-											"type": "string"
-										}
-									]
-								},
 								"method": "GET",
 								"header": [],
 								"url": {
@@ -1447,21 +1624,6 @@
 								}
 							],
 							"request": {
-								"auth": {
-									"type": "apikey",
-									"apikey": [
-										{
-											"key": "value",
-											"value": "{{management_apikey}}",
-											"type": "string"
-										},
-										{
-											"key": "key",
-											"value": "Api-Key",
-											"type": "string"
-										}
-									]
-								},
 								"method": "POST",
 								"header": [],
 								"body": {
@@ -1500,21 +1662,6 @@
 								}
 							],
 							"request": {
-								"auth": {
-									"type": "apikey",
-									"apikey": [
-										{
-											"key": "value",
-											"value": "{{management_apikey}}",
-											"type": "string"
-										},
-										{
-											"key": "key",
-											"value": "Api-Key",
-											"type": "string"
-										}
-									]
-								},
 								"method": "DELETE",
 								"header": [],
 								"url": {
@@ -1530,6 +1677,36 @@
 								}
 							},
 							"response": []
+						}
+					],
+					"auth": {
+						"type": "bearer",
+						"bearer": [
+							{
+								"key": "token",
+								"value": "{{access_token_management_user}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
 						}
 					]
 				}

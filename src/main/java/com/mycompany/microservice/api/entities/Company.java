@@ -89,6 +89,7 @@ public class Company extends BaseEntity {
   @Column private BigDecimal addressLongitude;
 
   @Column private Boolean isPlatform;
+  @Column private Boolean isBackOffice;
   @Column private Boolean isManagement;
   @Column private Boolean isInternal;
 
@@ -151,6 +152,8 @@ public class Company extends BaseEntity {
         + this.addressLongitude
         + ", isPlatform="
         + this.isPlatform
+        + ", isBackOffice="
+        + this.isBackOffice
         + ", isManagement="
         + this.isManagement
         + ", isInternal="
@@ -186,25 +189,22 @@ public class Company extends BaseEntity {
     return StringUtils.isNotBlank(this.slug) && this.slug.equals(slug);
   }
 
-  private List<UserRolesEnum> getUserRoles() {
+  public Collection<GrantedAuthority> getGrantedAuthoritiesFromCompanyType() {
+    return this.getApiRolesFromCompanyType().stream()
+        .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName()))
+        .collect(Collectors.toSet());
+  }
+
+  private List<UserRolesEnum> getApiRolesFromCompanyType() {
     final List<UserRolesEnum> roles = new ArrayList<>();
 
-    if (Boolean.TRUE.equals(this.isManagement)) {
-      roles.add(UserRolesEnum.MANAGEMENT_USER);
-    }
     if (Boolean.TRUE.equals(this.isInternal)) {
-      roles.add(UserRolesEnum.INTERNAL_USER);
+      roles.add(UserRolesEnum.INTERNAL_API_USER);
     }
     if (Boolean.TRUE.equals(this.isPlatform)) {
-      roles.add(UserRolesEnum.PLATFORM_USER);
+      roles.add(UserRolesEnum.PLATFORM_API_USER);
     }
 
     return roles;
-  }
-
-  public Collection<GrantedAuthority> getAuthorities() {
-    return this.getUserRoles().stream()
-        .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName()))
-        .collect(Collectors.toSet());
   }
 }

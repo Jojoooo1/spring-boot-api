@@ -1,4 +1,4 @@
-package com.mycompany.microservice.api.infra.advice;
+package com.mycompany.microservice.api.infra.advices;
 
 import static com.mycompany.microservice.api.utils.TimeUtils.ONE_MILLI;
 
