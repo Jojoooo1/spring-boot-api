@@ -24,7 +24,6 @@ import org.springframework.core.NestedExceptionUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.*;
-import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.lang.NonNull;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
@@ -107,6 +106,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       errors.add(
           ApiErrorDetails.builder()
               .reason(violation.getMessage())
+              // Get specific parameter name
               .pointer(((PathImpl) violation.getPropertyPath()).getLeafNode().getName())
               // .pointer(
               //     violation.getInvalidValue() != null
@@ -134,8 +134,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     return this.buildProblemDetail(BAD_REQUEST, errorDetail);
   }
 
+  /*
+   *  When authorizing user at controller or service layer using @PreAuthorize it throws
+   * AccessDeniedException, and it's a developer's responsibility to catch it
+   * */
   @ResponseStatus(HttpStatus.FORBIDDEN)
-  @ExceptionHandler({AccessDeniedException.class})
+  @ExceptionHandler(AccessDeniedException.class)
   public ProblemDetail handleAccessDeniedException(final Exception ex, final WebRequest request) {
     log.info(ex.getMessage(), ex);
     return this.buildProblemDetail(HttpStatus.FORBIDDEN, null);
@@ -162,6 +166,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     return this.buildProblemDetail(HttpStatus.INTERNAL_SERVER_ERROR, API_DEFAULT_ERROR_MESSAGE);
   }
 
+  /*
+   * Catch API defined exceptions
+   *  */
   @ExceptionHandler(RootException.class)
   public ResponseEntity<ProblemDetail> rootException(final RootException ex) {
     log.info(ex.getMessage(), ex);
@@ -176,7 +183,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     return ResponseEntity.status(ex.getHttpStatus()).body(problemDetail);
   }
 
-  // All unknown exception will fallback in this function.
+  /*
+   * Fallback, catch all unknown API exceptions
+   *  */
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   @ExceptionHandler(Throwable.class)
   public ProblemDetail handleAllExceptions(final Throwable ex, final WebRequest request) {
@@ -185,25 +194,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     // this.slack.notify(format("[API] InternalServerError: %s", ex.getMessage()));
 
     return this.buildProblemDetail(HttpStatus.INTERNAL_SERVER_ERROR, API_DEFAULT_ERROR_MESSAGE);
-  }
-
-  /*
-   *
-   * Override in order to facilitate error debug.
-   * */
-  @Override
-  protected ResponseEntity<Object> handleHttpMessageNotWritable(
-      @NonNull final HttpMessageNotWritableException ex,
-      @NonNull final HttpHeaders headers,
-      @NonNull final HttpStatusCode stat,
-      @NonNull final WebRequest request) {
-    log.warn(format("%s", ex.getMessage()), ex);
-
-    // this.slack.notify(format("[API] InternalServerError: %s", ex.getMessage()));
-
-    final HttpStatus status = HttpStatus.valueOf(stat.value());
-    return ResponseEntity.status(status)
-        .body(this.buildProblemDetail(status, API_DEFAULT_ERROR_MESSAGE));
   }
 
   private ProblemDetail buildProblemDetail(final HttpStatus status, final String detail) {
@@ -218,6 +208,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     if (CollectionUtils.isNotEmpty(errors)) {
       problemDetail.setProperty("errors", errors);
     }
+
     // problemDetail.setProperty("timestamp",
     // DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss").format(LocalDateTime.now()));
 
