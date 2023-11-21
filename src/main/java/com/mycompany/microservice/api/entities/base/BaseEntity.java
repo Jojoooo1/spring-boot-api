@@ -5,6 +5,7 @@ import jakarta.persistence.MappedSuperclass;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +19,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @SuperBuilder
 @MappedSuperclass
 public abstract class BaseEntity implements Serializable {
