@@ -15,16 +15,13 @@ This documentation, provide a comprehensive details on the various API, each
 addressing different aspects of a SaaS business:
 
 - **Client Platform**: API dedicated to client-facing applications generally accessed through
-  frontend interfaces, mobile applications and/or API depending on the clients requirements.
+  frontend interfaces, mobile applications and/or API.
 - **Back Office**: Operation and support API for operational functionalities.
 - **Internal**: APIs for external services like schedulers, jobs, webhooks [...] enabling seamless
   integration with the platform.
 - **Management**: API used by the development team to manage the platform. It is intentionally
   separated from the internal API for improved security.
 - **Public API**: Public facing API
-
-Each of these endpoints requires specific authentication mechanisms, collectively forming a robust
-and flexible foundation for SaaS applications.
 
 ## Table of Contents
 
@@ -80,7 +77,6 @@ and flexible foundation for SaaS applications.
 
 - **URL:** `{{host}}/internal/`
 - **Description:** Expose APIs for external services such as schedulers, jobs, webhooks etc.
-  allowing seamless integration with the platform.
 - **Auth:**
     - **Authentication:**
         - API key
@@ -131,21 +127,19 @@ message delivery.
 
 ### Metrics & Tracing
 
-It uses Prometheus and Micrometer to collect detailed metrics and tracing data, providing essential
-insights into your application's behavior and performance.
+It uses Prometheus and Micrometer (Otel) to collect detailed metrics and tracing data.
 
 ### Rate Limiting
 
-To maintain optimal performance and prevent abuse, a rate limiter is implemented. By default, it
-limits each IP to 50 requests per second, helping balance server usage and maintain
-responsiveness. Based on your use case, It can be more adequate to implement at the Load
-Balancer level.
+By default, it limits each IP to 50 requests per second, helping balance server usage and maintain
+responsiveness. It is usually more adequate to implement rate limiting at the Load Balancer level.
 
 ### Error Handling
 
 It uses a consistent error handling strategy that prioritizes informative and descriptive error
 responses. Errors are carefully categorized and presented with corresponding HTTP status codes
-and clear error messages. It mostly uses RFC 7807.
+and clear error messages. It
+uses [RFC 9457](https://datatracker.ietf.org/doc/html/rfc9457#name-members-of-a-problem-detail).
 
 ### CI/CD - Gitflow
 
@@ -163,13 +157,13 @@ and clear error messages. It mostly uses RFC 7807.
 ###### Release
 
 ```bash
-make release
+make release # from develop
 ```
 
 ###### Hotfix
 
 ```bash
-make hotfix # from main branch
+make hotfix # from main
 ```
 
 ### Formatting
