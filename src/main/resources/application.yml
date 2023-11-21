@@ -39,7 +39,7 @@ kubernetes:
 
 management:
   server:
-    port: 8081 # change this in production
+    port: 8081
   info:
     java:
       enabled: true
@@ -51,12 +51,12 @@ management:
     #      group:
     #       readiness:
     #         include: rabbit
-    metrics:
-      distribution:
-        percentiles-histogram:
-          http:
-            server:
-              requests: true
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http:
+          server:
+            requests: true
   endpoints:
     web:
       exposure:

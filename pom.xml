@@ -152,11 +152,11 @@
       <groupId>io.micrometer</groupId>
       <artifactId>micrometer-registry-prometheus</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.hibernate.orm</groupId>
-      <artifactId>hibernate-micrometer</artifactId>
-      <version>6.3.1.Final</version>
-    </dependency>
+    <!-- <dependency> -->
+    <!--   <groupId>org.hibernate.orm</groupId> -->
+    <!--   <artifactId>hibernate-micrometer</artifactId> -->
+    <!--   <version>6.3.1.Final</version> -->
+    <!-- </dependency> -->
     <dependency>
       <groupId>io.opentelemetry</groupId>
       <artifactId>opentelemetry-exporter-otlp</artifactId>

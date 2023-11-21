@@ -16,6 +16,10 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @SpringBootApplication
 public class ApiApplication {
 
+  // static {
+  //	BlockHound.install();
+  // }
+
   public static void main(final String[] args) {
     SpringApplication.run(ApiApplication.class, args);
   }

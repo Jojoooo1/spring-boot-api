@@ -68,6 +68,9 @@ public class SecurityConfiguration {
                     .requestMatchers(AppUrls.PUBLIC + "/**")
                     .permitAll()
                     //
+                    .requestMatchers("/actuator/**")
+                    .permitAll()
+                    //
                     .anyRequest()
                     .denyAll())
         // Necessary if we want to be able to call POST/PUT/DELETE

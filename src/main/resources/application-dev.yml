@@ -24,19 +24,17 @@ rabbitmq:
       routingkey: to_outbound_webhook
 
 management:
-  server:
-    port: 8080
   endpoint:
     health:
       show-details: always
 
   # for testing purpose you can use https://github.com/CtrlSpice/otel-desktop-viewer
-  #  tracing:
-  #    sampling:
-  #      probability: 1
-  #  otlp:
-  #    tracing:
-  #      endpoint: http://localhost:4317
+  tracing:
+    sampling:
+      probability: 1
+  otlp:
+    tracing:
+      endpoint: http://localhost:4317
 
 jdbc:
   datasource-proxy:
