@@ -58,30 +58,33 @@ and flexible foundation for SaaS applications.
   supported
   platform. Separated for better isolation.
 - **Auth:**
-    - **Authentication:** Web/Mobile uses JWT, API uses API key.
-    - **Authorization:** Web and mobile uses JWT role based access. It verifies platform_user
-      and platform_admin role. API verifies the API key value and the associated
-      company's database role _company.is_platform_.
+    - **Authentication:**
+        - Web/mobile: JWT
+        - API: API key
+    - **Authorization:**
+        - Web/mobile: JWT role based access. It verifies `platform_user` and `platform_admin` role.
+        - API: API key role based access. It verifies the API key company's
+          role `company.is_platform`.
 
 ### Back-office
 
 - **URL:** `{{host}}/back-office/`
-- **Description:** It provides APIs to efficiently manage back-office operations, usually serving as
-  the interface between support and operation.
+- **Description:** Provides APIs to efficiently manage back-office operations, usually serving as
+  interface between support and operation.
 - **Auth:**
-    - **Authentication:** It uses JWT.
-    - **Authorization:** It uses JWT role based access and verify the presence of the
-      back_office_user or back_office_admin role.
+    - **Authentication:** JWT
+    - **Authorization:** JWT role based access. It verifies `back_office_user`
+      and `back_office_admin` role.
 
 ### Internal
 
 - **URL:** `{{host}}/internal/`
-- **Description:** Expose APIs for external services such as schedulers, jobs, and webhooks,
+- **Description:** Expose APIs for external services such as schedulers, jobs, webhooks etc.
   allowing seamless integration with the platform.
 - **Auth:**
-    - **Authentication:** It uses API key.
-    - **Authorization:** It validates the provided API key and associated company's database role
-      _company.is_internal_.
+    - **Authentication:** API key
+    - **Authorization:** API key role based access. It verifies the API key company's
+      role `company.is_internal`.
 
 ### Management
 
@@ -89,9 +92,9 @@ and flexible foundation for SaaS applications.
 - **Description:** Designed to empower the development team, this endpoint offers APIs for managing
   and maintaining the entire platform.
 - **Auth:**
-    - **Authentication:** It uses API key.
-    - **Authorization:** It validates the provided API key and associated company's database role
-      _company.is_management_.
+    - **Authentication:** JWT
+    - **Authorization:** JWT role based access. It verifies `management_user`
+      and `management_admin` role.
 
 ### Public
 
@@ -102,9 +105,13 @@ and flexible foundation for SaaS applications.
 
 ### Authentication and Authorization
 
-It uses Keycloak and Spring Security for authentication and implements a pretty simple Role-Based
-Access Control (RBAC) for authorization. If you need a more complete approach I would recommend
-Keycloak Attribute-based access control (ABAC).
+It uses Keycloak and Spring Security for authentication and Role-Based Access Control (RBAC).
+If you need a more complete solution I would recommend to use Keycloak Attribute-based access
+control (ABAC).
+
+If you would like to centralize the authorization in Keycloak, I would recommend to use the
+Resource Owner’s Password Credentials (deprecated in OAuth 2.1) or Client Credentials
+Grant (do not scale very well) for the API key.
 
 ### Database
 
@@ -112,12 +119,12 @@ It uses PostgreSQL for persistence and Flyway for managing migrations and schema
 
 ### Caching
 
-It uses the default Spring cache mechanism, utilizing a `ConcurrentHashMap` object. It
-can be extended to use a centralize cache like [Redis](https://redis.io/).
+It uses the default Spring cache mechanism with `ConcurrentHashMap`. It
+can be extended to use a centralized cache like [Redis](https://redis.io/).
 
 ### Message Broker
 
-Message handling is managed by RabbitMQ (using quorum queue), ensuring reliable and efficient
+Message brokering is managed by RabbitMQ (using quorum queue), ensuring reliable and efficient
 message delivery.
 
 ### Metrics & Tracing
