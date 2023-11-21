@@ -1,7 +1,5 @@
 package com.mycompany.microservice.api.infra.interceptors;
 
-import static com.mycompany.microservice.api.utils.TimeUtils.ONE_MILLI;
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +35,7 @@ public class LogSlowResponseTimeInterceptor implements HandlerInterceptor {
     final Long startTime = (Long) request.getAttribute(EXEC_TIME);
     if (startTime != null) {
       final long elapsedInNanoS = System.nanoTime() - startTime;
-      final long responseTimeInMs = elapsedInNanoS / ONE_MILLI;
+      final long responseTimeInMs = elapsedInNanoS / 1_000_000;
       if (responseTimeInMs > this.maxResponseTimeToLogInMs) {
         log.warn(
             "[SLOW_REQUEST] {}ms {} '{}'",

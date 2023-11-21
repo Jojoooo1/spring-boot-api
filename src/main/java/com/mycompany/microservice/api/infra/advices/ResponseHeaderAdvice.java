@@ -1,7 +1,5 @@
 package com.mycompany.microservice.api.infra.advices;
 
-import static com.mycompany.microservice.api.utils.TimeUtils.ONE_MILLI;
-
 import com.mycompany.microservice.api.constants.AppHeaders;
 import com.mycompany.microservice.api.utils.TraceUtils;
 import io.micrometer.tracing.Tracer;
@@ -46,7 +44,7 @@ public class ResponseHeaderAdvice implements ResponseBodyAdvice<Object> {
 
   private static String fromTimeToString(final Long startTime) {
     final long elapsed = System.nanoTime() - startTime;
-    final long millis = elapsed / ONE_MILLI;
+    final long millis = elapsed / 1_000_000;
     return millis > 0 ? millis + " ms" : elapsed + " ns";
   }
 

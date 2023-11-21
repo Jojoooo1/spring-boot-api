@@ -1,7 +1,7 @@
 package com.mycompany.microservice.api.entities;
 
 import static com.mycompany.microservice.api.entities.Company.TABLE_NAME;
-import static com.mycompany.microservice.api.utils.StringUtils.numericOnly;
+import static org.apache.commons.lang3.StringUtils.getDigits;
 
 import com.mycompany.microservice.api.entities.base.BaseEntity;
 import com.mycompany.microservice.api.enums.UserRolesEnum;
@@ -105,10 +105,10 @@ public class Company extends BaseEntity {
   @PrePersist
   @PreUpdate
   private void preSave() {
-    this.phone = numericOnly(this.phone);
-    this.federalTaxId = numericOnly(this.federalTaxId);
-    this.stateTaxId = numericOnly(this.stateTaxId);
-    this.addressPostCode = numericOnly(this.addressPostCode);
+    this.phone = getDigits(this.phone);
+    this.federalTaxId = getDigits(this.federalTaxId);
+    this.stateTaxId = getDigits(this.stateTaxId);
+    this.addressPostCode = getDigits(this.addressPostCode);
   }
 
   @Override
