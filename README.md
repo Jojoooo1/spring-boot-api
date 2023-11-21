@@ -189,7 +189,6 @@ Environment:
 The dependencies of the project are:
 
 * OpenJDK Java version >= 21
-* Spring boot >= 3.2
 * [Docker](https://www.docker.com)
 * [Docker Compose](https://docs.docker.com/compose/)
 * [Maven](https://maven.apache.org/)
