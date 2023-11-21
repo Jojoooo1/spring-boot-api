@@ -15,7 +15,7 @@ This documentation, provide a comprehensive details on the various API, each
 addressing different aspects of a SaaS business:
 
 - **Client Platform**: API dedicated to client-facing applications generally accessed through
-  frontend interfaces, mobile applications and/or API depending on the client's requirements.
+  frontend interfaces, mobile applications and/or API depending on the clients requirements.
 - **Back Office**: Operation and support applications that are vital for operational
   functionalities.
 - **Internal**: APIs for external services like schedulers, jobs, webhooks [...] enabling seamless
