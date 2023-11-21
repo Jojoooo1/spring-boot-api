@@ -64,8 +64,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         .body(this.buildProblemDetail(BAD_REQUEST, "Validation failed.", errors));
   }
 
-  // Process validation errors by controller method parameter type, e.g. @RequestParameter,
-  // @PathVariable, etc.
+  // Process controller method parameter validations e.g. @RequestParam, @PathVariable etc.
   @Override
   protected ResponseEntity<Object> handleHandlerMethodValidationException(
       final @NotNull HandlerMethodValidationException ex,
@@ -76,15 +75,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     final List<ApiErrorDetails> errors = new ArrayList<>();
     for (final var validation : ex.getAllValidationResults()) {
-      final String arg =
-          validation.getArgument() != null ? validation.getArgument().toString() : null;
+      final String parameterName = validation.getMethodParameter().getParameterName();
       validation
           .getResolvableErrors()
           .forEach(
               error -> {
                 errors.add(
                     ApiErrorDetails.builder()
-                        .pointer(arg)
+                        .pointer(parameterName)
                         .reason(error.getDefaultMessage())
                         .build());
               });
@@ -105,9 +103,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     for (final var violation : ex.getConstraintViolations()) {
       errors.add(
           ApiErrorDetails.builder()
-              .reason(violation.getMessage())
               // Get specific parameter name
               .pointer(((PathImpl) violation.getPropertyPath()).getLeafNode().getName())
+              .reason(violation.getMessage())
               // .pointer(
               //     violation.getInvalidValue() != null
               //         ? violation.getInvalidValue().toString()

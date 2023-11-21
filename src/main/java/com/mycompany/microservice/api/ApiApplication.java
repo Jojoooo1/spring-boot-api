@@ -8,7 +8,6 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.scheduling.annotation.EnableAsync;
-import reactor.core.publisher.Hooks;
 
 @EnableAsync
 @EnableCaching
@@ -24,6 +23,5 @@ public class ApiApplication {
   @PostConstruct
   void started() {
     TimeZone.setDefault(TimeZone.getTimeZone("America/Sao_Paulo"));
-    Hooks.enableAutomaticContextPropagation();
   }
 }

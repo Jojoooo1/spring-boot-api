@@ -6,5 +6,5 @@ import java.io.Serializable;
 import lombok.Builder;
 
 @Builder
-public record ApiErrorDetails(String reason, @JsonInclude(Include.NON_NULL) String pointer)
+public record ApiErrorDetails(@JsonInclude(Include.NON_NULL) String pointer, String reason)
     implements Serializable {}

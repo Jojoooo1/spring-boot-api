@@ -30,6 +30,18 @@ management:
     health:
       show-details: always
 
+  # for testing purpose you can use https://github.com/CtrlSpice/otel-desktop-viewer
+  #  tracing:
+  #    sampling:
+  #      probability: 1
+  #  otlp:
+  #    tracing:
+  #      endpoint: http://localhost:4317
+
+jdbc:
+  datasource-proxy:
+    include-parameter-values: true
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/api?stringtype=unspecified&reWriteBatchedInserts=true
