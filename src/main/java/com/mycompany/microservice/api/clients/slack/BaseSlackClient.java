@@ -25,18 +25,14 @@ public abstract class BaseSlackClient {
           Slack.getInstance().send(this.getUrl(), "Insert your body message");
 
       if (response.getCode() != 200) {
-        log.warn(
-            "[SLACK - {}][ERROR] status[{}] body[{}]",
-            this.getChannel(),
-            response.getCode(),
-            response.getBody());
+        log.warn("[SLACK][ERROR] status[{}] body[{}]", response.getCode(), response.getBody());
 
       } else {
         log.info("[SLACK] error message send with success");
       }
 
     } catch (final Exception ex) {
-      log.error("[SLACK] An error has occurred when sending error message", ex);
+      log.error("[SLACK][ERROR] An error has occurred when sending error message", ex);
     }
   }
 }

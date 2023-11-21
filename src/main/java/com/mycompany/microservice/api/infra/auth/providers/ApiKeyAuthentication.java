@@ -2,7 +2,6 @@ package com.mycompany.microservice.api.infra.auth.providers;
 
 import java.io.Serial;
 import java.util.Collection;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -55,7 +54,7 @@ public class ApiKeyAuthentication extends AbstractAuthenticationToken {
 
   @Getter
   @NoArgsConstructor
-  @AllArgsConstructor(access = AccessLevel.PRIVATE)
+  @AllArgsConstructor
   @Builder
   public static class ApiKeyDetails {
     private Long id;
