@@ -16,10 +16,9 @@ addressing different aspects of a SaaS business:
 
 - **Client Platform**: API dedicated to client-facing applications generally accessed through
   frontend interfaces, mobile applications and/or API depending on the clients requirements.
-- **Back Office**: Operation and support applications that are vital for operational
-  functionalities.
+- **Back Office**: Operation and support API for operational functionalities.
 - **Internal**: APIs for external services like schedulers, jobs, webhooks [...] enabling seamless
-  integration and enriching overall functionality.
+  integration with the platform.
 - **Management**: API used by the development team to manage the platform. It is intentionally
   separated from the internal API for improved security.
 - **Public API**: Public facing API
@@ -72,9 +71,10 @@ and flexible foundation for SaaS applications.
 - **Description:** Provides APIs to efficiently manage back-office operations, usually serving as
   interface between support and operation.
 - **Auth:**
-    - **Authentication:** JWT
-    - **Authorization:** JWT role based access. It verifies `back_office_user`
-      and `back_office_admin` role.
+    - **Authentication:**
+        - JWT
+    - **Authorization:**
+        - JWT role based access. It verifies `back_office_user` and `back_office_admin` role.
 
 ### Internal
 
@@ -82,9 +82,10 @@ and flexible foundation for SaaS applications.
 - **Description:** Expose APIs for external services such as schedulers, jobs, webhooks etc.
   allowing seamless integration with the platform.
 - **Auth:**
-    - **Authentication:** API key
-    - **Authorization:** API key role based access. It verifies the API key company's
-      role `company.is_internal`.
+    - **Authentication:**
+        - API key
+    - **Authorization:**
+        - API key role based access. It verifies the API key company's role `company.is_internal`.
 
 ### Management
 
@@ -92,9 +93,10 @@ and flexible foundation for SaaS applications.
 - **Description:** Designed to empower the development team, this endpoint offers APIs for managing
   and maintaining the entire platform.
 - **Auth:**
-    - **Authentication:** JWT
-    - **Authorization:** JWT role based access. It verifies `management_user`
-      and `management_admin` role.
+    - **Authentication:**
+        - JWT
+    - **Authorization:**
+        - JWT role based access. It verifies `management_user` and `management_admin` role.
 
 ### Public
 
@@ -106,12 +108,12 @@ and flexible foundation for SaaS applications.
 ### Authentication and Authorization
 
 It uses Keycloak and Spring Security for authentication and Role-Based Access Control (RBAC).
-If you need a more complete solution I would recommend to use Keycloak Attribute-based access
+For a more fine-grained authorization you can use Keycloak Attribute-based access
 control (ABAC).
 
-If you would like to centralize the authorization in Keycloak, I would recommend to use the
-Resource Owner’s Password Credentials (deprecated in OAuth 2.1) or Client Credentials
-Grant (do not scale very well) for the API key.
+If you would like to centralize the API key authorization in Keycloak, I would recommend to use the
+Resource Owner’s Password Credentials (easier to set up but deprecated in OAuth 2) or Client
+Credentials Grant.
 
 ### Database
 
