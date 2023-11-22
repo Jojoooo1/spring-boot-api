@@ -6,6 +6,7 @@ import static java.lang.String.format;
 import static java.util.Collections.emptyList;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
+import com.mycompany.microservice.api.clients.slack.SlackAlertClient;
 import com.mycompany.microservice.api.responses.shared.ApiErrorDetails;
 import java.sql.BatchUpdateException;
 import java.util.ArrayList;
@@ -40,6 +41,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 @RequiredArgsConstructor
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+
+  private final SlackAlertClient slack;
 
   // Process @Valid
   @Override

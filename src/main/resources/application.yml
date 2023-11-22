@@ -14,7 +14,7 @@ rate-limit:
     refill-in-seconds: ${DEFAULT_REFILL_IN_SECONDS:1}
 
 slack:
-  username: ${SLACK_USERNAME}
+  env: ${SLACK_ENV}
   channels:
     api-alert:
       url: ${SLACK_API_ALERT_URL}

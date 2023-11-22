@@ -1,6 +1,6 @@
 package com.mycompany.microservice.api.rabbitmq.listeners;
 
-import static com.mycompany.microservice.api.rabbitmq.configs.RabbitConfig.RABBIT_ASYNC_EVENT_CONTAINER_FACTORY;
+import static com.mycompany.microservice.api.rabbitmq.configs.RabbitConfig.RABBIT_ASYNC_EVENT_LISTENER_FACTORY;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,10 +22,10 @@ public class EventListener {
 
   @RabbitListener(
       id = RABBIT_ASYNC_EVENT_LISTENER_ID,
-      containerFactory = RABBIT_ASYNC_EVENT_CONTAINER_FACTORY,
+      containerFactory = RABBIT_ASYNC_EVENT_LISTENER_FACTORY,
       queues = "${rabbitmq.listeners.event.queue}")
   public Mono<Void> process(final Message<?> message) {
-    log.info("[SUB][{}] {}", this.queueName, message);
+    log.info("[RABBITMQ][SUB][{}] {}", this.queueName, message);
     return Mono.empty();
   }
 }
