@@ -52,7 +52,7 @@ public class RabbitConfig {
     factory.setConnectionFactory(this.connectionFactory("api-event-listener"));
     factory.setMessageConverter(new Jackson2JsonMessageConverter());
     factory.setObservationEnabled(true);
-    factory.setAutoStartup(false);
+    factory.setAutoStartup(false); // started at ApplicationReadyEvent
 
     // https://docs.spring.io/spring-amqp/docs/current/reference/html/#async-listeners
     factory.setAcknowledgeMode(AcknowledgeMode.MANUAL);

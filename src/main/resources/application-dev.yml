@@ -1,5 +1,5 @@
 slack:
-  username: api-alert-dev
+  env: api-dev
   channels:
     api-alert:
       url: http://your-slack-bot-url.com/example

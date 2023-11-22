@@ -14,13 +14,13 @@ public class SlackAlertClient extends BaseSlackClient {
 
   private final String url;
   private final String channel;
-  private final String username;
+  private final String env;
 
   public SlackAlertClient(
-      @Value("${slack.username}") final String username,
+      @Value("${slack.env}") final String env,
       @Value("${slack.channels.api-alert.url}") final String url,
       @Value("${slack.channels.api-alert.name}") final String channel) {
-    this.username = username;
+    this.env = env;
     this.url = url;
     this.channel = channel;
   }
