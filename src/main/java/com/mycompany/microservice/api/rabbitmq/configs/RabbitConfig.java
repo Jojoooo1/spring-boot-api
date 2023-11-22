@@ -7,7 +7,6 @@ import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
-import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +16,8 @@ import org.springframework.retry.support.RetryTemplate;
 @Configuration
 public class RabbitConfig {
 
-  public static final String RABBIT_ASYNC_EVENT_CONTAINER_FACTORY = "EventContainerFactory";
+  public static final String RABBIT_ASYNC_EVENT_LISTENER_FACTORY = "AsyncEventListener";
+  public static final String RABBIT_EVENT_PUBLISHER = "EventPublisher";
 
   @Value("${rabbitmq.host}")
   private String host;
@@ -34,10 +34,6 @@ public class RabbitConfig {
   @Value("${rabbitmq.listeners.event.prefetch-count}")
   private Integer prefetchCount;
 
-  private MessageConverter jsonMessageConverter() {
-    return new Jackson2JsonMessageConverter();
-  }
-
   private ConnectionFactory connectionFactory(final String connectionName) {
     final CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
     connectionFactory.setConnectionNameStrategy(conn -> connectionName);
@@ -50,11 +46,11 @@ public class RabbitConfig {
     return connectionFactory;
   }
 
-  @Bean(name = RABBIT_ASYNC_EVENT_CONTAINER_FACTORY)
-  public DirectRabbitListenerContainerFactory eventContainerFactory() {
+  @Bean(name = RABBIT_ASYNC_EVENT_LISTENER_FACTORY)
+  public DirectRabbitListenerContainerFactory eventListenerFactory() {
     final DirectRabbitListenerContainerFactory factory = new DirectRabbitListenerContainerFactory();
     factory.setConnectionFactory(this.connectionFactory("api-event-listener"));
-    factory.setMessageConverter(this.jsonMessageConverter());
+    factory.setMessageConverter(new Jackson2JsonMessageConverter());
     factory.setObservationEnabled(true);
     factory.setAutoStartup(false);
 
@@ -65,11 +61,11 @@ public class RabbitConfig {
     return factory;
   }
 
-  @Bean
+  @Bean(name = RABBIT_EVENT_PUBLISHER)
   public RabbitTemplate rabbitTemplate() {
     final RabbitTemplate factory =
         new RabbitTemplate(this.connectionFactory("api-event-publisher"));
-    factory.setMessageConverter(this.jsonMessageConverter());
+    factory.setMessageConverter(new Jackson2JsonMessageConverter());
     factory.setObservationEnabled(true);
     factory.setRetryTemplate(RetryTemplate.defaultInstance());
 
