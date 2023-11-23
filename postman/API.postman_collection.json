@@ -15,14 +15,34 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/actuator",
+							"raw": "http://localhost:8081/actuator",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8081",
 							"path": [
 								"actuator"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "prometheus",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/actuator/prometheus",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"actuator",
+								"prometheus"
 							]
 						}
 					},
@@ -848,13 +868,19 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{host}}/back-office/hello-world",
+							"raw": "{{host}}/back-office/hello-world?email=email-test",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"back-office",
 								"hello-world"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "email-test"
+								}
 							]
 						}
 					},
