@@ -107,7 +107,7 @@ It uses Keycloak and Spring Security for authentication and Role-Based Access Co
 For a more fine-grained authorization you can use Keycloak Attribute-based access
 control (ABAC).
 
-If you would like to centralize the API key authorization in Keycloak, I would recommend to use the
+If you would like to centralize the API key authorization in Keycloak, I would recommend using the
 Resource Owner’s Password Credentials (easier to set up but deprecated in OAuth 2) or Client
 Credentials Grant.
 
