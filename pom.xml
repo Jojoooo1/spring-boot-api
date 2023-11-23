@@ -24,7 +24,7 @@
     <!-- Database -->
     <postgresql.version>42.7.0</postgresql.version>
     <querydsl.version>5.0.0</querydsl.version>
-    <flyway-core.version>9.22.0</flyway-core.version>
+    <flyway-core.version>10.1.0</flyway-core.version>
     
     <!-- Logging -->
     <logstash.version>7.4</logstash.version>
@@ -50,7 +50,7 @@
     <git-code-format-maven-plugin.version>5.1</git-code-format-maven-plugin.version>
     
     <!-- Test -->
-    <testcontainers.version>1.19.2</testcontainers.version>
+    <testcontainers.version>1.19.3</testcontainers.version>
   
   </properties>
   <dependencies>
