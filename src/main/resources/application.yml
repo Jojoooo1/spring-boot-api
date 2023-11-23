@@ -133,11 +133,6 @@ spring:
       write-dates-as-timestamps: false
       fail-on-empty-beans: false
 
-  rabbitmq:
-    template:
-      retry:
-        enabled: true
-
   lifecycle:
     timeout-per-shutdown-phase: 20s
 

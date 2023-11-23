@@ -1,0 +1,1232 @@
+{
+	"info": {
+		"_postman_id": "937446bf-749a-4e66-8b2a-2d06caa37cd8",
+		"name": "E2E",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8038963"
+	},
+	"item": [
+		{
+			"name": "actuator",
+			"item": [
+				{
+					"name": "actuator",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {",
+									"  pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/actuator",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"actuator"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "prometheus",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {",
+									"  pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/actuator/prometheus",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"actuator",
+								"prometheus"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "platform",
+			"item": [
+				{
+					"name": "login",
+					"item": [
+						{
+							"name": "login as platform user",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"postman.setEnvironmentVariable(\"access_token_platform_user\", jsonData.access_token);",
+											"",
+											"pm.test(\"Status code is 200\", () => {",
+											"  pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{keycloak_client_secret}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{keycloak_client}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "grant_type",
+											"value": "password",
+											"type": "text"
+										},
+										{
+											"key": "audience",
+											"value": "{{keycloak_client}}",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "{{platform_user_username}}",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "{{platform_user_password}}",
+											"type": "text"
+										},
+										{
+											"key": "scope",
+											"value": "email profile",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{keycloak_host}}/realms/{{keycloak_realm_name}}/protocol/openid-connect/token",
+									"host": [
+										"{{keycloak_host}}"
+									],
+									"path": [
+										"realms",
+										"{{keycloak_realm_name}}",
+										"protocol",
+										"openid-connect",
+										"token"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "web",
+					"item": [
+						{
+							"name": "hello-world",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", () => {",
+											"  pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token_platform_user}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/platform/web/hello-world",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"platform",
+										"web",
+										"hello-world"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "mobile",
+					"item": [
+						{
+							"name": "hello-world",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", () => {",
+											"  pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token_platform_user}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/platform/mobile/hello-world",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"platform",
+										"mobile",
+										"hello-world"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "api",
+					"item": [
+						{
+							"name": "hello-world",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", () => {",
+											"  pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "{{platform_apikey}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Api-Key",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/platform/api/hello-world",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"platform",
+										"api",
+										"hello-world"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "back-office",
+			"item": [
+				{
+					"name": "login as back-office user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"postman.setEnvironmentVariable(\"access_token_back_office_user\", jsonData.access_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{keycloak_client_secret}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{keycloak_client}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								},
+								{
+									"key": "audience",
+									"value": "{{keycloak_client}}",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "{{back_office_user_username}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{back_office_user_password}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{keycloak_host}}/realms/{{keycloak_realm_name}}/protocol/openid-connect/token",
+							"host": [
+								"{{keycloak_host}}"
+							],
+							"path": [
+								"realms",
+								"{{keycloak_realm_name}}",
+								"protocol",
+								"openid-connect",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "hello-world",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token_back_office_user}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/back-office/hello-world?email=email-test",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"back-office",
+								"hello-world"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "email-test"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "internal",
+			"item": [
+				{
+					"name": "caches",
+					"item": [
+						{
+							"name": "local",
+							"item": [
+								{
+									"name": "clear by name",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 200\", () => {",
+													"  pm.response.to.have.status(200);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "apikey",
+											"apikey": [
+												{
+													"key": "value",
+													"value": "{{internal_apikey}}",
+													"type": "string"
+												},
+												{
+													"key": "key",
+													"value": "Api-Key",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/internal/caches/company",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"internal",
+												"caches",
+												"company"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "clear all",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 200\", () => {",
+													"  pm.response.to.have.status(200);",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "apikey",
+											"apikey": [
+												{
+													"key": "value",
+													"value": "{{internal_apikey}}",
+													"type": "string"
+												},
+												{
+													"key": "key",
+													"value": "Api-Key",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{host}}/internal/caches",
+											"host": [
+												"{{host}}"
+											],
+											"path": [
+												"internal",
+												"caches"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "management",
+			"item": [
+				{
+					"name": "login",
+					"item": [
+						{
+							"name": "login as management user",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"postman.setEnvironmentVariable(\"access_token_management_user\", jsonData.access_token);",
+											"",
+											"pm.test(\"Status code is 200\", () => {",
+											"  pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{keycloak_client_secret}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{keycloak_client}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "grant_type",
+											"value": "password",
+											"type": "text"
+										},
+										{
+											"key": "audience",
+											"value": "{{keycloak_client}}",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "{{management_user_username}}",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "{{management_user_password}}",
+											"type": "text"
+										},
+										{
+											"key": "scope",
+											"value": "email profile",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{keycloak_host}}/realms/{{keycloak_realm_name}}/protocol/openid-connect/token",
+									"host": [
+										"{{keycloak_host}}"
+									],
+									"path": [
+										"realms",
+										"{{keycloak_realm_name}}",
+										"protocol",
+										"openid-connect",
+										"token"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "companies",
+					"item": [
+						{
+							"name": "create",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"let req = {",
+											"    \"slug\": pm.random(),",
+											"    \"name\": pm.random(),",
+											"    \"officialName\": pm.random(),",
+											"    \"federalTaxId\": pm.randomInteger(14),",
+											"    \"stateTaxId\": pm.randomInteger(14),",
+											"    \"phone\": pm.randomInteger(10),",
+											"    \"email\": \"company@gmail.com\",",
+											"",
+											"    \"addressStreet\": \"rua test\",",
+											"    \"addressStreetNumber\": \"11\",",
+											"    \"addressComplement\": \"test\",",
+											"    \"addressCityDistrict\": \"Pinheiros\",",
+											"    \"addressPostCode\": \"05415090\",",
+											"    \"addressCity\": \"Sao paulo\",",
+											"    \"addressStateCode\": \"SP\",",
+											"    \"addressCountry\": \"addressCountry\",",
+											"",
+											"    \"isManagement\": true,",
+											"    \"isInternal\": true,",
+											"",
+											"    \"addressLatitude\": 10,",
+											"    \"addressLongitude\": 10",
+											"};",
+											"",
+											"pm.variables.set('body', JSON.stringify(req));"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"postman.setEnvironmentVariable(\"entity_id\", jsonData.id);",
+											"",
+											"pm.test(\"Status code is 201\", () => {",
+											"  pm.response.to.have.status(201);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{body}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/management/companies",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"management",
+										"companies"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get by id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", () => {",
+											"  pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/management/companies/{{entity_id}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"management",
+										"companies",
+										"{{entity_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", () => {",
+											"  pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"slug\": \"test\",\n    \"name\": \"test\",\n    \"officialName\": \"test\",\n    \"federalTaxId\": \"12\",\n    \"stateTaxId\": \"12\",\n    \"phone\": \"12\",\n    \"email\": \"test@gmail.com\",\n    \"addressStreet\": \"test\",\n    \"addressStreetNumber\": \"test\",\n    \"addressComplement\": \"test\",\n    \"addressCityDistrict\": \"test\",\n    \"addressPostCode\": \"test\",\n    \"addressCity\": \"test\",\n    \"addressStateCode\": \"test\",\n    \"addressCountry\": \"test\",\n    \"addressLatitude\": 0,\n    \"addressLongitude\": 0,\n    \"isManagement\": true,\n    \"isInternal\": false\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/management/companies/{{entity_id}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"management",
+										"companies",
+										"{{entity_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "patch",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", () => {",
+											"  pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"test\",\n    \"isInternal\": true\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/management/companies/{{entity_id}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"management",
+										"companies",
+										"{{entity_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get all",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", () => {",
+											"  pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/management/companies",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"management",
+										"companies"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 204\", () => {",
+											"  pm.response.to.have.status(204);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/management/companies/{{entity_id}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"management",
+										"companies",
+										"{{entity_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "bearer",
+						"bearer": [
+							{
+								"key": "token",
+								"value": "{{access_token_management_user}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "api-keys",
+					"item": [
+						{
+							"name": "create",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"postman.setEnvironmentVariable(\"entity_id\", jsonData.id);",
+											"",
+											"pm.test(\"Status code is 201\", () => {",
+											"  pm.response.to.have.status(201);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"companyId\": 1,\n    \"name\": \"apikey test\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/management/api-keys",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"management",
+										"api-keys"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get by id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", () => {",
+											"  pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/management/api-keys/{{entity_id}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"management",
+										"api-keys",
+										"{{entity_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get all",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", () => {",
+											"  pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/management/api-keys",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"management",
+										"api-keys"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "inactive",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 204\", () => {",
+											"  pm.response.to.have.status(204);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/management/api-keys/{{entity_id}}",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"management",
+										"api-keys",
+										"{{entity_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "bearer",
+						"bearer": [
+							{
+								"key": "token",
+								"value": "{{access_token_management_user}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "public",
+			"item": [
+				{
+					"name": "hello-world",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {",
+									"  pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/public/hello-world",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"public",
+								"hello-world"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "publish message",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {",
+									"  pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/public/publish",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"public",
+								"publish"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"Object.prototype.random = () => {",
+					"    return Math.random().toString(36).substr(2, 7);",
+					"}",
+					"",
+					"Object.prototype.randomInteger = (length = 44) => {",
+					"    var result = '';",
+					"    var characters = '0123456789';",
+					"    var charactersLength = characters.length;",
+					"    for (var i = 0; i < length; i++) {",
+					"        result += characters.charAt(Math.floor(Math.random() *",
+					"            charactersLength));",
+					"    }",
+					"    return result;",
+					"}"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
