@@ -6,10 +6,6 @@ on:
     branches: [ main ]
 
 env:
-  #  PROJECT_ID: <YOUR-PROJECT-ID>
-  #  PROJECT_SA_KEY: ${{ secrets.YOUR_SECRET_SA }}
-  REPO_HOST: docker.io
-  REPO_NAME: jojoooo1
   IMAGE_NAME: api
 
 concurrency:
@@ -17,12 +13,12 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-
+  
   rc-test:
     if: contains(toJSON(github.head_ref), 'release/') || contains(toJSON(github.head_ref), 'hotfix/')
     runs-on: ubuntu-latest
     steps:
-
+      
       # 1. Setup
       - uses: actions/checkout@v4
       - name: Set up JDK
@@ -31,20 +27,21 @@ jobs:
           distribution: 'liberica'
           java-version: '21'
           cache: 'maven'
-
+      
       # 2. Test
       - name: Run Unit & Integration Tests
         run: mvn clean verify --no-transfer-progress
-
+  
   rc-deploy:
     needs: [ rc-test ]
     runs-on: ubuntu-latest
+    environment: test
     outputs:
       IMAGE_TAG: ${{ steps.variables.outputs.IMAGE_TAG }}
       IMAGE_REGISTRY: ${{ steps.variables.outputs.IMAGE_REGISTRY }}
-
+    
     steps:
-
+      
       # 1. Setup
       - uses: actions/checkout@v4
       - name: Set up JDK
@@ -53,18 +50,18 @@ jobs:
           distribution: 'liberica'
           java-version: '21'
           cache: 'maven'
-
+      
       # 2.1 Sets variables
       - name: Sets release variables
         id: variables
         run: |
           git fetch --prune --prune-tags origin
-
+          
           # 1. Get tags
           LATEST_TAG=$(git describe --tags "$(git rev-list --tags --max-count=1)") # gets tags across all branches, not just the current branch
           TAG_LIST=($(echo $LATEST_TAG | tr '.' ' '))
           [[ "${#TAG_LIST[@]}" -ne 2 ]] && echo "$RELEASE_VERSION is not a valid version" && exit 1
-
+          
           # 2. Set release version
           if [[ "$GITHUB_HEAD_REF" == release* ]]
           then
@@ -74,7 +71,7 @@ jobs:
           fi
           
           # 3. Set vars
-          IMAGE_REGISTRY="${{ env.REPO_HOST }}/${{ env.REPO_NAME }}/${{ env.IMAGE_NAME }}"
+          IMAGE_REGISTRY="us-docker.pkg.dev/${{ secrets.PROJECT_ID }}/cloud-diplomats/${{ env.IMAGE_NAME }}"
           IMAGE_TAG=${RELEASE_VERSION}-$(git rev-parse --short=4 HEAD)-rc
           
           # 4. Set envs & outputs
@@ -83,36 +80,30 @@ jobs:
           
           echo "IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_OUTPUT
           echo "IMAGE_REGISTRY=${IMAGE_REGISTRY}" >> $GITHUB_OUTPUT
-
+      
       # 2.2 Echo variables
       - name: Echo variables
         run: |
           echo "GITHUB_HEAD_REF=$GITHUB_HEAD_REF"
           echo "IMAGE_TAG=$IMAGE_TAG"
           echo "IMAGE_REGISTRY=$IMAGE_REGISTRY"
-
-      # 3. Setup registry
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ env.REPO_NAME }}
-          password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
-
+      
       # 3.1. Setup gcloud
-      #      - id: auth
-      #        uses: google-github-actions/auth@v1.1.1
-      #        with:
-      #          credentials_json: ${{ env.PROJECT_SA_KEY }} # Note: Needs to have storage admin role if first push to registry (create the bucket)
-      #
-      #      - name: Set up Cloud SDK
-      #        uses: google-github-actions/setup-gcloud@v1.1.1
-      #        with:
-      #          project_id: ${{ env.PROJECT_ID }}
-
+      - id: auth
+        uses: google-github-actions/auth@v1.2.0
+        with:
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.SERVICE_ACCOUNT }} # impersonated SA
+      
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1.1.1
+        with:
+          project_id: ${{ secrets.PROJECT_ID }}
+      
       # 3.2. Configure docker to use gcloud as a credential helper
-      #      - name: Setup docker to authenticate via gcloud
-      #        run: gcloud --quiet auth configure-docker us-docker.pkg.dev
-
+      - name: Setup docker to authenticate via gcloud
+        run: gcloud --quiet auth configure-docker us-docker.pkg.dev
+      
       # 4. Push to image registry
       - name: Deploy image with spring-boot-maven-plugin (using buildpack)
         run: |
@@ -120,5 +111,5 @@ jobs:
             -Dspring-boot.build-image.imageName=$IMAGE_REGISTRY:$IMAGE_TAG
           
           docker push $IMAGE_REGISTRY:$IMAGE_TAG
-
+      
       # 5. Notify if fails
