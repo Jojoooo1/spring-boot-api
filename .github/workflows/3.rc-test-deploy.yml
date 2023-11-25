@@ -40,6 +40,10 @@ jobs:
       IMAGE_TAG: ${{ steps.variables.outputs.IMAGE_TAG }}
       IMAGE_REGISTRY: ${{ steps.variables.outputs.IMAGE_REGISTRY }}
     
+    # Add "id-token" with the intended permissions.
+    permissions:
+      contents: 'read'
+      id-token: 'write'
     steps:
       
       # 1. Setup
