@@ -93,7 +93,8 @@ jobs:
           echo "IMAGE_REGISTRY=$IMAGE_REGISTRY"
       
       # 3.1. Setup gcloud
-      - id: auth
+      - name: Auth via Workload Identity Federation
+        id: auth
         uses: google-github-actions/auth@v1.2.0
         with:
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
