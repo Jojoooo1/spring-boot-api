@@ -6,10 +6,6 @@ on:
     branches: [ main ]
 
 env:
-  #  PROJECT_ID: <YOUR-PROJECT-ID>
-  #  PROJECT_SA_KEY: ${{ secrets.YOUR_SECRET_SA }}
-  REPO_HOST: docker.io
-  REPO_NAME: jojoooo1
   IMAGE_NAME: api
 
 concurrency:
@@ -81,7 +77,7 @@ jobs:
           fi
           
           # 3. Set vars
-          IMAGE_REGISTRY="${{ env.REPO_HOST }}/${{ env.REPO_NAME }}/${{ env.IMAGE_NAME }}"
+          IMAGE_REGISTRY="us-docker.pkg.dev/${{ secrets.PROJECT_ID }}/cloud-diplomats/${{ env.IMAGE_NAME }}"
           IMAGE_TAG=${RELEASE_VERSION}-$(git rev-parse --short=4 HEAD)
           
           # 4. Set envs & outputs
