@@ -57,13 +57,13 @@ jobs:
           cache: 'maven'
       
       # 2.1. Sets variables
-      - name: Sets release variables
+      - name: Sets variables
         id: variables
         run: |
           git fetch --prune --prune-tags origin
           
           # 1. Get tags
-          LATEST_TAG=$(git describe --tags "$(git rev-list --tags --max-count=1)") # gets tags across all branches, not just the current branch
+          LATEST_TAG=$(git describe --tags "$(git rev-list --tags --max-count=1)")
           TAG_LIST=($(echo $LATEST_TAG | tr '.' ' '))
           [[ "${#TAG_LIST[@]}" -ne 2 ]] && echo "$RELEASE_VERSION is not a valid version" && exit 1
           

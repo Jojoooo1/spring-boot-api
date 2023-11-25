@@ -40,7 +40,7 @@ jobs:
           cache: 'maven'
       
       # 2.1. Sets variables
-      - name: Sets release variables
+      - name: Sets variables
         id: variables
         run: |
           # 1. Set vars
