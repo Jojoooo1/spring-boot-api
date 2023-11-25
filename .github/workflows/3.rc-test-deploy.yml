@@ -76,7 +76,7 @@ jobs:
           fi
           
           # 3. Set vars
-          IMAGE_REGISTRY="us-docker.pkg.dev/${{ secrets.PROJECT_ID }}/cloud-diplomats/${{ env.IMAGE_NAME }}"
+          IMAGE_REGISTRY="${{ secrets.PROJECT_ID }}/cloud-diplomats/${{ env.IMAGE_NAME }}"
           IMAGE_TAG=${RELEASE_VERSION}-$(git rev-parse --short=4 HEAD)-rc
           
           # 4. Set envs & outputs
