@@ -1,4 +1,4 @@
-name: "Dev - Test"
+name: "run tests"
 
 on:
   pull_request:
@@ -21,9 +21,9 @@ jobs:
           distribution: 'liberica'
           java-version: '21'
           cache: 'maven'
-
+      
       # 2. Run tests
       - name: Run Unit & Integration Tests
         run: mvn clean verify --no-transfer-progress
-
+      
       # 3. Notify if fails

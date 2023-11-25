@@ -1,4 +1,4 @@
-name: "Release Candidate - Test & Deploy to Test"
+name: "run tests & deploy to test"
 
 on:
   pull_request:
@@ -56,7 +56,7 @@ jobs:
           java-version: '21'
           cache: 'maven'
       
-      # 2.1 Sets variables
+      # 2.1. Sets variables
       - name: Sets release variables
         id: variables
         run: |
@@ -86,13 +86,13 @@ jobs:
           echo "IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_OUTPUT
           echo "IMAGE_REGISTRY=${IMAGE_REGISTRY}" >> $GITHUB_OUTPUT
       
-      # 2.2 Echo variables
+      # 2.2. Echo variables
       - name: Echo variables
         run: |
           echo "IMAGE_TAG=$IMAGE_TAG"
           echo "IMAGE_REGISTRY=$IMAGE_REGISTRY"
       
-      # 3.1. Setup gcloud
+      # 3. Auth
       - name: Auth via Workload Identity Federation
         id: auth
         uses: google-github-actions/auth@v1.2.0
@@ -100,24 +100,25 @@ jobs:
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ secrets.SERVICE_ACCOUNT }} # impersonated SA
       
-      - name: Set up Google Cloud SDK
+      # 4.1. Setup gcloud
+      - name: Set up gcloud
         uses: google-github-actions/setup-gcloud@v1.1.1
         with:
           project_id: ${{ secrets.PROJECT_ID }}
       
-      # 3.2. Configure docker to use gcloud as a credential helper
+      # 4.2. Configure docker to use gcloud as a credential helper
       - name: Setup docker to authenticate via gcloud
         run: gcloud --quiet auth configure-docker us-docker.pkg.dev
       
-      # 4. Build image using maven
+      # 5. Build image using maven
       - name: Build image
         run: mvn clean package -DskipTests spring-boot:build-image --no-transfer-progress -Dspring-boot.build-image.imageName=$IMAGE_REGISTRY:$IMAGE_TAG
       
-      # 5. Push image to registry
+      # 6. Push image to registry
       - name: Push image to registry
         run: docker push $IMAGE_REGISTRY:$IMAGE_TAG
       
-      # 6. Notify if fails
+      # 7. Notify if fails
       #      - name: Notify slack fail
       #        if: failure()
       #        env:
