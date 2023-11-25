@@ -18,7 +18,6 @@ jobs:
     runs-on: ubuntu-latest
     if: (contains(toJSON(github.head_ref), 'release/') || contains(toJSON(github.head_ref), 'hotfix/')) && github.event.pull_request.merged == true
     steps:
-      
       # 1. Setup
       - uses: actions/checkout@v4
       - name: Set up JDK
@@ -36,18 +35,11 @@ jobs:
     needs: [ prod-test ]
     runs-on: ubuntu-latest
     environment: prod
-    outputs:
-      IMAGE_TAG: ${{ steps.variables.outputs.IMAGE_TAG }}
-      IMAGE_REGISTRY: ${{ steps.variables.outputs.IMAGE_REGISTRY }}
-      RELEASE_VERSION: ${{ steps.variables.outputs.RELEASE_VERSION }}
-    
-    # Necessary for workload identity provider
-    permissions:
+    permissions: # Necessary for workload identity provider
       contents: 'read'
       id-token: 'write'
     
     steps:
-      
       # 1. Setup
       - uses: actions/checkout@v4
       - name: Set up JDK
@@ -57,7 +49,7 @@ jobs:
           java-version: '21'
           cache: 'maven'
       
-      # 2.1 Sets variables
+      # 2. Sets & print variables
       - name: Sets variables
         id: variables
         run: |
@@ -80,17 +72,12 @@ jobs:
           IMAGE_REGISTRY="us-docker.pkg.dev/${{ secrets.PROJECT_ID }}/cloud-diplomats/${{ env.IMAGE_NAME }}"
           IMAGE_TAG=${RELEASE_VERSION}-$(git rev-parse --short=4 HEAD)
           
-          # 4. Set envs & outputs
+          # 4. Set vars as env
           echo "IMAGE_REGISTRY=$IMAGE_REGISTRY" >> $GITHUB_ENV
           echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
           echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
-          
-          echo "IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_OUTPUT
-          echo "IMAGE_REGISTRY=${IMAGE_REGISTRY}" >> $GITHUB_OUTPUT
-          echo "RELEASE_VERSION=${RELEASE_VERSION}" >> $GITHUB_OUTPUT
       
-      # 2.2. Echo variables
-      - name: Echo variables
+      - name: Print variables
         run: |
           echo "IMAGE_TAG=$IMAGE_TAG"
           echo "IMAGE_REGISTRY=$IMAGE_REGISTRY"
@@ -103,22 +90,20 @@ jobs:
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ secrets.SERVICE_ACCOUNT }} # impersonated SA
       
-      # 4.1. Setup gcloud
+      # 4. Setup gcloud & configure docker to use gcloud
       - name: Set up gcloud
         uses: google-github-actions/setup-gcloud@v1.1.1
         with:
           project_id: ${{ secrets.PROJECT_ID }}
-      
-      # 4.2. Configure docker to use gcloud as a credential helper
       - name: Setup docker to authenticate via gcloud
         run: gcloud --quiet auth configure-docker us-docker.pkg.dev
       
-      # 5. Build image using maven
+      # 5. Build image
       - name: Build image
         run: mvn clean package -DskipTests spring-boot:build-image --no-transfer-progress -Dspring-boot.build-image.imageName=$IMAGE_REGISTRY:$IMAGE_TAG
       
-      # 6. Push image to registry
-      - name: Push image to registry
+      # 6. Push image
+      - name: Push image
         run: docker push $IMAGE_REGISTRY:$IMAGE_TAG
       
       # 7. Notify if fails
@@ -136,7 +121,6 @@ jobs:
     needs: [ prod-deploy ]
     runs-on: ubuntu-latest
     steps:
-      
       # 1. Setup
       - uses: actions/create-github-app-token@v1
         id: app-token
@@ -152,7 +136,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
-          RELEASE_VERSION=${{ needs.prod-deploy.outputs.RELEASE_VERSION }}
           git config user.name github-actions
           git config user.email github-actions@github.com
           
@@ -164,7 +147,6 @@ jobs:
     needs: [ prod-deploy ]
     runs-on: ubuntu-latest
     steps:
-      
       # 1. Setup
       - uses: actions/create-github-app-token@v1
         id: app-token
@@ -178,18 +160,17 @@ jobs:
           token: ${{ steps.app-token.outputs.token }}
       
       # 2. Create PR
-      - name: Open PR to align main with develop
+      - name: Open PR to align develop with main
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
-          RELEASE_VERSION=${{ needs.prod-deploy.outputs.RELEASE_VERSION }}
           git config user.name github-actions
           git config user.email github-actions@github.com
           
           BRANCH_NAME="merge/$RELEASE_VERSION"
-          git rebase origin/main
-          
           git checkout -b $BRANCH_NAME
+          
+          git merge origin/main
           git commit --allow-empty -am "Merge main into develop"
           git push origin "$BRANCH_NAME"
           
