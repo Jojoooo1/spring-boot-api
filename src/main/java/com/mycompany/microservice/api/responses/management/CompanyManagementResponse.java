@@ -24,7 +24,7 @@ public record CompanyManagementResponse(
     BigDecimal addressLongitude,
     Boolean isManagement,
     Boolean isInternal,
-    Boolean isClient,
+    Boolean isPlatform,
     String createdBy,
     String updatedBy,
     LocalDateTime createdAt,

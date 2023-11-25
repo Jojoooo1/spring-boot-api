@@ -8,6 +8,7 @@ import java.util.Optional;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,9 @@ public class CompanyService extends BaseService<Company> {
 
   public Optional<Company> findBySlugOptional(final String slug) {
     log.debug("[retrieving] company with slug '{}'", slug);
+    if (StringUtils.isBlank(slug)) {
+      return Optional.empty();
+    }
     return this.repository.findBySlug(slug);
   }
 

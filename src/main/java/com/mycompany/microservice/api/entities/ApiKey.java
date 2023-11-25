@@ -4,20 +4,16 @@ import static com.mycompany.microservice.api.entities.ApiKey.TABLE_NAME;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mycompany.microservice.api.entities.base.BaseEntity;
-import com.mycompany.microservice.api.utils.LogUtils;
 import io.hypersistence.utils.hibernate.id.BatchSequenceGenerator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.io.Serial;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,7 +28,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 @SuperBuilder
 @Table(name = TABLE_NAME, schema = "public")
 public class ApiKey extends BaseEntity {
@@ -41,19 +37,18 @@ public class ApiKey extends BaseEntity {
   @Serial private static final long serialVersionUID = -3552577854495026179L;
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "api_key")
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = TABLE_NAME)
   @GenericGenerator(
-      name = "api_key",
+      name = TABLE_NAME,
       type = BatchSequenceGenerator.class,
       parameters = {
-        @Parameter(name = "sequence", value = "api_key_id_seq"),
+        @Parameter(name = "sequence", value = TABLE_NAME + "_id_seq"),
         @Parameter(name = "fetch_size", value = "1")
       })
   private Long id;
 
-  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(nullable = false)
-  private Company company;
+  private Long companyId;
 
   @Column(nullable = false)
   private String name;
@@ -75,8 +70,8 @@ public class ApiKey extends BaseEntity {
     return "Apikey{"
         + "id="
         + this.id
-        + ", company="
-        + LogUtils.logId(this.company)
+        + ", companyId="
+        + this.companyId
         + ", name='"
         + this.name
         + "', isActive="

@@ -1,4 +1,4 @@
-name: "Release Production - Test & Deploy"
+name: "run tests & deploy to prod"
 
 on:
   pull_request:
@@ -17,51 +17,58 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-
+  
   prod-test:
     runs-on: ubuntu-latest
     if: (contains(toJSON(github.head_ref), 'release/') || contains(toJSON(github.head_ref), 'hotfix/')) && github.event.pull_request.merged == true
     steps:
-
+      
       # 1. Setup
       - uses: actions/checkout@v4
       - name: Set up JDK
-        uses: actions/setup-java@v3.12.0
+        uses: actions/setup-java@v3.13.0
         with:
-          distribution: 'temurin'
-          java-version: '17'
+          distribution: 'liberica'
+          java-version: '21'
           cache: 'maven'
-
+      
       # 2. Test
       - name: Run Unit & Integration Tests
         run: mvn clean verify --no-transfer-progress
-
+  
   prod-deploy:
     needs: [ prod-test ]
     runs-on: ubuntu-latest
+    environment: prod
     outputs:
       IMAGE_TAG: ${{ steps.variables.outputs.IMAGE_TAG }}
       IMAGE_REGISTRY: ${{ steps.variables.outputs.IMAGE_REGISTRY }}
       RELEASE_VERSION: ${{ steps.variables.outputs.RELEASE_VERSION }}
+    
+    # Necessary for workload identity provider
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    
     steps:
-
+      
       # 1. Setup
       - uses: actions/checkout@v4
       - name: Set up JDK
-        uses: actions/setup-java@v3.12.0
+        uses: actions/setup-java@v3.13.0
         with:
-          distribution: 'temurin'
-          java-version: '17'
+          distribution: 'liberica'
+          java-version: '21'
           cache: 'maven'
-
+      
       # 2.1 Sets variables
-      - name: Sets release variables
+      - name: Sets variables
         id: variables
         run: |
           git fetch --prune --prune-tags origin
           
           # 1. Get tags
-          LATEST_TAG=$(git describe --tags "$(git rev-list --tags --max-count=1)") # gets tags across all branches, not just the current branch
+          LATEST_TAG=$(git describe --tags "$(git rev-list --tags --max-count=1)")
           TAG_LIST=($(echo $LATEST_TAG | tr '.' ' '))
           [[ "${#TAG_LIST[@]}" -ne 2 ]] && echo "$RELEASE_VERSION is not a valid version" && exit 1
           
@@ -81,124 +88,113 @@ jobs:
           echo "IMAGE_REGISTRY=$IMAGE_REGISTRY" >> $GITHUB_ENV
           echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
           echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
-
+          
           echo "IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_OUTPUT
           echo "IMAGE_REGISTRY=${IMAGE_REGISTRY}" >> $GITHUB_OUTPUT
           echo "RELEASE_VERSION=${RELEASE_VERSION}" >> $GITHUB_OUTPUT
-
-      # 2.2 Echo variables
+      
+      # 2.2. Echo variables
       - name: Echo variables
         run: |
-          echo "GITHUB_HEAD_REF=$GITHUB_HEAD_REF"
-          echo "RELEASE_VERSION=$RELEASE_VERSION"
           echo "IMAGE_TAG=$IMAGE_TAG"
           echo "IMAGE_REGISTRY=$IMAGE_REGISTRY"
-
-      # 3. Setup registry
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
+      
+      # 3. Auth
+      - name: Auth via Workload Identity Federation
+        id: auth
+        uses: google-github-actions/auth@v1.2.0
         with:
-          username: ${{ env.REPO_NAME }}
-          password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
-
-      # 3.1. Setup gcloud
-      #      - id: auth
-      #        uses: google-github-actions/auth@v1.1.1
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.SERVICE_ACCOUNT }} # impersonated SA
+      
+      # 4.1. Setup gcloud
+      - name: Set up gcloud
+        uses: google-github-actions/setup-gcloud@v1.1.1
+        with:
+          project_id: ${{ secrets.PROJECT_ID }}
+      
+      # 4.2. Configure docker to use gcloud as a credential helper
+      - name: Setup docker to authenticate via gcloud
+        run: gcloud --quiet auth configure-docker us-docker.pkg.dev
+      
+      # 5. Build image using maven
+      - name: Build image
+        run: mvn clean package -DskipTests spring-boot:build-image --no-transfer-progress -Dspring-boot.build-image.imageName=$IMAGE_REGISTRY:$IMAGE_TAG
+      
+      # 6. Push image to registry
+      - name: Push image to registry
+        run: docker push $IMAGE_REGISTRY:$IMAGE_TAG
+      
+      # 7. Notify if fails
+      #      - name: Notify slack fail
+      #        if: failure()
+      #        env:
+      #          SLACK_BOT_TOKEN: ${{ secrets.SLACK_NOTIFICATIONS_BOT_TOKEN }}
+      #        uses: voxmedia/github-action-slack-notify-build@v1
       #        with:
-      #          credentials_json: ${{ env.PROJECT_SA_KEY }} # Note: Needs to have storage admin role if first push to registry (create the bucket)
-      #
-      #      - name: Set up Cloud SDK
-      #        uses: google-github-actions/setup-gcloud@v1.1.1
-      #        with:
-      #          project_id: ${{ env.PROJECT_ID }}
-
-      # 3.2. Configure docker to use gcloud as a credential helper
-      #      - name: Setup docker to authenticate via gcloud
-      #        run: gcloud --quiet auth configure-docker us-docker.pkg.dev
-
-      # 3.3. Push to image registry
-      - name: Deploy image with spring-boot-maven-plugin (using buildpack)
-        run: |
-          mvn clean package -DskipTests spring-boot:build-image --no-transfer-progress \
-            -Dspring-boot.build-image.imageName=$IMAGE_REGISTRY:$IMAGE_TAG
-          
-          docker push $IMAGE_REGISTRY:$IMAGE_TAG
-
-      # 4. Notify if fails
-
+      #          channel: app-alerts
+      #          status: FAILED
+      #          color: danger
+  
   prod-create-release:
     needs: [ prod-deploy ]
     runs-on: ubuntu-latest
     steps:
-
+      
       # 1. Setup
-      - name: Generate github access token
-        id: generate_gh_access_token
-        uses: tibdex/github-app-token@v2
+      - uses: actions/create-github-app-token@v1
+        id: app-token
         with:
-          app_id: ${{ secrets.CI_APP_ID }}
-          private_key: ${{ secrets.CI_APP_PRIVATE_KEY }}
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.CI_APP_PRIVATE_KEY }}
       - uses: actions/checkout@v4
         with:
-          token: ${{ steps.generate_gh_access_token.outputs.token }}
-      - name: Set up JDK
-        uses: actions/setup-java@v3.12.0
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-          cache: 'maven'
-
+          token: ${{ steps.app-token.outputs.token }}
+      
       # 2. Create release
       - name: Create release
         env:
-          GITHUB_TOKEN: ${{ steps.generate_gh_access_token.outputs.token }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           RELEASE_VERSION=${{ needs.prod-deploy.outputs.RELEASE_VERSION }}
           git config user.name github-actions
           git config user.email github-actions@github.com
-
+          
           git tag -a $RELEASE_VERSION -m "release: $RELEASE_VERSION"
           git push origin $RELEASE_VERSION
           gh release create $RELEASE_VERSION --title "$RELEASE_VERSION" --generate-notes
-
+  
   prod-create-pull-request:
     needs: [ prod-deploy ]
     runs-on: ubuntu-latest
     steps:
-
+      
       # 1. Setup
-      - name: Generate github access token
-        id: generate_gh_access_token
-        uses: tibdex/github-app-token@v2
+      - uses: actions/create-github-app-token@v1
+        id: app-token
         with:
-          app_id: ${{ secrets.CI_APP_ID }}
-          private_key: ${{ secrets.CI_APP_PRIVATE_KEY }}
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.CI_APP_PRIVATE_KEY }}
       - uses: actions/checkout@v4
         with:
           ref: develop
           fetch-depth: 0
-          token: ${{ steps.generate_gh_access_token.outputs.token }}
-      - name: Set up JDK
-        uses: actions/setup-java@v3.12.0
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-          cache: 'maven'
-
+          token: ${{ steps.app-token.outputs.token }}
+      
       # 2. Create PR
       - name: Open PR to align main with develop
         env:
-          GITHUB_TOKEN: ${{ steps.generate_gh_access_token.outputs.token }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           RELEASE_VERSION=${{ needs.prod-deploy.outputs.RELEASE_VERSION }}
           git config user.name github-actions
           git config user.email github-actions@github.com
-
+          
           BRANCH_NAME="merge/$RELEASE_VERSION"
           git rebase origin/main
-
+          
           git checkout -b $BRANCH_NAME
           git commit --allow-empty -am "Merge main into develop"
           git push origin "$BRANCH_NAME"
-
+          
           gh pr create --base develop --head "$BRANCH_NAME" --title "Merge - $RELEASE_VERSION" --fill

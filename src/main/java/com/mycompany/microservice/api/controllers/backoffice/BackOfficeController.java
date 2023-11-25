@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(BackOfficeController.BASE_URL)
 @RequiredArgsConstructor
 public class BackOfficeController {
-  public static final String BASE_URL = AppUrls.BACK_OFFICE_APP;
+  public static final String BASE_URL = AppUrls.BACK_OFFICE;
 
   @GetMapping("/hello-world")
   @ResponseStatus(HttpStatus.OK)

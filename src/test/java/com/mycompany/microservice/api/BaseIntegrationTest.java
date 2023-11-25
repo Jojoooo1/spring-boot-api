@@ -24,13 +24,10 @@ import org.testcontainers.utility.MountableFile;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class BaseIntegrationTest {
 
-  public static final String RABBIT_USER_FROM_DEFINITION = "user";
-  public static final String RABBIT_PASSWORD_FROM_DEFINITION = "password";
-
   @Container @ServiceConnection
   public static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15-alpine");
 
-  @Container public static RabbitMQContainer rabbit = new RabbitMQContainer("rabbitmq:3.12.4");
+  @Container public static RabbitMQContainer rabbit = new RabbitMQContainer("rabbitmq:3.12.9");
 
   static {
     setRabbitConfig(rabbit);
@@ -43,8 +40,9 @@ public abstract class BaseIntegrationTest {
   static void applicationProperties(final DynamicPropertyRegistry registry) {
     registry.add("rabbitmq.host", rabbit::getHost);
     registry.add("rabbitmq.port", rabbit::getAmqpPort);
-    registry.add("rabbitmq.username", () -> RABBIT_USER_FROM_DEFINITION);
-    registry.add("rabbitmq.password", () -> RABBIT_PASSWORD_FROM_DEFINITION);
+    // defined in resources/testcontainers/rabbitmq-definition.json
+    registry.add("rabbitmq.username", () -> "user");
+    registry.add("rabbitmq.password", () -> "password");
   }
 
   public static String random(final Integer... args) {

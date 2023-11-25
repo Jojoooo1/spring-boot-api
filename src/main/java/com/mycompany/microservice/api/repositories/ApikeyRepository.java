@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.lang.NonNull;
 
@@ -16,14 +15,10 @@ public interface ApikeyRepository extends JpaRepository<ApiKey, Long> {
 
   ApiKey findFirstByCompanyIdAndIsActive(Long companyId, boolean isActive);
 
-  @EntityGraph(attributePaths = {"company"})
-  @Cacheable(value = CACHE_NAME, key = "{'withCompanyByKeyAndIsActive', #key}")
-  Optional<ApiKey> findWithCompanyByKeyAndIsActive(String key, boolean isActive);
+  @Cacheable(value = CACHE_NAME, key = "{'findByKeyAndIsActive', #key}")
+  Optional<ApiKey> findByKeyAndIsActive(String key, boolean isActive);
 
-  @Caching(
-      evict = {
-        @CacheEvict(value = CACHE_NAME, key = "{'withCompanyByKeyAndIsActive', #entity.key}")
-      })
+  @Caching(evict = {@CacheEvict(value = CACHE_NAME, key = "{'findByKeyAndIsActive', #entity.key}")})
   @Override
   <S extends ApiKey> @NonNull S save(@NonNull S entity);
 
@@ -37,10 +32,7 @@ public interface ApikeyRepository extends JpaRepository<ApiKey, Long> {
   @Override
   <S extends ApiKey> List<S> saveAll(@NonNull Iterable<S> entities);
 
-  @Caching(
-      evict = {
-        @CacheEvict(value = CACHE_NAME, key = "{'withCompanyByKeyAndIsActive', #entity.key}")
-      })
+  @Caching(evict = {@CacheEvict(value = CACHE_NAME, key = "{'findByKeyAndIsActive', #entity.key}")})
   @Override
   void delete(@NonNull ApiKey entity);
 

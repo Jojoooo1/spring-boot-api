@@ -1,8 +1,10 @@
 package com.mycompany.microservice.api.infra.auth.providers;
 
 import com.mycompany.microservice.api.entities.ApiKey;
+import com.mycompany.microservice.api.entities.Company;
 import com.mycompany.microservice.api.infra.auth.providers.ApiKeyAuthentication.ApiKeyDetails;
 import com.mycompany.microservice.api.services.ApiKeyService;
+import com.mycompany.microservice.api.services.CompanyService;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -19,6 +21,7 @@ public class ApiKeyAuthenticationProvider implements AuthenticationProvider {
   private static final String LOG_NAME = "ApiKeyAuthProvider";
 
   @Autowired private ApiKeyService apiKeyService;
+  @Autowired private CompanyService companyService;
 
   @Override
   public Authentication authenticate(final Authentication authentication)
@@ -35,14 +38,24 @@ public class ApiKeyAuthenticationProvider implements AuthenticationProvider {
 
       if (apiKeyOptional.isPresent()) {
         final ApiKey apiKey = apiKeyOptional.get();
+        final Company company = this.companyService.findById(apiKey.getCompanyId());
+        log.debug(
+            "[{}] api-key '{}' found with authorities '{}'",
+            LOG_NAME,
+            apiKeyInRequest,
+            company.getGrantedAuthoritiesFromCompanyType());
+
         final ApiKeyDetails apiKeyDetails =
             ApiKeyDetails.builder()
                 .id(apiKey.getId())
-                .companySlug(apiKey.getCompany().getSlug())
-                .email(apiKey.getCompany().getEmail())
+                .companySlug(company.getSlug())
+                .email(company.getEmail())
+                .isInternal(Boolean.TRUE.equals(company.getIsInternal()))
+                .isPlatform(Boolean.TRUE.equals(company.getIsPlatform()))
                 .build();
 
-        return new ApiKeyAuthentication(apiKey.getKey(), true, apiKeyDetails);
+        return new ApiKeyAuthentication(
+            apiKey.getKey(), true, apiKeyDetails, company.getGrantedAuthoritiesFromCompanyType());
       }
 
       log.info("[{}] api-key '{}' not found, returning 401", LOG_NAME, apiKeyInRequest);

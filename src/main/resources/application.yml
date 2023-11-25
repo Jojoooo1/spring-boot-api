@@ -4,7 +4,7 @@ miscellaneous:
 http:
   clients:
     default-timeout: ${HTTP_CLIENTS_DEFAULT_TIMEOUT:5000}
-    my-external-api:
+    webhook-site:
       base-url: ${HTTP_CLIENTS_MY_EXTERNAL_API_BASE_URL}
 
 rate-limit:
@@ -14,7 +14,7 @@ rate-limit:
     refill-in-seconds: ${DEFAULT_REFILL_IN_SECONDS:1}
 
 slack:
-  username: ${SLACK_USERNAME}
+  env: ${SLACK_ENV}
   channels:
     api-alert:
       url: ${SLACK_API_ALERT_URL}
@@ -39,11 +39,10 @@ kubernetes:
 
 management:
   server:
-    port: 8081 # change this in production
-  endpoints:
-    web:
-      exposure:
-        include: info, health, prometheus, metrics, preStopHook
+    port: 8081
+  info:
+    java:
+      enabled: true
   endpoint:
     health:
       probes:
@@ -52,22 +51,45 @@ management:
     #      group:
     #       readiness:
     #         include: rabbit
-    metrics:
-      distribution:
-        percentiles-histogram:
-          http:
-            server:
-              requests: true
-  info:
-    java:
-      enabled: true
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http:
+          server:
+            requests: true
+  endpoints:
+    web:
+      exposure:
+        include: info, health, prometheus, metrics, preStopHook
+  tracing:
+    sampling:
+      probability: 0
+  #  otlp:
+  #    tracing:
+  #      endpoint:
+  observations:
+    enable:
+      spring:
+        security: false # not needed in most of the case.
+
+# https://jdbc-observations.github.io/datasource-micrometer/docs/current/docs/html/#appendix-common-application-properties
+jdbc:
+  datasource-proxy:
+    enabled: true
 
 spring:
   application:
     name: api
+  main:
+    keep-alive: true # ensures JVM is kept alive, even if all threads are virtual threads https://docs.spring.io/spring-boot/docs/3.2.0-RC2/reference/htmlsingle/#features.spring-application.virtual-threads
+  reactor:
+    context-propagation: auto # automatically propagates trace and span in reactive pipelines.
+  threads:
+    virtual:
+      enabled: true
   web:
     resources:
-      add-mappings: false # disable serving of static content entirely.
+      add-mappings: false # disable static content.
   security:
     oauth2:
       resourceserver:
@@ -89,14 +111,14 @@ spring:
     password: ${DB_PASSWORD}
 
   jpa:
-    open-in-view: false # disable lazy loading in web views
+    open-in-view: false # disables lazy loading in web views, important for performance.
     hibernate:
       ddl-auto: validate
     properties:
       hibernate:
-        generate_statistics: true
+        generate_statistics: false
         jdbc:
-          # Note: GenerationType.IDENTITY, Hibernate will disable batch inserts/updates. (workaround vladmihalcea.hibernate.id.BatchSequenceGenerator)
+          # important: When using GenerationType.IDENTITY Hibernate disable batching, you need to use BatchSequenceGenerator
           batch_size: ${JDBC_BATCH_SIZE:10}
           time_zone: ${JDBC_TIMEZONE:America/Sao_Paulo}
 
@@ -111,25 +133,15 @@ spring:
       write-dates-as-timestamps: false
       fail-on-empty-beans: false
 
-  rabbitmq:
-    template:
-      retry:
-        enabled: true
-
   lifecycle:
     timeout-per-shutdown-phase: 20s
 
 server:
   shutdown: graceful
   tomcat:
-    # enable tomcat metrics
+    # enables tomcat metrics
     mbeanregistry:
       enabled: true
-
-logging:
-  level:
-    org:
-      hibernate: ERROR
 
 ---
 spring:

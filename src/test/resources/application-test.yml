@@ -1,10 +1,10 @@
 http:
   clients:
-    my-external-api:
+    webhook-site:
       base-url: http://test.com
 
 slack:
-  username: api-alert-test
+  env: api-test
   channels:
     api-alert:
       url: http://test.com

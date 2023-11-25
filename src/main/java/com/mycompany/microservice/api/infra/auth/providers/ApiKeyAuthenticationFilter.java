@@ -1,7 +1,6 @@
-package com.mycompany.microservice.api.infra.auth.filters;
+package com.mycompany.microservice.api.infra.auth.providers;
 
 import com.mycompany.microservice.api.constants.AppHeaders;
-import com.mycompany.microservice.api.infra.auth.providers.ApiKeyAuthentication;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,9 +15,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 
 @Slf4j
-public class ApiKeyProcessingFilter extends AbstractAuthenticationProcessingFilter {
+public class ApiKeyAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-  public ApiKeyProcessingFilter(
+  public ApiKeyAuthenticationFilter(
       final String defaultFilterProcessesUrl, final AuthenticationManager authenticationManager) {
     super(defaultFilterProcessesUrl);
     this.setAuthenticationManager(authenticationManager);

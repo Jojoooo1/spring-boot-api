@@ -1,4 +1,4 @@
-package com.mycompany.microservice.api.controllers.mobile;
+package com.mycompany.microservice.api.controllers.platform.web;
 
 import com.mycompany.microservice.api.constants.AppUrls;
 import lombok.RequiredArgsConstructor;
@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-@RequestMapping(MobileController.BASE_URL)
+@RequestMapping(PlatformWebController.BASE_URL)
 @RequiredArgsConstructor
-public class MobileController {
-  public static final String BASE_URL = AppUrls.MOBILE_APP;
+public class PlatformWebController {
+  public static final String BASE_URL = AppUrls.PLATFORM_WEB;
 
   @GetMapping("/hello-world")
   @ResponseStatus(HttpStatus.OK)

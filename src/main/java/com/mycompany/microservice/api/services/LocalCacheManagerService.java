@@ -56,7 +56,6 @@ public class LocalCacheManagerService {
     log.info("[cache-eviction] evicted all local caches");
   }
 
-  @Async
   public void evictCacheInAllKubernetesInstances() {
     this.evictCacheInAllKubernetesInstances(StringUtils.EMPTY);
   }

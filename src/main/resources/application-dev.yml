@@ -1,14 +1,14 @@
-http:
-  clients:
-    my-external-api:
-      base-url: https://webhook.site/8258fbb5-0137-4e8c-9a5f-080629933063
-
 slack:
-  username: api-alert-dev
+  env: api-dev
   channels:
     api-alert:
       url: http://your-slack-bot-url.com/example
       name: api-alert
+
+http:
+  clients:
+    webhook-site:
+      base-url: https://webhook.site/b4b43dbd-9980-4690-8db7-e50be66e4d0c
 
 rabbitmq:
   host: localhost
@@ -24,14 +24,21 @@ rabbitmq:
       routingkey: to_outbound_webhook
 
 management:
-  server:
-    port: 8080
   endpoint:
     health:
       show-details: always
+
+  # for testing purpose you can use https://github.com/CtrlSpice/otel-desktop-viewer
   tracing:
     sampling:
-      probability: 0
+      probability: 1
+  otlp:
+    tracing:
+      endpoint: http://localhost:4317
+
+jdbc:
+  datasource-proxy:
+    include-parameter-values: true
 
 spring:
   datasource:
@@ -41,9 +48,8 @@ spring:
   jpa:
     properties:
       hibernate:
-        show_sql: false # does not show correctly batch insert (use datasource-proxy)
+        show_sql: false
         format_sql: false
-        # generate_statistics: true
 
   security:
     oauth2:
@@ -57,8 +63,6 @@ spring:
       enabled: false
 
 logging:
-  pattern:
-    level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
   level:
     web: info
     # org.springframework.cache: TRACE

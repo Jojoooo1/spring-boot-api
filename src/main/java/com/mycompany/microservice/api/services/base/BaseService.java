@@ -62,7 +62,7 @@ public abstract class BaseService<E extends BaseEntity> {
 
   @Transactional
   public E create(final E entity) {
-    return this.createAll(List.of(entity)).get(0);
+    return this.createAll(List.of(entity)).getFirst();
   }
 
   @Transactional
@@ -77,7 +77,7 @@ public abstract class BaseService<E extends BaseEntity> {
 
   @Transactional
   public E update(final E entity) {
-    return this.updateAll(List.of(entity)).get(0);
+    return this.updateAll(List.of(entity)).getFirst();
   }
 
   @Transactional
@@ -136,7 +136,7 @@ public abstract class BaseService<E extends BaseEntity> {
 
     // Used to improve cache management since saveAll will reset the entire cache.
     if (entities.size() == 1) {
-      this.getRepository().save(entities.get(0));
+      this.getRepository().save(entities.getFirst());
     } else {
       this.getRepository().saveAll(entities);
     }
@@ -196,7 +196,7 @@ public abstract class BaseService<E extends BaseEntity> {
 
     // Used to improve cache management since deleteAll will reset the entire cache.
     if (entities.size() == 1) {
-      this.getRepository().delete(entities.get(0));
+      this.getRepository().delete(entities.getFirst());
     } else {
       this.getRepository().deleteAll(entities);
     }

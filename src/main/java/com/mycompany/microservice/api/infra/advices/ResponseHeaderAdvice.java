@@ -1,8 +1,9 @@
-package com.mycompany.microservice.api.infra.advice;
-
-import static com.mycompany.microservice.api.utils.TimeUtils.ONE_MILLI;
+package com.mycompany.microservice.api.infra.advices;
 
 import com.mycompany.microservice.api.constants.AppHeaders;
+import com.mycompany.microservice.api.utils.TraceUtils;
+import io.micrometer.tracing.Tracer;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
@@ -23,9 +24,15 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
  */
 @Slf4j
 @ControllerAdvice
+@RequiredArgsConstructor
 public class ResponseHeaderAdvice implements ResponseBodyAdvice<Object> {
 
   private static final String TIME = "StopWatch";
+  private final Tracer tracer;
+
+  private static void addTraceToHeader(final Tracer tracer, final ServerHttpResponse response) {
+    response.getHeaders().add("traceId", TraceUtils.getTrace(tracer));
+  }
 
   private static void addResponseTimeHeader(
       final ServerHttpResponse response, final ServletServerHttpRequest servletServerRequest) {
@@ -37,7 +44,7 @@ public class ResponseHeaderAdvice implements ResponseBodyAdvice<Object> {
 
   private static String fromTimeToString(final Long startTime) {
     final long elapsed = System.nanoTime() - startTime;
-    final long millis = elapsed / ONE_MILLI;
+    final long millis = elapsed / 1_000_000;
     return millis > 0 ? millis + " ms" : elapsed + " ns";
   }
 
@@ -59,6 +66,7 @@ public class ResponseHeaderAdvice implements ResponseBodyAdvice<Object> {
 
     final ServletServerHttpRequest servletServerRequest = (ServletServerHttpRequest) request;
     ResponseHeaderAdvice.addResponseTimeHeader(response, servletServerRequest);
+    ResponseHeaderAdvice.addTraceToHeader(this.tracer, response);
 
     return body;
   }

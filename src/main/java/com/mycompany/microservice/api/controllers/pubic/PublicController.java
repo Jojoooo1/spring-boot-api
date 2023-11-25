@@ -48,4 +48,10 @@ public class PublicController {
   public Mono<String> callExternalAPI() {
     return this.webhookSiteService.post(Map.of());
   }
+
+  @GetMapping("/call-external-api-with-cb")
+  @ResponseStatus(HttpStatus.OK)
+  public Mono<String> callExternalAPIWithCircuitBreaker() {
+    return this.webhookSiteService.postWithCircuitBreaker(Map.of());
+  }
 }

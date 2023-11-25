@@ -1,6 +1,6 @@
 package com.mycompany.microservice.api.utils;
 
-import static com.mycompany.microservice.api.utils.LogUtils.NULL;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 import com.mycompany.microservice.api.entities.Company;
 import java.util.List;
@@ -11,8 +11,8 @@ class LogUtilsTest {
 
   @Test
   void verifyLogIdNullSafe() {
-    Assertions.assertEquals(NULL, LogUtils.logId(null));
-    Assertions.assertEquals(NULL, LogUtils.logId(new Company()));
+    Assertions.assertEquals(EMPTY, LogUtils.logId(null));
+    Assertions.assertEquals(EMPTY, LogUtils.logId(new Company()));
   }
 
   @Test

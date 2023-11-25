@@ -21,12 +21,12 @@
               {
               "level": "%level",
               "company": "%mdc{company}",
+              "user": "%mdc{user}",
               "message": "%message",
               "traceId": "%mdc{traceId}",
               "spanId": "%mdc{spanId}",
               <!-- Nginx requestID -->
               "requestId": "%mdc{X-Request-ID}",
-              "user": "%mdc{user}",
               "logger": "%logger",
               "thread": "%thread"
               }

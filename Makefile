@@ -21,6 +21,9 @@ test: ## Execute all test
 run-api: ## Run API with maven
 	@mvn clean spring-boot:run -Dspring.profiles.active=dev
 
+start-api-with-docker-image: ## Run API with docker (don't forget to build the image locally before)
+	@docker run --net host -e SPRING_PROFILES_ACTIVE="dev" -e SPRING_DATASOURCE_URL="jdbc:postgresql://localhost:5432/api?stringtype=unspecified&reWriteBatchedInserts=true" api:0.0.1-SNAPSHOT
+
 start-api: ## Run API with docker compose
 	@docker compose up -d
 	@docker compose logs -f api
