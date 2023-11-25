@@ -110,14 +110,13 @@ jobs:
       
       # 4. Build image using maven
       - name: Build image
-        run: mvn clean package -DskipTests spring-boot:build-image --no-transfer-progress \
-          -Dspring-boot.build-image.imageName=$IMAGE_REGISTRY:$IMAGE_TAG
+        run: mvn clean package -DskipTests spring-boot:build-image --no-transfer-progress -Dspring-boot.build-image.imageName=$IMAGE_REGISTRY:$IMAGE_TAG
       
       # 5. Push image to registry
       - name: Push image to registry
         run: docker push $IMAGE_REGISTRY:$IMAGE_TAG
       
-      # 5. Notify if fails
+      # 6. Notify if fails
       #      - name: Notify slack fail
       #        if: failure()
       #        env:
