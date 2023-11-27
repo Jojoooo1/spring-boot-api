@@ -118,7 +118,7 @@ jobs:
       - name: Push image to registry
         run: docker push $IMAGE_REGISTRY:$IMAGE_TAG
       
-      # 7. Notify if fails
+      # 7. Notify if failss
       #      - name: Notify slack fail
       #        if: failure()
       #        env:
