@@ -140,9 +140,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          
           RELEASE_VERSION=${{ needs.prod-deploy.outputs.RELEASE_VERSION }}
           git tag -a $RELEASE_VERSION -m "release: $RELEASE_VERSION"
           git push origin $RELEASE_VERSION
@@ -169,9 +166,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          
           RELEASE_VERSION=${{ needs.prod-deploy.outputs.RELEASE_VERSION }}
           BRANCH_NAME="merge/$RELEASE_VERSION"
           git checkout -b $BRANCH_NAME
