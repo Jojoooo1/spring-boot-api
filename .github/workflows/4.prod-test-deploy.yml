@@ -40,8 +40,6 @@ jobs:
       id-token: 'write'
     
     outputs:
-      IMAGE_TAG: ${{ steps.variables.outputs.IMAGE_TAG }}
-      IMAGE_REGISTRY: ${{ steps.variables.outputs.IMAGE_REGISTRY }}
       RELEASE_VERSION: ${{ steps.variables.outputs.RELEASE_VERSION }}
     steps:
       # 1. Setup
@@ -141,11 +139,11 @@ jobs:
       - name: Create release
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
-          RELEASE_VERSION: ${{ needs.prod-deploy.outputs.RELEASE_VERSION }}
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
           
+          RELEASE_VERSION=${{ needs.prod-deploy.outputs.RELEASE_VERSION }}
           git tag -a $RELEASE_VERSION -m "release: $RELEASE_VERSION"
           git push origin $RELEASE_VERSION
           gh release create $RELEASE_VERSION --title "$RELEASE_VERSION" --generate-notes
@@ -170,11 +168,11 @@ jobs:
       - name: Open PR to align develop with main
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
-          RELEASE_VERSION: ${{ needs.prod-deploy.outputs.RELEASE_VERSION }}
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
           
+          RELEASE_VERSION=${{ needs.prod-deploy.outputs.RELEASE_VERSION }}
           BRANCH_NAME="merge/$RELEASE_VERSION"
           git checkout -b $BRANCH_NAME
           
