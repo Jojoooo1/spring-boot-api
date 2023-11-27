@@ -1,21 +1,16 @@
 # Description
 
-Here you can talk about what problem your PR is solving.
+###### _Short description of your task_
 
 # Task
 
-No task assigned.
+###### _Link to your task in Jira_
 
 # Test
 
-## Unit & Integration Tests
+- ###### _A short description to test your PR_
 
-`make test`
+# PR Dependencies
 
-# Deploy
-
-After the tests were successful the image will be updated automatically. If you want to update the
-image for production environment you will need to generate a release and gave the
-image name to the SRE team.
-
+- None
 
