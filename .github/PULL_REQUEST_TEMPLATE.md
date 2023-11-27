@@ -4,7 +4,7 @@
 
 # Task
 
-###### _Link to your task in Jira_
+###### _Link to your task(s) in Jira_
 
 # Test
 
