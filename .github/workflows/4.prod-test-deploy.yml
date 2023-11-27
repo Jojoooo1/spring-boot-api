@@ -39,6 +39,10 @@ jobs:
       contents: 'read'
       id-token: 'write'
     
+    outputs:
+      IMAGE_TAG: ${{ steps.variables.outputs.IMAGE_TAG }}
+      IMAGE_REGISTRY: ${{ steps.variables.outputs.IMAGE_REGISTRY }}
+      RELEASE_VERSION: ${{ steps.variables.outputs.RELEASE_VERSION }}
     steps:
       # 1. Setup
       - uses: actions/checkout@v4
@@ -72,10 +76,12 @@ jobs:
           IMAGE_REGISTRY="us-docker.pkg.dev/${{ secrets.PROJECT_ID }}/cloud-diplomats/${{ env.IMAGE_NAME }}"
           IMAGE_TAG=${RELEASE_VERSION}-$(git rev-parse --short=4 HEAD)
           
-          # 4. Set vars as env
+          # 4. Set vars as envs & ouputs
           echo "IMAGE_REGISTRY=$IMAGE_REGISTRY" >> $GITHUB_ENV
           echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
           echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
+          
+          echo "RELEASE_VERSION=${RELEASE_VERSION}" >> $GITHUB_OUTPUT
       
       - name: Print variables
         run: |
@@ -135,6 +141,7 @@ jobs:
       - name: Create release
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          RELEASE_VERSION: ${{ needs.prod-deploy.outputs.RELEASE_VERSION }}
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
@@ -163,6 +170,7 @@ jobs:
       - name: Open PR to align develop with main
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          RELEASE_VERSION: ${{ needs.prod-deploy.outputs.RELEASE_VERSION }}
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
