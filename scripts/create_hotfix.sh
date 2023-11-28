@@ -17,7 +17,7 @@ getHotfixReleaseVersion() {
 
   # 3. Calculate release version
   V_MINOR=${TAG_LIST[0]}
-  V_PATCH=$(( TAG_LIST[1] + 1))
+  V_PATCH=$(( TAG_LIST[1] + 1 ))
   RELEASE_VERSION=${V_MINOR}.${V_PATCH}
 }
 
