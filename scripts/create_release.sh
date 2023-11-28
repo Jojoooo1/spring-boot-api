@@ -16,8 +16,9 @@ getReleaseVersion() {
   [[ "${#TAG_LIST[@]}" -ne 2 ]] && echo "$LATEST_TAG is not a valid version" && exit 1
 
   # 3. Calculate release version
-  V_MINOR=${TAG_LIST[0]}
-  RELEASE_VERSION=$(( V_MINOR + 1)).0
+  V_MINOR=$(( TAG_LIST[0] + 1 ))
+  V_PATCH=0
+  RELEASE_VERSION=${V_MINOR}.${V_PATCH}
 }
 
 message ">>> Starting release"
