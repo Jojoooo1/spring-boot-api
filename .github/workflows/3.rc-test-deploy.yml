@@ -86,6 +86,7 @@ jobs:
         uses: google-github-actions/auth@v2.0.0
         with:
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.SERVICE_ACCOUNT }} # impersonated SA
       
       # 4. Setup gcloud & configure docker to use gcloud
       - name: Setup gcloud
