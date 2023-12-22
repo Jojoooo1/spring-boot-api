@@ -96,7 +96,7 @@ jobs:
       
       # 4. Setup gcloud & configure docker to use gcloud
       - name: Set up gcloud
-        uses: google-github-actions/setup-gcloud@v2.0.0
+        uses: google-github-actions/setup-gcloud@v2.0.1
         with:
           project_id: ${{ secrets.PROJECT_ID }}
       - name: Setup docker to authenticate via gcloud
