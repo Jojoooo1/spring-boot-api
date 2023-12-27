@@ -31,7 +31,7 @@
     
     <!-- Metrics -->
     <!-- <hibernate-micrometer.version>6.3.0.Final</hibernate-micrometer.version>  -->
-    <datasource-micrometer.version>1.0.2</datasource-micrometer.version>
+    <datasource-micrometer.version>1.0.3</datasource-micrometer.version>
     <opentelemetry-exporter-otlp.version>1.32.0</opentelemetry-exporter-otlp.version>
     
     <!-- Lombok & Mapstruct -->
