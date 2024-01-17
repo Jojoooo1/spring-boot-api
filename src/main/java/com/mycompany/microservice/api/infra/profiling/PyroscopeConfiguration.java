@@ -4,6 +4,7 @@ import io.pyroscope.http.Format;
 import io.pyroscope.javaagent.EventType;
 import io.pyroscope.javaagent.PyroscopeAgent;
 import io.pyroscope.javaagent.config.Config;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
@@ -17,9 +18,10 @@ public class PyroscopeConfiguration {
     PyroscopeAgent.start(
         new Config.Builder()
             .setApplicationName("cloud-diplomats-api-java")
+            .setLabels(Map.of("project", "cloud-diplomats", "type", "api"))
             .setProfilingEvent(EventType.ITIMER)
             .setProfilingAlloc("512k")
-            .setAllocLive(true)
+            // .setAllocLive(true)
             .setFormat(Format.JFR)
             .setServerAddress(pyroscopeServer)
             .build());
