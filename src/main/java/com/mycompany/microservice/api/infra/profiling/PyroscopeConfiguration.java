@@ -18,6 +18,8 @@ public class PyroscopeConfiguration {
         new Config.Builder()
             .setApplicationName("cloud-diplomats-api-java")
             .setProfilingEvent(EventType.ITIMER)
+            .setProfilingAlloc("512k")
+            .setAllocLive(true)
             .setFormat(Format.JFR)
             .setServerAddress(pyroscopeServer)
             .build());
