@@ -25,6 +25,8 @@
     <postgresql.version>42.7.1</postgresql.version>
     <querydsl.version>5.0.0</querydsl.version>
     <flyway-core.version>10.1.0</flyway-core.version>
+    <!-- awaiting compatibility with hibernate 6.4 and consequently spring boot 3.1 -->
+    <hypersistence-utils.version>3.7.0</hypersistence-utils.version>
     
     <!-- Logging -->
     <logstash.version>7.4</logstash.version>
@@ -33,6 +35,7 @@
     <!-- <hibernate-micrometer.version>6.3.0.Final</hibernate-micrometer.version>  -->
     <datasource-micrometer.version>1.0.3</datasource-micrometer.version>
     <opentelemetry-exporter-otlp.version>1.32.0</opentelemetry-exporter-otlp.version>
+    <pyroscope-agent.version>0.12.2</pyroscope-agent.version>
     
     <!-- Lombok & Mapstruct -->
     <projectlombok.version>1.18.30</projectlombok.version>
@@ -102,7 +105,7 @@
     <dependency>
       <groupId>io.hypersistence</groupId>
       <artifactId>hypersistence-utils-hibernate-62</artifactId>
-      <version>3.7.0</version>
+      <version>${hypersistence-utils.version}</version>
     </dependency>
     
     <!-- Database access -->
@@ -113,13 +116,13 @@
     <dependency>
       <groupId>com.querydsl</groupId>
       <artifactId>querydsl-jpa</artifactId>
-      <version>5.0.0</version>
+      <version>${querydsl.version}</version>
       <classifier>jakarta</classifier>
     </dependency>
     <dependency>
       <groupId>com.querydsl</groupId>
       <artifactId>querydsl-apt</artifactId>
-      <version>5.0.0</version>
+      <version>${querydsl.version}</version>
       <scope>provided</scope>
       <optional>true</optional>
       <classifier>jakarta</classifier>
@@ -167,7 +170,7 @@
     <dependency>
       <groupId>io.pyroscope</groupId>
       <artifactId>agent</artifactId>
-      <version>0.12.2</version>
+      <version>${pyroscope-agent.version}</version>
     </dependency>
     
     <!-- Data & Serialization -->
