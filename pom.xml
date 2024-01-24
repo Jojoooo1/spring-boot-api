@@ -163,6 +163,13 @@
       <version>${opentelemetry-exporter-otlp.version}</version>
     </dependency>
     
+    <!-- Profiling -->
+    <dependency>
+      <groupId>io.pyroscope</groupId>
+      <artifactId>agent</artifactId>
+      <version>0.12.2</version>
+    </dependency>
+    
     <!-- Data & Serialization -->
     <dependency>
       <groupId>org.springframework.boot</groupId>

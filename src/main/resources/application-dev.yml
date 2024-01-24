@@ -23,11 +23,16 @@ rabbitmq:
       exchange: outbound
       routingkey: to_outbound_webhook
 
+profiling:
+  pyroscope:
+    enabled: false
+    server: http://pyroscope-local.cloud-diplomats.com
+
 management:
   endpoint:
     health:
       show-details: always
-
+  
   # for testing purpose you can use https://github.com/CtrlSpice/otel-desktop-viewer
   tracing:
     sampling:
@@ -50,14 +55,14 @@ spring:
       hibernate:
         show_sql: false
         format_sql: false
-
+  
   security:
     oauth2:
       resourceserver:
         jwt:
           issuer-uri: http://localhost:8000/realms/api
           jwk-set-uri: http://localhost:8000/realms/api/protocol/openid-connect/certs
-
+  
   devtools:
     restart:
       enabled: false
