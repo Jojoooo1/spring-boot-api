@@ -23,7 +23,7 @@
     
     <!-- Database -->
     <postgresql.version>42.7.1</postgresql.version>
-    <querydsl.version>5.0.0</querydsl.version>
+    <querydsl.version>5.1.0</querydsl.version>
     <flyway-core.version>10.1.0</flyway-core.version>
     <!-- awaiting compatibility with hibernate 6.4 and consequently spring boot 3.1 -->
     <hypersistence-utils.version>3.7.0</hypersistence-utils.version>
