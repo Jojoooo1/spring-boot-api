@@ -49,7 +49,7 @@
     <apache-commons-collection.version>4.4</apache-commons-collection.version>
     
     <!-- Development-->
-    <git-code-format-maven-plugin.version>5.1</git-code-format-maven-plugin.version>
+    <git-code-format-maven-plugin.version>5.2</git-code-format-maven-plugin.version>
     
     <!-- Test -->
     <testcontainers.version>1.19.4</testcontainers.version>
