@@ -34,7 +34,7 @@
     <!-- <hibernate-micrometer.version>6.3.0.Final</hibernate-micrometer.version>  -->
     <datasource-micrometer.version>1.0.3</datasource-micrometer.version>
     <opentelemetry-exporter-otlp.version>1.32.0</opentelemetry-exporter-otlp.version>
-    <pyroscope-agent.version>0.12.2</pyroscope-agent.version>
+    <pyroscope-agent.version>0.13.0</pyroscope-agent.version>
     
     <!-- Lombok & Mapstruct -->
     <projectlombok.version>1.18.30</projectlombok.version>
