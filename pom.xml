@@ -320,11 +320,11 @@
         <version>3.2.5</version>
       </plugin>
       
-      <!-- SPRING_PROFILES_ACTIVE=dev mvn clean -Pnative spring-boot:build-image -->
-      <!-- <plugin> -->
-      <!--   <groupId>org.graalvm.buildtools</groupId> -->
-      <!--   <artifactId>native-maven-plugin</artifactId> -->
-      <!-- </plugin> -->
+      <!-- SPRING_PROFILES_ACTIVE=dev mvn clean -Pnative -DskipTests spring-boot:build-image -->
+      <plugin>
+        <groupId>org.graalvm.buildtools</groupId>
+        <artifactId>native-maven-plugin</artifactId>
+      </plugin>
       
       <!--
        Spring boot buildpack image are build and run as non-root (runAsUser: 1000)
@@ -343,7 +343,7 @@
             <!-- <builder>paketobuildpacks/builder-jammy-tiny:latest</builder> -->
             
             <env>
-              <!-- <BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE> -->
+              <BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE>
               <BP_JVM_VERSION>21</BP_JVM_VERSION>
             </env>
             <createdDate>${maven.build.timestamp}</createdDate>
