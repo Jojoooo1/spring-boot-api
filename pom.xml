@@ -320,11 +320,14 @@
         <version>3.2.5</version>
       </plugin>
       
+      
       <!-- SPRING_PROFILES_ACTIVE=dev mvn clean -Pnative -DskipTests spring-boot:build-image -->
-      <plugin>
-        <groupId>org.graalvm.buildtools</groupId>
-        <artifactId>native-maven-plugin</artifactId>
-      </plugin>
+      
+      <!-- already set in parent native profile -->
+      <!-- <plugin> -->
+      <!--   <groupId>org.graalvm.buildtools</groupId> -->
+      <!--   <artifactId>native-maven-plugin</artifactId> -->
+      <!-- </plugin> -->
       
       <!--
        Spring boot buildpack image are build and run as non-root (runAsUser: 1000)
