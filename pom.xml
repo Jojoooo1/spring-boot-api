@@ -33,7 +33,7 @@
     <!-- Metrics -->
     <!-- <hibernate-micrometer.version>6.3.0.Final</hibernate-micrometer.version>  -->
     <datasource-micrometer.version>1.0.3</datasource-micrometer.version>
-    <opentelemetry-exporter-otlp.version>1.32.0</opentelemetry-exporter-otlp.version>
+    <opentelemetry-exporter-otlp.version>1.35.0</opentelemetry-exporter-otlp.version>
     <pyroscope-agent.version>0.13.0</pyroscope-agent.version>
     
     <!-- Lombok & Mapstruct -->
@@ -320,7 +320,7 @@
         <version>3.2.5</version>
       </plugin>
       
-      
+      <!-- logback with spring native does not seems to work -->
       <!-- SPRING_PROFILES_ACTIVE=dev mvn clean -Pnative -DskipTests spring-boot:build-image -->
       
       <!-- already set in parent native profile (https://github.com/spring-projects/spring-boot/blob/main/spring-boot-project/spring-boot-starters/spring-boot-starter-parent/build.gradle) -->
@@ -347,6 +347,12 @@
             
             <env>
               <!-- <BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE> --> <!-- already set in parent native profile -->
+              <BP_NATIVE_IMAGE_BUILD_ARGUMENTS>
+                -H:+AddAllCharsets
+                -H:+ReportExceptionStackTraces
+                --initialize-at-run-time=io.netty.handler.ssl.BouncyCastleAlpnSslUtils
+                --initialize-at-build-time=ch.qos.logback,org.slf4j.LoggerFactory
+              </BP_NATIVE_IMAGE_BUILD_ARGUMENTS>
               <BP_JVM_VERSION>21</BP_JVM_VERSION>
             </env>
             <createdDate>${maven.build.timestamp}</createdDate>
