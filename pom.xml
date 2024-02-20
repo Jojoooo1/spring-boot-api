@@ -339,11 +339,12 @@
           <image>
             <!-- Default -->
             <!-- <builder>paketobuildpacks/builder-jammy-base:</builder> -->
-            <!-- Native -->
+            <!-- Native (already set in native profile) -->
             <!-- <builder>paketobuildpacks/builder-jammy-tiny:latest</builder> -->
             
             <env>
-              <BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE>
+              <!-- already set in native profile -->
+              <!-- <BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE> -->
               <BP_JVM_VERSION>21</BP_JVM_VERSION>
             </env>
             <createdDate>${maven.build.timestamp}</createdDate>
