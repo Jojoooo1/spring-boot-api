@@ -323,7 +323,7 @@
       
       <!-- SPRING_PROFILES_ACTIVE=dev mvn clean -Pnative -DskipTests spring-boot:build-image -->
       
-      <!-- already set in parent native profile -->
+      <!-- already set in parent native profile (https://github.com/spring-projects/spring-boot/blob/main/spring-boot-project/spring-boot-starters/spring-boot-starter-parent/build.gradle) -->
       <!-- <plugin> -->
       <!--   <groupId>org.graalvm.buildtools</groupId> -->
       <!--   <artifactId>native-maven-plugin</artifactId> -->
