@@ -354,8 +354,8 @@
                 -H:+UnlockExperimentalVMOptions
                 
                 <!-- -H:IncludeResources=src/main/resources/logback-spring.xml -->
-                -H:IncludeResources=/workspace/BOOT-INF/classes/logback-spring.xml
-                -H:ReflectionConfigurationFiles=/workspace/META-INF/native-image/logback-config.json
+                <!-- -H:IncludeResources=/workspace/BOOT-INF/classes/logback-spring.xml -->
+                <!-- -H:ReflectionConfigurationFiles=/workspace/META-INF/native-image/logback-config.json -->
                 
                 --initialize-at-run-time=io.netty.handler.ssl.BouncyCastleAlpnSslUtils
                 --initialize-at-build-time=ch.qos.logback,org.slf4j.LoggerFactory,org.slf4j.MDC
