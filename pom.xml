@@ -22,7 +22,7 @@
     <java.version>21</java.version>
     
     <!-- Database -->
-    <postgresql.version>42.7.1</postgresql.version>
+    <postgresql.version>42.7.2</postgresql.version>
     <querydsl.version>5.1.0</querydsl.version>
     <flyway-core.version>10.1.0</flyway-core.version>
     <hypersistence-utils.version>3.7.3</hypersistence-utils.version>
@@ -33,7 +33,7 @@
     <!-- Metrics -->
     <!-- <hibernate-micrometer.version>6.3.0.Final</hibernate-micrometer.version>  -->
     <datasource-micrometer.version>1.0.3</datasource-micrometer.version>
-    <opentelemetry-exporter-otlp.version>1.35.0</opentelemetry-exporter-otlp.version>
+    <opentelemetry-exporter-otlp.version>1.32.0</opentelemetry-exporter-otlp.version>
     <pyroscope-agent.version>0.13.0</pyroscope-agent.version>
     
     <!-- Lombok & Mapstruct -->
@@ -336,6 +336,7 @@
          https://github.com/paketo-buildpacks/spring-boot
       -->
       <plugin>
+        
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
@@ -350,8 +351,14 @@
               <BP_NATIVE_IMAGE_BUILD_ARGUMENTS>
                 -H:+AddAllCharsets
                 -H:+ReportExceptionStackTraces
+                -H:+UnlockExperimentalVMOptions
+                
+                <!-- -H:IncludeResources=src/main/resources/logback-spring.xml -->
+                -H:IncludeResources=/workspace/BOOT-INF/classes/logback-spring.xml
+                -H:ReflectionConfigurationFiles=/workspace/META-INF/native-image/logback-config.json
+                
                 --initialize-at-run-time=io.netty.handler.ssl.BouncyCastleAlpnSslUtils
-                --initialize-at-build-time=ch.qos.logback,org.slf4j.LoggerFactory
+                --initialize-at-build-time=ch.qos.logback,org.slf4j.LoggerFactory,org.slf4j.MDC
               </BP_NATIVE_IMAGE_BUILD_ARGUMENTS>
               <BP_JVM_VERSION>21</BP_JVM_VERSION>
             </env>

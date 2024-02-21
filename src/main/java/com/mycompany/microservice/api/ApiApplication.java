@@ -26,10 +26,10 @@ public class ApiApplication {
 
     final Runtime r = Runtime.getRuntime();
 
-    log.info("Active processors: " + r.availableProcessors());
-    log.info("Total memory: " + r.totalMemory());
-    log.info("Free memory: " + r.freeMemory());
-    log.info("Max memory: " + r.maxMemory());
+    log.info("[APP] Active processors: " + r.availableProcessors());
+    log.info("[APP] Total memory: " + r.totalMemory());
+    log.info("[APP] Free memory: " + r.freeMemory());
+    log.info("[APP] Max memory: " + r.maxMemory());
 
     SpringApplication.run(ApiApplication.class, args);
   }
