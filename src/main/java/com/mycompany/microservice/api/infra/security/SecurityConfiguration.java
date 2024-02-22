@@ -22,7 +22,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 
 @Slf4j
-@Configuration(proxyBeanMethods = false)
+@Configuration
 @EnableMethodSecurity
 @EnableWebSecurity
 public class SecurityConfiguration {
