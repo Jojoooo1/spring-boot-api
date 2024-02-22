@@ -11,7 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @EnableJpaAuditing(auditorAwareRef = "auditorProvider")
 public class AuditorConfig {
 

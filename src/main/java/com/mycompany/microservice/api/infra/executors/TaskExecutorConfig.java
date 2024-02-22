@@ -6,7 +6,7 @@ import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.core.task.support.ContextPropagatingTaskDecorator;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class TaskExecutorConfig {
 
   /*

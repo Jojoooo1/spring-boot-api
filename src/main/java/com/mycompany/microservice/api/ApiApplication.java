@@ -13,7 +13,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @Slf4j
 @EnableAsync
 @EnableCaching
-@ConfigurationPropertiesScan
+@ConfigurationPropertiesScan()
 @ServletComponentScan
 @SpringBootApplication
 public class ApiApplication {

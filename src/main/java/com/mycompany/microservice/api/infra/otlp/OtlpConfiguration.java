@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 
 // Not working yet, need to wait for spring boot to be compatible with otel exporter 1.34.
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(OtlpProperties.class)
 public class OtlpConfiguration {
 
