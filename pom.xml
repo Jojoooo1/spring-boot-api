@@ -7,7 +7,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.2.0</version>
+    <version>3.2.2</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
   
@@ -52,7 +52,7 @@
     <git-code-format-maven-plugin.version>5.3</git-code-format-maven-plugin.version>
     
     <!-- Test -->
-    <testcontainers.version>1.19.5</testcontainers.version>
+    <testcontainers.version>1.19.6</testcontainers.version>
   
   </properties>
   <dependencies>
