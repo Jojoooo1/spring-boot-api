@@ -223,9 +223,8 @@ make kill
 
 ## Spring native
 
-Spring boot 3.2.2 hibernate issue: https://github.com/spring-projects/spring-framework/issues/31051
-Spring boot 3.2.2 spring-security
-issue: https://github.com/spring-projects/spring-security/issues/14362
+- Spring boot 3.2.2 hibernate issue: https://github.com/spring-projects/spring-framework/issues/31051
+- Spring boot 3.2.2 spring-security issue: https://github.com/spring-projects/spring-security/issues/14362
 
 Limitations:
 
