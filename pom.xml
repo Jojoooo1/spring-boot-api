@@ -320,44 +320,37 @@
         <version>3.2.5</version>
       </plugin>
       
-      <!-- logback with spring native does not seems to work -->
       <!-- SPRING_PROFILES_ACTIVE=dev mvn clean -Pnative -DskipTests spring-boot:build-image -->
       
-      <!-- already set in parent native profile (https://github.com/spring-projects/spring-boot/blob/main/spring-boot-project/spring-boot-starters/spring-boot-starter-parent/build.gradle) -->
+      <!-- already set in parent with native profile -->
       <!-- <plugin> -->
       <!--   <groupId>org.graalvm.buildtools</groupId> -->
       <!--   <artifactId>native-maven-plugin</artifactId> -->
       <!-- </plugin> -->
       
-      <!--
-       Spring boot buildpack image are build and run as non-root (runAsUser: 1000)
-       Principal buildpack that it uses:
-         https://github.com/paketo-buildpacks/bellsoft-liberica
-         https://github.com/paketo-buildpacks/spring-boot
-      -->
       <plugin>
         
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
           <image>
-            <!-- Default -->
+            <!-- Default (build and run as non-root (runAsUser: 1000)) -->
             <!-- <builder>paketobuildpacks/builder-jammy-base:</builder> -->
             <!-- Native -->
             <!-- <builder>paketobuildpacks/builder-jammy-tiny:latest</builder> --> <!-- already set in parent native profile -->
             
             <env>
-              <!-- <BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE> --> <!-- already set in parent native profile -->
-              <BP_NATIVE_IMAGE_BUILD_ARGUMENTS>
-                -H:+AddAllCharsets
-                -H:+ReportExceptionStackTraces
-                -H:+UnlockExperimentalVMOptions
-                
-                -H:ReflectionConfigurationFiles=/workspace/META-INF/native-image/logback-config.json
-                
-                --initialize-at-run-time=io.netty.handler.ssl.BouncyCastleAlpnSslUtils
-                --initialize-at-build-time=ch.qos.logback,org.slf4j.LoggerFactory,org.slf4j.MDC
-              </BP_NATIVE_IMAGE_BUILD_ARGUMENTS>
+              <!-- <BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE> --> <!-- already set in parent with native profile -->
+              <!-- <BP_NATIVE_IMAGE_BUILD_ARGUMENTS> -->
+              <!--   -H:+AddAllCharsets -->
+              <!--   -H:+ReportExceptionStackTraces -->
+              <!--   -H:+UnlockExperimentalVMOptions -->
+              <!--    -->
+              <!--   -H:ReflectionConfigurationFiles=/workspace/META-INF/native-image/logback-config.json -->
+              <!--    -->
+              <!--   &#45;&#45;initialize-at-run-time=io.netty.handler.ssl.BouncyCastleAlpnSslUtils -->
+              <!--   &#45;&#45;initialize-at-build-time=ch.qos.logback,org.slf4j.LoggerFactory,org.slf4j.MDC -->
+              <!-- </BP_NATIVE_IMAGE_BUILD_ARGUMENTS> -->
               <BP_JVM_VERSION>21</BP_JVM_VERSION>
             </env>
             <createdDate>${maven.build.timestamp}</createdDate>
