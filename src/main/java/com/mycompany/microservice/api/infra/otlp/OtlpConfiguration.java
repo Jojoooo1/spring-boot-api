@@ -1,7 +1,7 @@
 package com.mycompany.microservice.api.infra.otlp;
 
-import io.opentelemetry.exporter.otlp.http.trace.OtlpHttpSpanExporter;
-import io.opentelemetry.exporter.otlp.http.trace.OtlpHttpSpanExporterBuilder;
+import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter;
+import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporterBuilder;
 import java.util.Map.Entry;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.actuate.autoconfigure.tracing.otlp.OtlpProperties;
@@ -21,10 +21,10 @@ public class OtlpConfiguration {
   // OtlpAutoConfiguration use HTTP by default, we update it to use GRPC
   // https://github.com/spring-projects/spring-boot/blob/main/spring-boot-project/spring-boot-actuator-autoconfigure/src/main/java/org/springframework/boot/actuate/autoconfigure/tracing/otlp/OtlpAutoConfiguration.java
   @Bean
-  public OtlpHttpSpanExporter otlpExporter(final OtlpProperties properties) {
+  public OtlpGrpcSpanExporter otlpExporter(final OtlpProperties properties) {
 
-    final OtlpHttpSpanExporterBuilder builder =
-        OtlpHttpSpanExporter.builder()
+    final OtlpGrpcSpanExporterBuilder builder =
+        OtlpGrpcSpanExporter.builder()
             .setEndpoint(
                 StringUtils.isNotBlank(properties.getEndpoint())
                     ? properties.getEndpoint()
