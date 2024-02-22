@@ -34,14 +34,14 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class LocalCacheManagerService {
 
-  @Value("${kubernetes.service-name}")
-  final String kubernetesServiceName;
-
   private final ApiKeyService apiKeyService;
   private final CompanyService companyService;
   private final DiscoveryClient discoveryClient;
   private final RestTemplate restTemplate;
   private final CacheManager cacheManager;
+
+  @Value("${kubernetes.service-name}")
+  private String kubernetesServiceName;
 
   public void evictByName(final String cacheName) {
     final Cache cache = this.cacheManager.getCache(cacheName);

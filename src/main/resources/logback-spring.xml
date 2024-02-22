@@ -45,6 +45,14 @@
       </encoder>
     </appender>
     
+    <!-- <appender name="ASYNC_CONSOLE" class="ch.qos.logback.classic.AsyncAppender"> -->
+    <!--   <discardingThreshold>0</discardingThreshold> &lt;!&ndash; default 20, means drop lower event when has 20% capacity remaining &ndash;&gt; -->
+    <!--   <appender-ref ref="CONSOLE" /> -->
+    <!--   <queueSize>1024</queueSize> &lt;!&ndash; default 256 &ndash;&gt; -->
+    <!--   <includeCallerData>false</includeCallerData> &lt;!&ndash; default false &ndash;&gt; -->
+    <!--   <neverBlock>false</neverBlock> &lt;!&ndash; default false, set to true to cause the Appender not block the application and just drop the messages &ndash;&gt; -->
+    <!-- </appender> -->
+    
     <root level="INFO">
       <appender-ref ref="json"/>
     </root>

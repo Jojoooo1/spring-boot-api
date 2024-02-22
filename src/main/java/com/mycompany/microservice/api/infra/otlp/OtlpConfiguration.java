@@ -9,6 +9,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+// Not working yet, need to wait for spring boot to be compatible with otel exporter 1.34.
+
 @Configuration
 @EnableConfigurationProperties(OtlpProperties.class)
 public class OtlpConfiguration {

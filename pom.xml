@@ -22,9 +22,9 @@
     <java.version>21</java.version>
     
     <!-- Database -->
-    <postgresql.version>42.7.1</postgresql.version>
+    <postgresql.version>42.7.2</postgresql.version>
     <querydsl.version>5.1.0</querydsl.version>
-    <flyway-core.version>10.1.0</flyway-core.version>
+    <flyway-core.version>10.8.1</flyway-core.version>
     <hypersistence-utils.version>3.7.3</hypersistence-utils.version>
     
     <!-- Logging -->
@@ -52,7 +52,7 @@
     <git-code-format-maven-plugin.version>5.3</git-code-format-maven-plugin.version>
     
     <!-- Test -->
-    <testcontainers.version>1.19.5</testcontainers.version>
+    <testcontainers.version>1.19.6</testcontainers.version>
   
   </properties>
   <dependencies>
@@ -96,7 +96,7 @@
       <!-- <scope>runtime</scope> -->
     </dependency>
     
-    <!-- Database tools -->
+    <!-- Database tools (Warning: not supported by spring native https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-with-GraalVM#flyway)  -->
     <dependency>
       <groupId>org.flywaydb</groupId>
       <artifactId>flyway-core</artifactId>
@@ -320,18 +320,37 @@
         <version>3.2.5</version>
       </plugin>
       
-      <!--
-       Spring boot buildpack image are build and run as non-root (runAsUser: 1000)
-       Principal buildpack that it uses:
-         https://github.com/paketo-buildpacks/bellsoft-liberica
-         https://github.com/paketo-buildpacks/spring-boot
-      -->
+      <!-- SPRING_PROFILES_ACTIVE=dev mvn clean -Pnative -DskipTests spring-boot:build-image -->
+      
+      <!-- already set in parent with native profile -->
+      <!-- <plugin> -->
+      <!--   <groupId>org.graalvm.buildtools</groupId> -->
+      <!--   <artifactId>native-maven-plugin</artifactId> -->
+      <!-- </plugin> -->
+      
       <plugin>
+        
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
           <image>
+            <!-- Default (build and run as non-root (runAsUser: 1000)) -->
+            <!-- <builder>paketobuildpacks/builder-jammy-base:</builder> -->
+            <!-- Native -->
+            <!-- <builder>paketobuildpacks/builder-jammy-tiny:latest</builder> --> <!-- already set in parent native profile -->
+            
             <env>
+              <!-- <BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE> --> <!-- already set in parent with native profile -->
+              <!-- <BP_NATIVE_IMAGE_BUILD_ARGUMENTS> -->
+              <!--   -H:+AddAllCharsets -->
+              <!--   -H:+ReportExceptionStackTraces -->
+              <!--   -H:+UnlockExperimentalVMOptions -->
+              <!--    -->
+              <!--   -H:ReflectionConfigurationFiles=/workspace/META-INF/native-image/logback-config.json -->
+              <!--    -->
+              <!--   &#45;&#45;initialize-at-run-time=io.netty.handler.ssl.BouncyCastleAlpnSslUtils -->
+              <!--   &#45;&#45;initialize-at-build-time=ch.qos.logback,org.slf4j.LoggerFactory,org.slf4j.MDC -->
+              <!-- </BP_NATIVE_IMAGE_BUILD_ARGUMENTS> -->
               <BP_JVM_VERSION>21</BP_JVM_VERSION>
             </env>
             <createdDate>${maven.build.timestamp}</createdDate>
