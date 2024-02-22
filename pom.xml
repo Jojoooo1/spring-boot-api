@@ -7,7 +7,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.2.2</version>
+    <version>3.2.0</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
   
@@ -24,7 +24,7 @@
     <!-- Database -->
     <postgresql.version>42.7.2</postgresql.version>
     <querydsl.version>5.1.0</querydsl.version>
-    <flyway-core.version>10.1.0</flyway-core.version>
+    <flyway-core.version>10.8.1</flyway-core.version>
     <hypersistence-utils.version>3.7.3</hypersistence-utils.version>
     
     <!-- Logging -->
@@ -96,7 +96,7 @@
       <!-- <scope>runtime</scope> -->
     </dependency>
     
-    <!-- Database tools -->
+    <!-- Database tools (Warning: not supported by spring native https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-with-GraalVM#flyway)  -->
     <dependency>
       <groupId>org.flywaydb</groupId>
       <artifactId>flyway-core</artifactId>
@@ -353,9 +353,7 @@
                 -H:+ReportExceptionStackTraces
                 -H:+UnlockExperimentalVMOptions
                 
-                <!-- -H:IncludeResources=src/main/resources/logback-spring.xml -->
-                <!-- -H:IncludeResources=/workspace/BOOT-INF/classes/logback-spring.xml -->
-                <!-- -H:ReflectionConfigurationFiles=/workspace/META-INF/native-image/logback-config.json -->
+                -H:ReflectionConfigurationFiles=/workspace/META-INF/native-image/logback-config.json
                 
                 --initialize-at-run-time=io.netty.handler.ssl.BouncyCastleAlpnSslUtils
                 --initialize-at-build-time=ch.qos.logback,org.slf4j.LoggerFactory,org.slf4j.MDC
