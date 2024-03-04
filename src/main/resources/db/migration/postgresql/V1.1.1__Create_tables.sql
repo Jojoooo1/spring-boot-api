@@ -28,8 +28,8 @@ CREATE TABLE public.company (
   created_by varchar(255),
   updated_by varchar(255),
 
-  created_at timestamp NOT NULL,
-  updated_at timestamp NOT NULL
+  created_at timestamp NOT NULL DEFAULT current_timestamp,
+  updated_at timestamp NOT NULL DEFAULT current_timestamp
 );
 
 CREATE TABLE public.api_key
@@ -44,8 +44,8 @@ CREATE TABLE public.api_key
     created_by varchar(255),
     updated_by varchar(255),
 
-    created_at timestamp NOT NULL,
-    updated_at timestamp NOT NULL
+    created_at timestamp NOT NULL DEFAULT current_timestamp,
+    updated_at timestamp NOT NULL DEFAULT current_timestamp
 );
 CREATE INDEX api_key_key_is_active_idx ON api_key (key, is_active);
 
