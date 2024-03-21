@@ -71,8 +71,8 @@ jobs:
         run: mvn clean package -DskipTests spring-boot:build-image --no-transfer-progress -Dspring-boot.build-image.imageName=$IMAGE_REGISTRY:$IMAGE_TAG
       
       # 6. Push image
-      - name: Push image
-        run: docker push $IMAGE_REGISTRY:$IMAGE_TAG
+      #      - name: Push image
+      #        run: docker push $IMAGE_REGISTRY:$IMAGE_TAG
       
       # 7. Notify if fails
       #      - name: Notify slack fail
