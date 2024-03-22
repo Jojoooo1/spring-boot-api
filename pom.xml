@@ -7,7 +7,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.2.3</version>
+    <version>3.2.4</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
   
@@ -30,10 +30,8 @@
     <!-- Logging -->
     <logstash.version>7.4</logstash.version>
     
-    <!-- Metrics -->
-    <!-- <hibernate-micrometer.version>6.3.0.Final</hibernate-micrometer.version>  -->
-    <datasource-micrometer.version>1.0.3</datasource-micrometer.version>
-    <opentelemetry-exporter-otlp.version>1.32.0</opentelemetry-exporter-otlp.version>
+    <!-- Telemetry -->
+    <opentelemetry-logback-mdc.version>2.2.0-alpha</opentelemetry-logback-mdc.version>
     <pyroscope-agent.version>0.13.0</pyroscope-agent.version>
     
     <!-- Lombok & Mapstruct -->
@@ -96,7 +94,6 @@
       <!-- <scope>runtime</scope> -->
     </dependency>
     
-    <!-- Database tools (Warning: not supported by spring native https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-with-GraalVM#flyway)  -->
     <dependency>
       <groupId>org.flywaydb</groupId>
       <artifactId>flyway-core</artifactId>
@@ -127,42 +124,21 @@
       <classifier>jakarta</classifier>
     </dependency>
     
-    <!-- Logs json encoder -->
-    <dependency>
-      <groupId>net.logstash.logback</groupId>
-      <artifactId>logstash-logback-encoder</artifactId>
-      <version>${logstash.version}</version>
-    </dependency>
-    
-    <!-- Tracing -->
-    <dependency>
-      <groupId>io.micrometer</groupId>
-      <artifactId>micrometer-tracing-bridge-otel</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>net.ttddyy.observation</groupId>
-      <artifactId>datasource-micrometer-spring-boot</artifactId>
-      <version>${datasource-micrometer.version}</version>
-    </dependency>
-    
-    <!-- Metrics -->
+    <!-- Telemetry -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-actuator</artifactId>
     </dependency>
-    <dependency>
-      <groupId>io.micrometer</groupId>
-      <artifactId>micrometer-registry-prometheus</artifactId>
-    </dependency>
-    <!-- <dependency> -->
-    <!--   <groupId>org.hibernate.orm</groupId> -->
-    <!--   <artifactId>hibernate-micrometer</artifactId> -->
-    <!--   <version>6.3.1.Final</version> -->
-    <!-- </dependency> -->
+    
+    <!-- Opentelemetry -->
     <dependency>
       <groupId>io.opentelemetry</groupId>
-      <artifactId>opentelemetry-exporter-otlp</artifactId>
-      <version>${opentelemetry-exporter-otlp.version}</version>
+      <artifactId>opentelemetry-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.opentelemetry.instrumentation</groupId>
+      <artifactId>opentelemetry-logback-mdc-1.0</artifactId>
+      <version>${opentelemetry-logback-mdc.version}</version>
     </dependency>
     
     <!-- Profiling -->
@@ -170,6 +146,13 @@
       <groupId>io.pyroscope</groupId>
       <artifactId>agent</artifactId>
       <version>${pyroscope-agent.version}</version>
+    </dependency>
+    
+    <!-- Logs json encoder -->
+    <dependency>
+      <groupId>net.logstash.logback</groupId>
+      <artifactId>logstash-logback-encoder</artifactId>
+      <version>${logstash.version}</version>
     </dependency>
     
     <!-- Data & Serialization -->
@@ -300,6 +283,13 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+      <dependency>
+        <groupId>io.opentelemetry</groupId>
+        <artifactId>opentelemetry-bom</artifactId>
+        <version>1.36.0</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   
@@ -320,43 +310,61 @@
         <version>3.2.5</version>
       </plugin>
       
-      <!-- SPRING_PROFILES_ACTIVE=dev mvn clean -Pnative -DskipTests spring-boot:build-image -->
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <image>
+            <builder>paketobuildpacks/builder-jammy-base</builder>
+            <!-- https://github.com/paketo-buildpacks/opentelemetry -->
+            <buildpack>gcr.io/paketo-buildpacks/opentelemetry</buildpack>
+            <env>
+              <BP_JVM_VERSION>21</BP_JVM_VERSION>
+              <BP_OPENTELEMETRY_ENABLED>true</BP_OPENTELEMETRY_ENABLED>
+            </env>
+            <createdDate>${maven.build.timestamp}</createdDate>
+            <bindings>
+              <binding>${project.basedir}/otel:/platform/bindings/otel</binding>
+            </bindings>
+          </image>
+        </configuration>
+      </plugin>
       
+      <!-- SPRING_PROFILES_ACTIVE=dev mvn clean -Pnative -DskipTests spring-boot:build-image -->
       <!-- uncomment if you want to compile with native profile -->
       <!-- <plugin> -->
       <!--   <groupId>org.graalvm.buildtools</groupId> -->
       <!--   <artifactId>native-maven-plugin</artifactId> -->
       <!-- </plugin> -->
       
-      <plugin>
-        
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-        <configuration>
-          <image>
-            <!-- Default (build and run as non-root (runAsUser: 1000)) -->
-            <!-- <builder>paketobuildpacks/builder-jammy-base:</builder> -->
-            <!-- Native -->
-            <!-- <builder>paketobuildpacks/builder-jammy-tiny:latest</builder> --> <!-- already set in parent native profile -->
-            
-            <env>
-              <!-- <BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE> --> <!-- already set in parent with native profile -->
-              <!-- <BP_NATIVE_IMAGE_BUILD_ARGUMENTS> -->
-              <!--   -H:+AddAllCharsets -->
-              <!--   -H:+ReportExceptionStackTraces -->
-              <!--   -H:+UnlockExperimentalVMOptions -->
-              <!--    -->
-              <!--   -H:ReflectionConfigurationFiles=/workspace/META-INF/native-image/logback-config.json -->
-              <!--    -->
-              <!--   &#45;&#45;initialize-at-run-time=io.netty.handler.ssl.BouncyCastleAlpnSslUtils -->
-              <!--   &#45;&#45;initialize-at-build-time=ch.qos.logback,org.slf4j.LoggerFactory,org.slf4j.MDC -->
-              <!-- </BP_NATIVE_IMAGE_BUILD_ARGUMENTS> -->
-              <BP_JVM_VERSION>21</BP_JVM_VERSION>
-            </env>
-            <createdDate>${maven.build.timestamp}</createdDate>
-          </image>
-        </configuration>
-      </plugin>
+      <!-- <plugin> -->
+      <!--   <groupId>org.springframework.boot</groupId> -->
+      <!--   <artifactId>spring-boot-maven-plugin</artifactId> -->
+      <!--   <configuration> -->
+      <!--     <image> -->
+      <!--       &lt;!&ndash; Default (build and run as non-root (runAsUser: 1000)) &ndash;&gt; -->
+      <!--       &lt;!&ndash; <builder>paketobuildpacks/builder-jammy-base:</builder> &ndash;&gt; -->
+      <!--       &lt;!&ndash; Native &ndash;&gt; -->
+      <!--       &lt;!&ndash; <builder>paketobuildpacks/builder-jammy-tiny:latest</builder> &ndash;&gt; &lt;!&ndash; already set in parent native profile &ndash;&gt; -->
+      <!--        -->
+      <!--       <env> -->
+      <!--         &lt;!&ndash; <BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE> &ndash;&gt; &lt;!&ndash; already set in parent with native profile &ndash;&gt; -->
+      <!--         &lt;!&ndash; <BP_NATIVE_IMAGE_BUILD_ARGUMENTS> &ndash;&gt; -->
+      <!--         &lt;!&ndash;   -H:+AddAllCharsets &ndash;&gt; -->
+      <!--         &lt;!&ndash;   -H:+ReportExceptionStackTraces &ndash;&gt; -->
+      <!--         &lt;!&ndash;   -H:+UnlockExperimentalVMOptions &ndash;&gt; -->
+      <!--         &lt;!&ndash;    &ndash;&gt; -->
+      <!--         &lt;!&ndash;   -H:ReflectionConfigurationFiles=/workspace/META-INF/native-image/logback-config.json &ndash;&gt; -->
+      <!--         &lt;!&ndash;    &ndash;&gt; -->
+      <!--         &lt;!&ndash;   &#45;&#45;initialize-at-run-time=io.netty.handler.ssl.BouncyCastleAlpnSslUtils &ndash;&gt; -->
+      <!--         &lt;!&ndash;   &#45;&#45;initialize-at-build-time=ch.qos.logback,org.slf4j.LoggerFactory,org.slf4j.MDC &ndash;&gt; -->
+      <!--         &lt;!&ndash; </BP_NATIVE_IMAGE_BUILD_ARGUMENTS> &ndash;&gt; -->
+      <!--         <BP_JVM_VERSION>21</BP_JVM_VERSION> -->
+      <!--       </env> -->
+      <!--       <createdDate>${maven.build.timestamp}</createdDate> -->
+      <!--     </image> -->
+      <!--   </configuration> -->
+      <!-- </plugin> -->
       
       <!-- Code formatting hooks -->
       <plugin>

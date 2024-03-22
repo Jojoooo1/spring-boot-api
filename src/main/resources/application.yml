@@ -51,31 +51,31 @@ management:
     #      group:
     #       readiness:
     #         include: rabbit
-  metrics:
-    distribution:
-      percentiles-histogram:
-        http:
-          server:
-            requests: true
+  #  metrics:
+  #    distribution:
+  #      percentiles-histogram:
+  #        http:
+  #          server:
+  #            requests: true
   endpoints:
     web:
       exposure:
-        include: info, health, prometheus, metrics, preStopHook
-  tracing:
-    sampling:
-      probability: 0
+        include: info, health, metrics, preStopHook # prometheus
+  #  tracing:
+  #    sampling:
+  #      probability: 0
   #  otlp:
   #    tracing:
   #      endpoint:
-  observations:
-    enable:
-      spring:
-        security: false # not needed in most of the case.
+  #  observations:
+  #    enable:
+  #      spring:
+  #        security: false # not needed in most of the case.
 
 # https://jdbc-observations.github.io/datasource-micrometer/docs/current/docs/html/#appendix-common-application-properties
-jdbc:
-  datasource-proxy:
-    enabled: true
+#jdbc:
+#  datasource-proxy:
+#    enabled: true
 
 spring:
   application:
@@ -144,10 +144,13 @@ spring:
 
 server:
   shutdown: graceful
-  tomcat:
-    # enables tomcat metrics
-    mbeanregistry:
-      enabled: true
+#  tomcat:
+#    # enables tomcat metrics
+#    mbeanregistry:
+#      enabled: true
+
+#logging.pattern.level=%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]
+logging.pattern.correlation: "[${spring.application.name:},%X{trace_id:-},%X{span_id:-},%X{trace_flags:-}]"
 
 ---
 spring:

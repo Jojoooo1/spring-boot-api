@@ -8,7 +8,7 @@ slack:
 http:
   clients:
     webhook-site:
-      base-url: https://webhook.site/b4b43dbd-9980-4690-8db7-e50be66e4d0c
+      base-url: https://webhook.site/f6ec3af8-08d7-427d-b839-3d88f84fa9c0
 
 rabbitmq:
   host: localhost

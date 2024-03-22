@@ -221,14 +221,31 @@ make test
 make kill
 ```
 
+## OpenTelemetry Automatic Instrumentation
+
+JVM options:
+
+```
+-javaagent:path-to-your-project/opentelemetry-javaagent.jar
+-Dotel.javaagent.configuration-file=path-to-your-project/otel.dev.yaml        
+```
+
+[documentation](https://opentelemetry.io/docs/languages/java/automatic/) /
+[java-instrumentation](https://github.com/open-telemetry/opentelemetry-java-instrumentation)
+
+## OpenTelemetry & Buildpack bindings
+
+`/otel` [bindings](https://paketo.io/docs/howto/configuration/#bindings) folder will be
+injected inside the image layer at `/platform/bindings` (it will only be visible at runtime, not
+visible using [dive](https://github.com/wagoodman/dive) for example).
+
 ## Spring native
 
-- Spring boot 3.2.2 hibernate issue: https://github.com/spring-projects/spring-framework/issues/31051
-- Spring boot 3.2.2 spring-security issue: https://github.com/spring-projects/spring-security/issues/14362
+- Spring boot 3.2.2 spring-security
+  issue: https://github.com/spring-projects/spring-security/issues/14362
 
 Limitations:
 
-- Had to use OtlpHttpSpanExporterBuilder instead of GrpcHttpSpanExporterBuilder
 - Flyway: Automatic detection of Java migrations are not supported in native image,
   see [#33458](https://github.com/spring-projects/spring-boot/issues/33458)
 - Many others small issues [...]
