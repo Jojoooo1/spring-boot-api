@@ -223,29 +223,43 @@ make kill
 
 ## OpenTelemetry Automatic Instrumentation
 
+[documentation](https://opentelemetry.io/docs/languages/java/automatic/) /
+[java-instrumentation](https://github.com/open-telemetry/opentelemetry-java-instrumentation)
+
 JVM options:
 
 ```
 -javaagent:path-to-your-project/opentelemetry-javaagent.jar
--Dotel.javaagent.configuration-file=path-to-your-project/otel.dev.yaml        
+-Dotel.javaagent.configuration-file=path-to-your-project/dev.properties
 ```
 
-[documentation](https://opentelemetry.io/docs/languages/java/automatic/) /
-[java-instrumentation](https://github.com/open-telemetry/opentelemetry-java-instrumentation)
+- For debugging tracing exporter, set `otel.traces.exporter=otlp` in `opentelemetry/dev.properties`
+  and use [otel-desktop-viewer](https://github.com/CtrlSpice/otel-desktop-viewer)
+- For debugging metrics exporter, set `otel.metrics.exporter=logging`
+  in `opentelemetry/dev.properties`
 
-If you want to locally test the tracing exporter, you can
-use [otel-desktop-viewer](https://github.com/CtrlSpice/otel-desktop-viewer)
+## OpenTelemetry & Buildpack
 
-## OpenTelemetry & Buildpack bindings
+To build the image:
 
-`/otel` [bindings](https://paketo.io/docs/howto/configuration/#bindings) folder will be
-injected inside the image layer at `/platform/bindings` (it will only be visible at runtime, not
-visible using [dive](https://github.com/wagoodman/dive) for example).
+```
+mvn clean package -DskipTests spring-boot:build-image
+```
+
+To run the image with otel agent:
+
+```
+docker run --net host \
+     -e SPRING_PROFILES_ACTIVE=dev \
+     -e SPRING_DATASOURCE_URL="jdbc:postgresql://localhost:5432/api" \
+     -e JAVA_TOOL_OPTIONS="-javaagent:/workspace/opentelemetry/opentelemetry-javaagent.jar" \
+     -e OTEL_JAVAAGENT_CONFIGURATION_FILE=/workspace/opentelemetry/default.properties \
+     -e OTEL_TRACES_EXPORTER=otlp \
+     -e OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317 \
+     api:0.0.1-SNAPSHOT
+```
 
 ## Spring native
-
-- Spring boot 3.2.2 spring-security
-  issue: https://github.com/spring-projects/spring-security/issues/14362
 
 Limitations:
 

@@ -310,22 +310,19 @@
         <version>3.2.5</version>
       </plugin>
       
+      
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
           <image>
-            <builder>paketobuildpacks/builder-jammy-base</builder>
-            <!-- https://github.com/paketo-buildpacks/opentelemetry -->
-            <buildpack>gcr.io/paketo-buildpacks/opentelemetry</buildpack>
             <env>
               <BP_JVM_VERSION>21</BP_JVM_VERSION>
-              <BP_OPENTELEMETRY_ENABLED>true</BP_OPENTELEMETRY_ENABLED>
             </env>
             <createdDate>${maven.build.timestamp}</createdDate>
-            <bindings>
-              <binding>${project.basedir}/otel:/platform/bindings/otel</binding>
-            </bindings>
+            <binding>
+              ${project.basedir}/src/opentelemetry:/workspace/opentelemetry
+            </binding>
           </image>
         </configuration>
       </plugin>
