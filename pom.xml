@@ -320,9 +320,11 @@
               <BP_JVM_VERSION>21</BP_JVM_VERSION>
             </env>
             <createdDate>${maven.build.timestamp}</createdDate>
-            <binding>
-              ${project.basedir}/src/opentelemetry:/workspace/opentelemetry
-            </binding>
+            <bindings>
+              <binding>
+                ${project.basedir}/src/opentelemetry:/workspace/opentelemetry
+              </binding>
+            </bindings>
           </image>
         </configuration>
       </plugin>
