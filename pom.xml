@@ -322,7 +322,7 @@
             <createdDate>${maven.build.timestamp}</createdDate>
             <bindings>
               <binding>
-                ${project.basedir}/src/opentelemetry:/workspace/opentelemetry
+                ${project.basedir}/opentelemetry:/workspace/opentelemetry
               </binding>
             </bindings>
           </image>

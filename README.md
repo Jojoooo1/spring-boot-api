@@ -229,8 +229,8 @@ make kill
 JVM options:
 
 ```
--javaagent:path-to-your-project/opentelemetry-javaagent.jar
--Dotel.javaagent.configuration-file=path-to-your-project/dev.properties
+-javaagent:path-to-your-project/opentelemetry/opentelemetry-javaagent.jar
+-Dotel.javaagent.configuration-file=path-to-your-project/opentelemetry/dev.properties
 ```
 
 - For debugging tracing exporter, set `otel.traces.exporter=otlp` in `opentelemetry/dev.properties`
