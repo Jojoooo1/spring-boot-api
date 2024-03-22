@@ -233,6 +233,9 @@ JVM options:
 [documentation](https://opentelemetry.io/docs/languages/java/automatic/) /
 [java-instrumentation](https://github.com/open-telemetry/opentelemetry-java-instrumentation)
 
+If you want to locally test the tracing exporter, you can
+use [otel-desktop-viewer](https://github.com/CtrlSpice/otel-desktop-viewer)
+
 ## OpenTelemetry & Buildpack bindings
 
 `/otel` [bindings](https://paketo.io/docs/howto/configuration/#bindings) folder will be
