@@ -1,6 +1,7 @@
 package com.mycompany.microservice.api.infra.advices;
 
 import com.mycompany.microservice.api.constants.AppHeaders;
+import io.opentelemetry.api.trace.Span;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
@@ -27,8 +28,13 @@ public class ResponseHeaderAdvice implements ResponseBodyAdvice<Object> {
 
   private static final String TIME = "StopWatch";
 
+  // private final Tracer tracer;
+
   private static void addResponseTimeHeader(
       final ServerHttpResponse response, final ServletServerHttpRequest servletServerRequest) {
+
+    Span.current().getSpanContext().getTraceId();
+
     final Long startTime = (Long) servletServerRequest.getServletRequest().getAttribute(TIME);
     if (startTime != null) {
       response.getHeaders().add(AppHeaders.RESPONSE_TIME_HEADER, fromTimeToString(startTime));
