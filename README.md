@@ -221,14 +221,48 @@ make test
 make kill
 ```
 
-## Spring native
+## OpenTelemetry Automatic Instrumentation
 
-- Spring boot 3.2.2 hibernate issue: https://github.com/spring-projects/spring-framework/issues/31051
-- Spring boot 3.2.2 spring-security issue: https://github.com/spring-projects/spring-security/issues/14362
+[documentation](https://opentelemetry.io/docs/languages/java/automatic/) /
+[java-instrumentation](https://github.com/open-telemetry/opentelemetry-java-instrumentation)
+
+JVM options:
+
+```
+-javaagent:path-to-your-project/opentelemetry/opentelemetry-javaagent.jar
+-Dotel.javaagent.configuration-file=path-to-your-project/opentelemetry/dev.properties
+```
+
+- For debugging tracing exporter, set `otel.traces.exporter=otlp` in `opentelemetry/dev.properties`
+  and use [otel-desktop-viewer](https://github.com/CtrlSpice/otel-desktop-viewer)
+- For debugging metrics exporter, set `otel.metrics.exporter=logging`
+  in `opentelemetry/dev.properties`
+
+## OpenTelemetry & Buildpack
+
+To build the image:
+
+```
+mvn clean package -DskipTests spring-boot:build-image
+```
+
+To run the image with otel agent:
+
+```
+docker run --net host \
+     -e SPRING_PROFILES_ACTIVE=dev \
+     -e SPRING_DATASOURCE_URL="jdbc:postgresql://localhost:5432/api" \
+     -e JAVA_TOOL_OPTIONS="-javaagent:/workspace/opentelemetry/opentelemetry-javaagent.jar" \
+     -e OTEL_JAVAAGENT_CONFIGURATION_FILE=/workspace/opentelemetry/default.properties \
+     -e OTEL_TRACES_EXPORTER=otlp \
+     -e OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317 \
+     api:0.0.1-SNAPSHOT
+```
+
+## Spring native
 
 Limitations:
 
-- Had to use OtlpHttpSpanExporterBuilder instead of GrpcHttpSpanExporterBuilder
 - Flyway: Automatic detection of Java migrations are not supported in native image,
   see [#33458](https://github.com/spring-projects/spring-boot/issues/33458)
 - Many others small issues [...]

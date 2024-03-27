@@ -3,47 +3,41 @@
   <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
   <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
   
-  <springProfile name="!json-logs">
-    <root level="INFO">
-      <appender-ref ref="CONSOLE"/>
-    </root>
-  </springProfile>
-  
-  <springProfile name="json-logs">
-    <appender name="json" class="ch.qos.logback.core.ConsoleAppender">
-      <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
-        <providers>
-          <timestamp>
-            <timeZone>America/Sao_Paulo</timeZone>
-          </timestamp>
+  <appender name="JSON" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+      <providers>
+        <timestamp>
+          <timeZone>America/Sao_Paulo</timeZone>
+        </timestamp>
+        <pattern>
           <pattern>
-            <pattern>
-              {
-              "level": "%level",
-              "company": "%mdc{company}",
-              "user": "%mdc{user}",
-              "message": "%message",
-              "traceId": "%mdc{traceId}",
-              "spanId": "%mdc{spanId}",
-              <!-- Nginx requestID -->
-              "requestId": "%mdc{X-Request-ID}",
-              "logger": "%logger",
-              "thread": "%thread"
-              }
-            </pattern>
+            {
+            "level": "%level",
+            "company": "%mdc{company}",
+            "user": "%mdc{user}",
+            "message": "%message",
+            "traceId": "%mdc{trace_id}",
+            "spanId": "%mdc{span_id}",
+            "traceFlags": "%mdc{trace_flags}",
+            <!-- Nginx requestID -->
+            "requestId": "%mdc{X-Request-ID}",
+            "logger": "%logger",
+            "thread": "%thread"
+            }
           </pattern>
-          <stackTrace>
-            <fieldName>stackTrace</fieldName>
-            <throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
-              <maxDepthPerThrowable>4</maxDepthPerThrowable>
-              <!-- <maxLength>256</maxLength>-->
-              <shortenedClassNameLength>30</shortenedClassNameLength>
-              <rootCauseFirst>true</rootCauseFirst>
-            </throwableConverter>
-          </stackTrace>
-        </providers>
-      </encoder>
-    </appender>
+        </pattern>
+        <stackTrace>
+          <fieldName>stackTrace</fieldName>
+          <throwableConverter
+            class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
+            <maxDepthPerThrowable>4</maxDepthPerThrowable>
+            <!-- <maxLength>256</maxLength>-->
+            <shortenedClassNameLength>30</shortenedClassNameLength>
+            <rootCauseFirst>true</rootCauseFirst>
+          </throwableConverter>
+        </stackTrace>
+      </providers>
+    </encoder>
     
     <!-- <appender name="ASYNC_CONSOLE" class="ch.qos.logback.classic.AsyncAppender"> -->
     <!--   <discardingThreshold>0</discardingThreshold> &lt;!&ndash; default 20, means drop lower event when has 20% capacity remaining &ndash;&gt; -->
@@ -52,11 +46,19 @@
     <!--   <includeCallerData>false</includeCallerData> &lt;!&ndash; default false &ndash;&gt; -->
     <!--   <neverBlock>false</neverBlock> &lt;!&ndash; default false, set to true to cause the Appender not block the application and just drop the messages &ndash;&gt; -->
     <!-- </appender> -->
-    
-    <root level="INFO">
-      <appender-ref ref="json"/>
-    </root>
   
+  </appender>
+  
+  <springProfile name="!json-logs">
+    <root level="INFO">
+      <appender-ref ref="CONSOLE"/>
+    </root>
+  </springProfile>
+  
+  <springProfile name="json-logs">
+    <root level="INFO">
+      <appender-ref ref="JSON"/>
+    </root>
   </springProfile>
 
 </configuration>

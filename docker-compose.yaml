@@ -42,7 +42,7 @@ services:
   
   api-database:
     container_name: api-database
-    image: bitnami/postgresql:16.2.0-debian-12-r5
+    image: bitnami/postgresql:16.2.0-debian-12-r8
     network_mode: host
     environment:
       POSTGRESQL_DATABASE: api
@@ -97,7 +97,7 @@ services:
   
   keycloak-database:
     container_name: keycloak-database
-    image: bitnami/postgresql:16.2.0-debian-12-r5
+    image: bitnami/postgresql:16.2.0-debian-12-r8
     environment:
       POSTGRESQL_DATABASE: keycloak
       POSTGRESQL_USERNAME: user
