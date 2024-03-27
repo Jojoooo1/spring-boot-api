@@ -127,7 +127,7 @@ message delivery.
 
 ### Metrics & Tracing
 
-It uses Prometheus and Micrometer (Otel) to collect detailed metrics and tracing data.
+It uses OpenTelemetry agent to collect detailed metrics and tracing data.
 
 ### Rate Limiting
 
