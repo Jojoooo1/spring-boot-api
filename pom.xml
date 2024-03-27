@@ -31,7 +31,7 @@
     <logstash.version>7.4</logstash.version>
     
     <!-- Telemetry -->
-    <opentelemetry-logback-mdc.version>2.2.0-alpha</opentelemetry-logback-mdc.version>
+    <opentelemetry-api.version>1.36.0</opentelemetry-api.version>
     <pyroscope-agent.version>0.13.0</pyroscope-agent.version>
     
     <!-- Lombok & Mapstruct -->
@@ -129,11 +129,10 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-actuator</artifactId>
     </dependency>
-    
-    <!-- Opentelemetry -->
     <dependency>
       <groupId>io.opentelemetry</groupId>
       <artifactId>opentelemetry-api</artifactId>
+      <version>${opentelemetry-api.version}</version>
     </dependency>
     
     <!-- Profiling -->
