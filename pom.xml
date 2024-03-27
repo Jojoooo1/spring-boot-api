@@ -135,11 +135,6 @@
       <groupId>io.opentelemetry</groupId>
       <artifactId>opentelemetry-api</artifactId>
     </dependency>
-    <dependency>
-      <groupId>io.opentelemetry.instrumentation</groupId>
-      <artifactId>opentelemetry-logback-mdc-1.0</artifactId>
-      <version>${opentelemetry-logback-mdc.version}</version>
-    </dependency>
     
     <!-- Profiling -->
     <dependency>

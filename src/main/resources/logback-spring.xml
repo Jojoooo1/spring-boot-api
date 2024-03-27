@@ -3,13 +3,7 @@
   <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
   <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
   
-  <appender name="console-with-otel"
-    class="io.opentelemetry.instrumentation.logback.mdc.v1_0.OpenTelemetryAppender">
-    <appender-ref ref="CONSOLE"/>
-  </appender>
-  
-  
-  <appender name="json" class="ch.qos.logback.core.ConsoleAppender">
+  <appender name="JSON" class="ch.qos.logback.core.ConsoleAppender">
     <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
       <providers>
         <timestamp>
@@ -45,7 +39,6 @@
       </providers>
     </encoder>
     
-    
     <!-- <appender name="ASYNC_CONSOLE" class="ch.qos.logback.classic.AsyncAppender"> -->
     <!--   <discardingThreshold>0</discardingThreshold> &lt;!&ndash; default 20, means drop lower event when has 20% capacity remaining &ndash;&gt; -->
     <!--   <appender-ref ref="CONSOLE" /> -->
@@ -56,21 +49,15 @@
   
   </appender>
   
-  <appender name="json-with-otel"
-    class="io.opentelemetry.instrumentation.logback.mdc.v1_0.OpenTelemetryAppender">
-    <appender-ref ref="json"/>
-  </appender>
-  
-  
   <springProfile name="!json-logs">
     <root level="INFO">
-      <appender-ref ref="console-with-otel"/>
+      <appender-ref ref="CONSOLE"/>
     </root>
   </springProfile>
   
   <springProfile name="json-logs">
     <root level="INFO">
-      <appender-ref ref="json-with-otel"/>
+      <appender-ref ref="JSON"/>
     </root>
   </springProfile>
 
