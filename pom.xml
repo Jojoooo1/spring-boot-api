@@ -32,7 +32,7 @@
     
     <!-- Telemetry -->
     <opentelemetry-api.version>1.36.0</opentelemetry-api.version>
-    <pyroscope-agent.version>0.13.0</pyroscope-agent.version>
+    <pyroscope-agent.version>0.13.1</pyroscope-agent.version>
     
     <!-- Lombok & Mapstruct -->
     <projectlombok.version>1.18.32</projectlombok.version>
