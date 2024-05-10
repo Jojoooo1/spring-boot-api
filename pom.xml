@@ -50,7 +50,7 @@
     <git-code-format-maven-plugin.version>5.3</git-code-format-maven-plugin.version>
     
     <!-- Test -->
-    <testcontainers.version>1.19.7</testcontainers.version>
+    <testcontainers.version>1.19.8</testcontainers.version>
   
   </properties>
   <dependencies>
