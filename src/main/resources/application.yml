@@ -62,18 +62,24 @@ spring:
     name: api
   main:
     keep-alive: true # ensures JVM is kept alive, even if all threads are virtual threads https://docs.spring.io/spring-boot/docs/3.2.0-RC2/reference/htmlsingle/#features.spring-application.virtual-threads
+  web:
+    resources:
+      add-mappings: false # disable static content.
+  mvc:
+    log-resolved-exception: false # remove tomcat log exception since it is already treated in GlobalExceptionHandler
   reactor:
     context-propagation: auto # automatically propagates trace and span in reactive pipelines.
   threads:
     virtual:
       enabled: true
-  web:
-    resources:
-      add-mappings: false # disable static content.
   security:
     oauth2:
       resourceserver:
         jwt:
+          # can not be used for now as claim name does not allow nested values.
+          # authorities-claim-name:
+          # authority-prefix: ROLE_
+          # principal-claim-name: email
           issuer-uri: ${SECURITY_OAUTH_ISSUER_URI}
           jwk-set-uri: ${SECURITY_OAUTH_JWK_SET_URI}
   data:
