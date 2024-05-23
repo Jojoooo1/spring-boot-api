@@ -141,6 +141,12 @@ responses. Errors are carefully categorized and presented with corresponding HTT
 and clear error messages. It
 uses [RFC 9457](https://datatracker.ietf.org/doc/html/rfc9457#name-members-of-a-problem-detail).
 
+example:
+
+```json
+
+```
+
 ### CI/CD - Gitflow
 
 <div align="center">

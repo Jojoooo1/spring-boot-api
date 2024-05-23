@@ -42,7 +42,7 @@ services:
   
   api-database:
     container_name: api-database
-    image: bitnami/postgresql:16.2.0-debian-12-r8
+    image: bitnami/postgresql:16.3.0
     network_mode: host
     environment:
       POSTGRESQL_DATABASE: api
@@ -61,7 +61,7 @@ services:
   
   rabbitmq:
     container_name: api-rabbitmq
-    image: bitnami/rabbitmq:3.12.13-debian-12-r2
+    image: bitnami/rabbitmq:3.13.2
     network_mode: host
     healthcheck:
       test: rabbitmq-diagnostics -q ping
@@ -80,7 +80,7 @@ services:
   
   keycloak:
     container_name: keycloak
-    image: bitnami/keycloak:23.0.7-debian-12-r1
+    image: bitnami/keycloak:24.0.4
     # network_mode: host
     environment:
       KEYCLOAK_ADMIN_USER: admin
@@ -97,7 +97,7 @@ services:
   
   keycloak-database:
     container_name: keycloak-database
-    image: bitnami/postgresql:16.2.0-debian-12-r8
+    image: bitnami/postgresql:16.3.0
     environment:
       POSTGRESQL_DATABASE: keycloak
       POSTGRESQL_USERNAME: user

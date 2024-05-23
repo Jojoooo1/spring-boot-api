@@ -74,6 +74,10 @@ spring:
     oauth2:
       resourceserver:
         jwt:
+          # can not be used for now as claim name does not allow nested values.
+          # authorities-claim-name:
+          # authority-prefix: ROLE_
+          # principal-claim-name: email
           issuer-uri: ${SECURITY_OAUTH_ISSUER_URI}
           jwk-set-uri: ${SECURITY_OAUTH_JWK_SET_URI}
   data:
