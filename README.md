@@ -144,7 +144,19 @@ uses [RFC 9457](https://datatracker.ietf.org/doc/html/rfc9457#name-members-of-a-
 example:
 
 ```json
-
+{
+  "type": "about:blank",
+  "title": "Bad Request",
+  "status": 400,
+  "detail": "Validation failed.",
+  "instance": "/management/companies",
+  "errors": [
+    {
+      "pointer": "slug",
+      "reason": "must not be blank"
+    }
+  ]
+}
 ```
 
 ### CI/CD - Gitflow
