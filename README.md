@@ -283,9 +283,9 @@ Limitations:
 
 - Flyway: Automatic detection of Java migrations are not supported in native image,
   see [#33458](https://github.com/spring-projects/spring-boot/issues/33458)
-- Many [others](https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-with-GraalVM
-  #known-graalvm-native-image-limitations)
-  small issues
+-
+Many [others](https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-with-GraalVM#known-graalvm-native-image-limitations)
+small issues
 
 ## Feedback and Support
 
