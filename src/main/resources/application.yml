@@ -55,7 +55,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: info, health, metrics, preStopHook # prometheus
+        include: info, health, metrics, sbom, preStopHook # prometheus
 
 spring:
   application:
