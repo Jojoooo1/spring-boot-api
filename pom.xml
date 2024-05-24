@@ -311,6 +311,12 @@
         <version>3.2.5</version>
       </plugin>
       
+      <!-- Add SBOM specification for application security contexts and supply chain component analysis. -->
+      <plugin>
+        <groupId>org.cyclonedx</groupId>
+        <artifactId>cyclonedx-maven-plugin</artifactId>
+      </plugin>
+      
       
       <plugin>
         <groupId>org.springframework.boot</groupId>
@@ -356,8 +362,8 @@
       <!--         &lt;!&ndash;    &ndash;&gt; -->
       <!--         &lt;!&ndash;   -H:ReflectionConfigurationFiles=/workspace/META-INF/native-image/logback-config.json &ndash;&gt; -->
       <!--         &lt;!&ndash;    &ndash;&gt; -->
-      <!--         &lt;!&ndash;   &#45;&#45;initialize-at-run-time=io.netty.handler.ssl.BouncyCastleAlpnSslUtils &ndash;&gt; -->
-      <!--         &lt;!&ndash;   &#45;&#45;initialize-at-build-time=ch.qos.logback,org.slf4j.LoggerFactory,org.slf4j.MDC &ndash;&gt; -->
+      <!--         &lt;!&ndash;   -initialize-at-run-time=io.netty.handler.ssl.BouncyCastleAlpnSslUtils &ndash;&gt; -->
+      <!--         &lt;!&ndash;   -initialize-at-build-time=ch.qos.logback,org.slf4j.LoggerFactory,org.slf4j.MDC &ndash;&gt; -->
       <!--         &lt;!&ndash; </BP_NATIVE_IMAGE_BUILD_ARGUMENTS> &ndash;&gt; -->
       <!--         <BP_JVM_VERSION>21</BP_JVM_VERSION> -->
       <!--       </env> -->
