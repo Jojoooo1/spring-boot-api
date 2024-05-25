@@ -4,7 +4,7 @@ services:
   # After using this maven container you need to re-install maven using "mvn install -DskipTests"
   api:
     container_name: api
-    image: maven:3.9.5-eclipse-temurin-21
+    image: maven:3.9.6-eclipse-temurin-21
     user: '1000'
     command:
       [
@@ -39,10 +39,10 @@ services:
       timeout: 5s
       retries: 5
       start_period: 30s
-
+  
   api-database:
     container_name: api-database
-    image: bitnami/postgresql:15.5.0-debian-11-r3
+    image: bitnami/postgresql:16.3.0
     network_mode: host
     environment:
       POSTGRESQL_DATABASE: api
@@ -58,10 +58,10 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
-
+  
   rabbitmq:
     container_name: api-rabbitmq
-    image: bitnami/rabbitmq:3.12.8-debian-11-r1
+    image: bitnami/rabbitmq:3.13.2
     network_mode: host
     healthcheck:
       test: rabbitmq-diagnostics -q ping
@@ -77,27 +77,27 @@ services:
     volumes:
       - ./scripts/configs/rabbitmq-definition.json:/etc/rabbitmq/definitions.json
       - api_rabbitmq:/bitnami/rabbitmq/mnesia
-
+  
   keycloak:
     container_name: keycloak
-    image: bitnami/keycloak:22.0.5-debian-11-r0
+    image: bitnami/keycloak:24.0.4
     # network_mode: host
     environment:
       KEYCLOAK_ADMIN_USER: admin
       KEYCLOAK_ADMIN_PASSWORD: password
-
+      
       KEYCLOAK_DATABASE_HOST: keycloak-database
       KEYCLOAK_DATABASE_PORT: 5432
-
+      
       KEYCLOAK_DATABASE_NAME: keycloak
       KEYCLOAK_DATABASE_USER: user
       KEYCLOAK_DATABASE_PASSWORD: password
     ports:
       - "8000:8080"
-
+  
   keycloak-database:
     container_name: keycloak-database
-    image: bitnami/postgresql:15.5.0-debian-11-r3
+    image: bitnami/postgresql:16.3.0
     environment:
       POSTGRESQL_DATABASE: keycloak
       POSTGRESQL_USERNAME: user

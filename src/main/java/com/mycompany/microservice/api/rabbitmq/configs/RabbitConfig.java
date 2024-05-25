@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.retry.support.RetryTemplate;
 
 @Slf4j
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class RabbitConfig {
 
   public static final String RABBIT_ASYNC_EVENT_LISTENER_FACTORY = "AsyncEventListener";

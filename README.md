@@ -127,7 +127,7 @@ message delivery.
 
 ### Metrics & Tracing
 
-It uses Prometheus and Micrometer (Otel) to collect detailed metrics and tracing data.
+It uses OpenTelemetry agent to collect detailed metrics and tracing data.
 
 ### Rate Limiting
 
@@ -140,6 +140,24 @@ It uses a consistent error handling strategy that prioritizes informative and de
 responses. Errors are carefully categorized and presented with corresponding HTTP status codes
 and clear error messages. It
 uses [RFC 9457](https://datatracker.ietf.org/doc/html/rfc9457#name-members-of-a-problem-detail).
+
+example:
+
+```json
+{
+  "type": "about:blank",
+  "title": "Bad Request",
+  "status": 400,
+  "detail": "Validation failed.",
+  "instance": "/management/companies",
+  "errors": [
+    {
+      "pointer": "slug",
+      "reason": "must not be blank"
+    }
+  ]
+}
+```
 
 ### CI/CD - Gitflow
 
@@ -220,6 +238,52 @@ make test
 ```bash
 make kill
 ```
+
+## OpenTelemetry Automatic Instrumentation
+
+[documentation](https://opentelemetry.io/docs/languages/java/automatic/) /
+[java-instrumentation](https://github.com/open-telemetry/opentelemetry-java-instrumentation)
+
+JVM options:
+
+```
+-javaagent:path-to-your-project/opentelemetry/opentelemetry-javaagent.jar
+-Dotel.javaagent.configuration-file=path-to-your-project/opentelemetry/dev.properties
+```
+
+- For debugging tracing exporter, set `otel.traces.exporter=otlp` in `opentelemetry/dev.properties`
+  and use [otel-desktop-viewer](https://github.com/CtrlSpice/otel-desktop-viewer)
+- For debugging metrics exporter, set `otel.metrics.exporter=logging`
+  in `opentelemetry/dev.properties`
+
+## OpenTelemetry & Buildpack
+
+To build the image:
+
+```
+mvn clean package -DskipTests spring-boot:build-image
+```
+
+To run the image with otel agent:
+
+```
+docker run --net host \
+     -e SPRING_PROFILES_ACTIVE=dev \
+     -e SPRING_DATASOURCE_URL="jdbc:postgresql://localhost:5432/api" \
+     -e JAVA_TOOL_OPTIONS="-javaagent:/workspace/opentelemetry/opentelemetry-javaagent.jar" \
+     -e OTEL_JAVAAGENT_CONFIGURATION_FILE=/workspace/opentelemetry/default.properties \
+     -e OTEL_TRACES_EXPORTER=otlp \
+     -e OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317 \
+     api:0.0.1-SNAPSHOT
+```
+
+## Spring native
+
+Limitations:
+
+- Flyway: Automatic detection of Java migrations are not supported in native image,
+  see [#33458](https://github.com/spring-projects/spring-boot/issues/33458)
+- Many [others](https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-with-GraalVM#known-graalvm-native-image-limitations) small issues
 
 ## Feedback and Support
 

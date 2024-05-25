@@ -8,7 +8,7 @@ slack:
 http:
   clients:
     webhook-site:
-      base-url: https://webhook.site/b4b43dbd-9980-4690-8db7-e50be66e4d0c
+      base-url: https://webhook.site/f6ec3af8-08d7-427d-b839-3d88f84fa9c0
 
 rabbitmq:
   host: localhost
@@ -23,26 +23,21 @@ rabbitmq:
       exchange: outbound
       routingkey: to_outbound_webhook
 
+profiling:
+  pyroscope:
+    enabled: false
+    server: http://pyroscope-local.cloud-diplomats.com
+
 management:
   endpoint:
     health:
       show-details: always
-
+  
   # for testing purpose you can use https://github.com/CtrlSpice/otel-desktop-viewer
-  tracing:
-    sampling:
-      probability: 1
-  otlp:
-    tracing:
-      endpoint: http://localhost:4317
-
-jdbc:
-  datasource-proxy:
-    include-parameter-values: true
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/api?stringtype=unspecified&reWriteBatchedInserts=true
+    url: jdbc:postgresql://localhost:5432/api
     username: user
     password: password
   jpa:
@@ -50,23 +45,23 @@ spring:
       hibernate:
         show_sql: false
         format_sql: false
-
+  
   security:
     oauth2:
       resourceserver:
         jwt:
           issuer-uri: http://localhost:8000/realms/api
           jwk-set-uri: http://localhost:8000/realms/api/protocol/openid-connect/certs
-
+  
   devtools:
     restart:
       enabled: false
 
 logging:
+  pattern.correlation: "[${spring.application.name:},%X{trace_id:-},%X{span_id:-},%X{trace_flags:-}]"
   level:
     web: info
     # org.springframework.cache: TRACE
     # hibernate.SQL: DEBUG
     # hibernate.engine.jdbc.batch.internal.BatchingBatch: DEBUG
     # reactor.netty.http.client.HttpClient: DEBUG
-

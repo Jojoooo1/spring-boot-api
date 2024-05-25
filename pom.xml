@@ -7,7 +7,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.2.0</version>
+    <version>3.3.0</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
   
@@ -22,35 +22,35 @@
     <java.version>21</java.version>
     
     <!-- Database -->
-    <postgresql.version>42.7.0</postgresql.version>
-    <querydsl.version>5.0.0</querydsl.version>
-    <flyway-core.version>10.1.0</flyway-core.version>
+    <postgresql.version>42.7.3</postgresql.version>
+    <querydsl.version>5.1.0</querydsl.version>
+    <flyway-database-postgresql.version>10.13.0</flyway-database-postgresql.version>
+    <hypersistence-utils.version>3.7.5</hypersistence-utils.version>
     
     <!-- Logging -->
     <logstash.version>7.4</logstash.version>
     
-    <!-- Metrics -->
-    <!-- <hibernate-micrometer.version>6.3.0.Final</hibernate-micrometer.version>  -->
-    <datasource-micrometer.version>1.0.2</datasource-micrometer.version>
-    <opentelemetry-exporter-otlp.version>1.32.0</opentelemetry-exporter-otlp.version>
+    <!-- Telemetry -->
+    <opentelemetry-api.version>1.38.0</opentelemetry-api.version>
+    <pyroscope-agent.version>0.14.0</pyroscope-agent.version>
     
     <!-- Lombok & Mapstruct -->
-    <projectlombok.version>1.18.30</projectlombok.version>
+    <projectlombok.version>1.18.32</projectlombok.version>
     <mapstruct.version>1.5.5.Final</mapstruct.version>
     <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
     
     <!-- utilities -->
-    <spring-cloud.version>2023.0.0-RC1</spring-cloud.version>
-    <bucket4j-core.version>8.4.0</bucket4j-core.version>
-    <slack-api-client.version>1.36.1</slack-api-client.version>
-    <apache-commons-text.version>1.11.0</apache-commons-text.version>
+    <spring-cloud.version>2023.0.1</spring-cloud.version>
+    <bucket4j-core.version>8.10.1</bucket4j-core.version>
+    <slack-api-client.version>1.39.2</slack-api-client.version>
+    <apache-commons-text.version>1.12.0</apache-commons-text.version>
     <apache-commons-collection.version>4.4</apache-commons-collection.version>
     
     <!-- Development-->
-    <git-code-format-maven-plugin.version>5.1</git-code-format-maven-plugin.version>
+    <git-code-format-maven-plugin.version>5.3</git-code-format-maven-plugin.version>
     
     <!-- Test -->
-    <testcontainers.version>1.19.3</testcontainers.version>
+    <testcontainers.version>1.19.8</testcontainers.version>
   
   </properties>
   <dependencies>
@@ -94,15 +94,15 @@
       <!-- <scope>runtime</scope> -->
     </dependency>
     
-    <!-- Database tools -->
     <dependency>
       <groupId>org.flywaydb</groupId>
-      <artifactId>flyway-core</artifactId>
+      <artifactId>flyway-database-postgresql</artifactId>
+      <version>${flyway-database-postgresql.version}</version>
     </dependency>
     <dependency>
       <groupId>io.hypersistence</groupId>
-      <artifactId>hypersistence-utils-hibernate-62</artifactId>
-      <version>3.6.1</version>
+      <artifactId>hypersistence-utils-hibernate-63</artifactId>
+      <version>${hypersistence-utils.version}</version>
     </dependency>
     
     <!-- Database access -->
@@ -113,16 +113,34 @@
     <dependency>
       <groupId>com.querydsl</groupId>
       <artifactId>querydsl-jpa</artifactId>
-      <version>5.0.0</version>
+      <version>${querydsl.version}</version>
       <classifier>jakarta</classifier>
     </dependency>
     <dependency>
       <groupId>com.querydsl</groupId>
       <artifactId>querydsl-apt</artifactId>
-      <version>5.0.0</version>
+      <version>${querydsl.version}</version>
       <scope>provided</scope>
       <optional>true</optional>
       <classifier>jakarta</classifier>
+    </dependency>
+    
+    <!-- Telemetry -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.opentelemetry</groupId>
+      <artifactId>opentelemetry-api</artifactId>
+      <version>${opentelemetry-api.version}</version>
+    </dependency>
+    
+    <!-- Profiling -->
+    <dependency>
+      <groupId>io.pyroscope</groupId>
+      <artifactId>agent</artifactId>
+      <version>${pyroscope-agent.version}</version>
     </dependency>
     
     <!-- Logs json encoder -->
@@ -130,37 +148,6 @@
       <groupId>net.logstash.logback</groupId>
       <artifactId>logstash-logback-encoder</artifactId>
       <version>${logstash.version}</version>
-    </dependency>
-    
-    <!-- Tracing -->
-    <dependency>
-      <groupId>io.micrometer</groupId>
-      <artifactId>micrometer-tracing-bridge-otel</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>net.ttddyy.observation</groupId>
-      <artifactId>datasource-micrometer-spring-boot</artifactId>
-      <version>${datasource-micrometer.version}</version>
-    </dependency>
-    
-    <!-- Metrics -->
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-actuator</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.micrometer</groupId>
-      <artifactId>micrometer-registry-prometheus</artifactId>
-    </dependency>
-    <!-- <dependency> -->
-    <!--   <groupId>org.hibernate.orm</groupId> -->
-    <!--   <artifactId>hibernate-micrometer</artifactId> -->
-    <!--   <version>6.3.1.Final</version> -->
-    <!-- </dependency> -->
-    <dependency>
-      <groupId>io.opentelemetry</groupId>
-      <artifactId>opentelemetry-exporter-otlp</artifactId>
-      <version>${opentelemetry-exporter-otlp.version}</version>
     </dependency>
     
     <!-- Data & Serialization -->
@@ -206,6 +193,12 @@
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-kubernetes-client</artifactId>
+      <!-- rate limiting -->
+    </dependency>
+    <dependency>
+      <groupId>com.bucket4j</groupId>
+      <artifactId>bucket4j-core</artifactId>
+      <version>${bucket4j-core.version}</version>
     </dependency>
     
     <!-- Utilities-->
@@ -291,6 +284,13 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+      <dependency>
+        <groupId>io.opentelemetry</groupId>
+        <artifactId>opentelemetry-bom</artifactId>
+        <version>1.38.0</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   
@@ -301,22 +301,23 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.2.2</version>
+        <version>3.2.5</version>
       </plugin>
       
       <!-- Integration tests -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
-        <version>3.2.2</version>
+        <version>3.2.5</version>
       </plugin>
       
-      <!--
-       Spring boot buildpack image are build and run as non-root (runAsUser: 1000)
-       Principal buildpack that it uses:
-         https://github.com/paketo-buildpacks/bellsoft-liberica
-         https://github.com/paketo-buildpacks/spring-boot
-      -->
+      <!-- Add SBOM specification for application security contexts and supply chain component analysis. -->
+      <plugin>
+        <groupId>org.cyclonedx</groupId>
+        <artifactId>cyclonedx-maven-plugin</artifactId>
+      </plugin>
+      
+      
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
@@ -326,9 +327,50 @@
               <BP_JVM_VERSION>21</BP_JVM_VERSION>
             </env>
             <createdDate>${maven.build.timestamp}</createdDate>
+            <bindings>
+              <binding>
+                ${project.basedir}/opentelemetry:/workspace/opentelemetry
+              </binding>
+            </bindings>
           </image>
         </configuration>
       </plugin>
+      
+      <!-- SPRING_PROFILES_ACTIVE=dev mvn clean -Pnative -DskipTests spring-boot:build-image -->
+      <!-- uncomment if you want to compile with native profile -->
+      <!-- <plugin> -->
+      <!--   <groupId>org.graalvm.buildtools</groupId> -->
+      <!--   <artifactId>native-maven-plugin</artifactId> -->
+      <!-- </plugin> -->
+      
+      <!-- <plugin> -->
+      <!--   <groupId>org.springframework.boot</groupId> -->
+      <!--   <artifactId>spring-boot-maven-plugin</artifactId> -->
+      <!--   <configuration> -->
+      <!--     <image> -->
+      <!--       &lt;!&ndash; Default (build and run as non-root (runAsUser: 1000)) &ndash;&gt; -->
+      <!--       &lt;!&ndash; <builder>paketobuildpacks/builder-jammy-base:</builder> &ndash;&gt; -->
+      <!--       &lt;!&ndash; Native &ndash;&gt; -->
+      <!--       &lt;!&ndash; <builder>paketobuildpacks/builder-jammy-tiny:latest</builder> &ndash;&gt; &lt;!&ndash; already set in parent native profile &ndash;&gt; -->
+      <!--        -->
+      <!--       <env> -->
+      <!--         &lt;!&ndash; <BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE> &ndash;&gt; &lt;!&ndash; already set in parent with native profile &ndash;&gt; -->
+      <!--         &lt;!&ndash; <BP_NATIVE_IMAGE_BUILD_ARGUMENTS> &ndash;&gt; -->
+      <!--         &lt;!&ndash;   -H:+AddAllCharsets &ndash;&gt; -->
+      <!--         &lt;!&ndash;   -H:+ReportExceptionStackTraces &ndash;&gt; -->
+      <!--         &lt;!&ndash;   -H:+UnlockExperimentalVMOptions &ndash;&gt; -->
+      <!--         &lt;!&ndash;    &ndash;&gt; -->
+      <!--         &lt;!&ndash;   -H:ReflectionConfigurationFiles=/workspace/META-INF/native-image/logback-config.json &ndash;&gt; -->
+      <!--         &lt;!&ndash;    &ndash;&gt; -->
+      <!--         &lt;!&ndash;   -initialize-at-run-time=io.netty.handler.ssl.BouncyCastleAlpnSslUtils &ndash;&gt; -->
+      <!--         &lt;!&ndash;   -initialize-at-build-time=ch.qos.logback,org.slf4j.LoggerFactory,org.slf4j.MDC &ndash;&gt; -->
+      <!--         &lt;!&ndash; </BP_NATIVE_IMAGE_BUILD_ARGUMENTS> &ndash;&gt; -->
+      <!--         <BP_JVM_VERSION>21</BP_JVM_VERSION> -->
+      <!--       </env> -->
+      <!--       <createdDate>${maven.build.timestamp}</createdDate> -->
+      <!--     </image> -->
+      <!--   </configuration> -->
+      <!-- </plugin> -->
       
       <!-- Code formatting hooks -->
       <plugin>

@@ -1,8 +1,6 @@
 package com.mycompany.microservice.api.infra.advices;
 
 import com.mycompany.microservice.api.constants.AppHeaders;
-import com.mycompany.microservice.api.utils.TraceUtils;
-import io.micrometer.tracing.Tracer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
@@ -28,14 +26,10 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 public class ResponseHeaderAdvice implements ResponseBodyAdvice<Object> {
 
   private static final String TIME = "StopWatch";
-  private final Tracer tracer;
-
-  private static void addTraceToHeader(final Tracer tracer, final ServerHttpResponse response) {
-    response.getHeaders().add("traceId", TraceUtils.getTrace(tracer));
-  }
 
   private static void addResponseTimeHeader(
       final ServerHttpResponse response, final ServletServerHttpRequest servletServerRequest) {
+
     final Long startTime = (Long) servletServerRequest.getServletRequest().getAttribute(TIME);
     if (startTime != null) {
       response.getHeaders().add(AppHeaders.RESPONSE_TIME_HEADER, fromTimeToString(startTime));
@@ -66,7 +60,6 @@ public class ResponseHeaderAdvice implements ResponseBodyAdvice<Object> {
 
     final ServletServerHttpRequest servletServerRequest = (ServletServerHttpRequest) request;
     ResponseHeaderAdvice.addResponseTimeHeader(response, servletServerRequest);
-    ResponseHeaderAdvice.addTraceToHeader(this.tracer, response);
 
     return body;
   }
