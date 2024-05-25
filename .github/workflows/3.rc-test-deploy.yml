@@ -80,29 +80,29 @@ jobs:
           echo "IMAGE_TAG=$IMAGE_TAG"
           echo "IMAGE_REGISTRY=$IMAGE_REGISTRY"
       
-      # 3. Auth
-      - name: Auth via Workload Identity Federation
-        id: auth
-        uses: google-github-actions/auth@v2.1.3
-        with:
-          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ secrets.SERVICE_ACCOUNT }} # impersonated SA
-      
-      # 4. Setup gcloud & configure docker to use gcloud
-      - name: Setup gcloud
-        uses: google-github-actions/setup-gcloud@v2.1.0
-        with:
-          project_id: ${{ secrets.PROJECT_ID }}
-      - name: Setup docker to authenticate via gcloud
-        run: gcloud --quiet auth configure-docker us-docker.pkg.dev
-      
-      # 5. Build image
-      - name: Build image
-        run: mvn clean package -DskipTests spring-boot:build-image --no-transfer-progress -Dspring-boot.build-image.imageName=$IMAGE_REGISTRY:$IMAGE_TAG
-      
-      # 6. Push image
-      - name: Push image
-        run: docker push $IMAGE_REGISTRY:$IMAGE_TAG
+#      # 3. Auth
+#      - name: Auth via Workload Identity Federation
+#        id: auth
+#        uses: google-github-actions/auth@v2.1.3
+#        with:
+#          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+#          service_account: ${{ secrets.SERVICE_ACCOUNT }} # impersonated SA
+#
+#      # 4. Setup gcloud & configure docker to use gcloud
+#      - name: Setup gcloud
+#        uses: google-github-actions/setup-gcloud@v2.1.0
+#        with:
+#          project_id: ${{ secrets.PROJECT_ID }}
+#      - name: Setup docker to authenticate via gcloud
+#        run: gcloud --quiet auth configure-docker us-docker.pkg.dev
+#
+#      # 5. Build image
+#      - name: Build image
+#        run: mvn clean package -DskipTests spring-boot:build-image --no-transfer-progress -Dspring-boot.build-image.imageName=$IMAGE_REGISTRY:$IMAGE_TAG
+#
+#      # 6. Push image
+#      - name: Push image
+#        run: docker push $IMAGE_REGISTRY:$IMAGE_TAG
       
       # 7. Notify if failss
       #      - name: Notify slack fail
