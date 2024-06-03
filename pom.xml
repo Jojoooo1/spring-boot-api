@@ -24,7 +24,7 @@
     <!-- Database -->
     <postgresql.version>42.7.3</postgresql.version>
     <querydsl.version>5.1.0</querydsl.version>
-    <flyway-database-postgresql.version>10.13.0</flyway-database-postgresql.version>
+    <flyway-database-postgresql.version>10.14.0</flyway-database-postgresql.version>
     <hypersistence-utils.version>3.7.5</hypersistence-utils.version>
     
     <!-- Logging -->
