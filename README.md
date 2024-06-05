@@ -191,8 +191,7 @@ to unify java formatting. On commit, the hook will automatically format staged f
 
 ### Postman Collection
 
-For simplified API testing and integration, we provide a Postman collection and environment variable
-file. Import our Postman collection to quickly get started.
+Import Postman collection to quickly get started.
 
 Collection:
 
