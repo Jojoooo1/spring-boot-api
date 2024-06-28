@@ -1,3 +1,7 @@
+### Medium
+
+[A Comprehensive guide to Spring Boot 3.2 with Java 21, Virtual Threads, Spring Security, PostgreSQL, Flyway, Caching, Micrometer, Opentelemetry, JUnit 5, RabbitMQ, Keycloak Integration, and More! (10/17)](https://medium.com/itnext/exploring-a-base-spring-boot-application-with-java-21-virtual-thread-spring-security-flyway-c0fde13c1eca?source=user_profile---------4----------------------------)
+
 # SaaS Base Project
 
 ## Introduction

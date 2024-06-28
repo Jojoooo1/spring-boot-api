@@ -11,7 +11,6 @@ services:
         'mvn',
         'clean',
         'spring-boot:run',
-        '-Dspring.profiles.active=dev',
         '-Duser.home=/var/maven'
       ]
     network_mode: host

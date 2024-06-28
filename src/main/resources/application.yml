@@ -91,9 +91,8 @@ spring:
     locations: classpath:/db/migration/postgresql
   
   datasource:
-    hikari.:
+    hikari:
       maximum-pool-size: ${DB_MAX_POOL_SIZE:20}
-      auto-commit: false # improve performance
       data-source-properties:
         ApplicationName: ${spring.application.name} # allows to see what applications are connected to the server and what resources they are using through views like pg_stat_activity
         reWriteBatchedInserts: true
