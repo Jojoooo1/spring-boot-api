@@ -26,8 +26,8 @@ jobs:
           cache: 'maven'
       
       # 2. Run tests
-#      - name: Run Unit & Integration Tests
-#        run: mvn clean verify --no-transfer-progress
+      # - name: Run Unit & Integration Tests
+      #   run: mvn clean verify --no-transfer-progress
       
       # 3. Auth
       - name: Auth via Workload Identity Federation
