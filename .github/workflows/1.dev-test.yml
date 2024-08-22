@@ -12,6 +12,9 @@ concurrency:
 jobs:
   dev-test:
     runs-on: ubuntu-latest
+    permissions: # Necessary for workload identity provider
+      contents: 'read'
+      id-token: 'write'
     steps:
       # 1. Setup
       - uses: actions/checkout@v4
