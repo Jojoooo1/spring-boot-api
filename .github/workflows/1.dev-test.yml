@@ -36,7 +36,7 @@ jobs:
         with:
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ secrets.SERVICE_ACCOUNT }} # impersonated SA
-          audience: {{ secrets.WORKLOAD_IDENTITY_PROVIDER_AUDIENCE }}
+          audience: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER_AUDIENCE }}
 
       # 4. Setup gcloud & configure docker to use gcloud
       - name: Setup gcloud
