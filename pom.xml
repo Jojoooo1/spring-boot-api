@@ -22,7 +22,7 @@
     <java.version>21</java.version>
     
     <!-- Database -->
-    <postgresql.version>42.7.3</postgresql.version>
+    <postgresql.version>42.7.4</postgresql.version>
     <querydsl.version>5.1.0</querydsl.version>
     <flyway-database-postgresql.version>10.20.1</flyway-database-postgresql.version>
     <hypersistence-utils.version>3.8.3</hypersistence-utils.version>
