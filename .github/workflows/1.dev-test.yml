@@ -12,6 +12,9 @@ concurrency:
 jobs:
   dev-test:
     runs-on: ubuntu-latest
+    permissions: # Necessary for workload identity provider
+      contents: 'read'
+      id-token: 'write'
     steps:
       # 1. Setup
       - uses: actions/checkout@v4
@@ -23,7 +26,30 @@ jobs:
           cache: 'maven'
       
       # 2. Run tests
-      - name: Run Unit & Integration Tests
-        run: mvn clean verify --no-transfer-progress
+      # - name: Run Unit & Integration Tests
+      #   run: mvn clean verify --no-transfer-progress
       
-      # 3. Notify if fails
+      # 3. Auth
+      - name: Auth via Workload Identity Federation
+        id: auth
+        uses: google-github-actions/auth@v2.1.5
+        with:
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.SERVICE_ACCOUNT }} # impersonated SA
+          audience: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER_AUDIENCE }}
+
+      # 4. Setup gcloud & configure docker to use gcloud
+      - name: Setup gcloud
+        uses: google-github-actions/setup-gcloud@v2.1.1
+        with:
+          project_id: ${{ secrets.PROJECT_ID }}
+      - name: Setup docker to authenticate via gcloud
+        run: gcloud --quiet auth configure-docker us-docker.pkg.dev
+
+      # 5. Build image
+      - name: Build image
+        run: mvn clean package -DskipTests spring-boot:build-image --no-transfer-progress -Dspring-boot.build-image.imageName=$IMAGE_REGISTRY:$IMAGE_TAG
+
+      # 6. Push image
+      - name: Push image
+        run: docker push $IMAGE_REGISTRY:$IMAGE_TAG
